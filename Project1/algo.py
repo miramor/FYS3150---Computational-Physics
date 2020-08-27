@@ -1,5 +1,5 @@
 import numpy as np
-
+#
 f = lambda x: 100.0*np.exp(-10.0*x)
 #f = lambda x: 2*x+2
 exact = lambda x: 1.0-(1-np.exp(-10))*x-np.exp(-10*x)
