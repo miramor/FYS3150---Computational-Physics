@@ -23,8 +23,8 @@ h = 1.0/n # (x_n-x_0)/n
 h_sq = h**2
 
 x0 = 0
-x_nplus1 = 0
-
+#x_nplus1 = 0
+#sss
 for i in range(n):
     x_i = x0+i*h
     exact_[i] = exact(x_i)
@@ -33,8 +33,7 @@ for i in range(n):
     a[i] = -1
     c[i] = -1
 
-print(g)
-i = 1
+
 for i in range(1,n):
     b[i] = b[i] - a[i-1]*c[i-1]/b[i-1]
     g[i] = g[i] + a[i-1]*g[i-1]/b[i-1]
