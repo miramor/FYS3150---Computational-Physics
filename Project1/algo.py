@@ -1,9 +1,10 @@
 import numpy as np
+import matplotlib.pyplot as plt
 #
 f = lambda x: 100.0*np.exp(-10.0*x)
 #f = lambda x: 2*x+2
 exact = lambda x: 1.0-(1-np.exp(-10))*x-np.exp(-10*x)
-n = 10 #num of points
+n = 1000 #num of points
 
 #Matrix
 b = np.zeros(n) #diagonal
@@ -24,7 +25,7 @@ h_sq = h**2
 
 x0 = 0
 #x_nplus1 = 0
-#sss
+
 for i in range(n):
     x_i = x0+i*h
     exact_[i] = exact(x_i)
@@ -33,10 +34,9 @@ for i in range(n):
     a[i] = -1
     c[i] = -1
 
-
 for i in range(1,n):
     b[i] = b[i] - a[i-1]*c[i-1]/b[i-1]
-    g[i] = g[i] + a[i-1]*g[i-1]/b[i-1]
+    g[i] = g[i] - a[i-1]*g[i-1]/b[i-1]
 
 
 u[n-1] = g[n-1]/b[n-1] #boundry condition where u[n+1] = 0
@@ -45,9 +45,14 @@ while i>=0:
     u[i] = (g[i] - c[i]*u[i+1])/b[i]
     i -= 1
 
-#print(g)
+"""
+error = abs(u-exact_)/u
+plt.plot(error)
+plt.show()
+"""
 
 for i in range(n):
     print(f"x = {x0+i*h}:   ")
-    print(f"Calc: {u[i]}")
-    print(f"exact_: {exact_[i]}")
+    #print(f"Calc: {u[i]}")
+    #print(f"exact_: {exact_[i]}")
+    print(f"Error: {abs(u[i]-exact_[i])}")
