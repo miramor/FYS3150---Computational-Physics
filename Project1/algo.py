@@ -3,7 +3,7 @@ import numpy as np
 f = lambda x: 100.0*np.exp(-10.0*x)
 #f = lambda x: 2*x+2
 exact = lambda x: 1.0-(1-np.exp(-10))*x-np.exp(-10*x)
-n = 10 #num of points
+n = 1000 #num of points
 
 #Matrix
 b = np.zeros(n) #diagonal
@@ -36,7 +36,7 @@ for i in range(n):
 
 for i in range(1,n):
     b[i] = b[i] - a[i-1]*c[i-1]/b[i-1]
-    g[i] = g[i] + a[i-1]*g[i-1]/b[i-1]
+    g[i] = g[i] - a[i-1]*g[i-1]/b[i-1]
 
 
 u[n-1] = g[n-1]/b[n-1] #boundry condition where u[n+1] = 0
