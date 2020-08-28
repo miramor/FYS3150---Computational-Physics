@@ -30,10 +30,9 @@ for i in range(n):
     x_i = x0+i*h
     exact_[i] = exact(x_i)
     g[i] = f(x_i)*h_sq
-    b[i] = -2
+    b[i] = 2
     a[i] = -1
     c[i] = -1
-
 
 for i in range(1,n):
     if a[0] == c[0]:
@@ -43,8 +42,8 @@ for i in range(1,n):
         b[i] = b[i] - a[i-1]*c[i-1]/b[i-1]
     g[i] = g[i] - a[i-1]*g[i-1]/b[i-1]
 
+print(g)
 #print(b)
-#print(g)
 
 
 u[n-1] = g[n-1]/b[n-1] #boundry condition where u[n] = 0
@@ -53,9 +52,9 @@ while i>=0:
     u[i] = (g[i] - c[i]*u[i+1])/b[i]
     i -= 1
 
-print(exact_)
-error = abs(u-exact_)/exact_
-plt.plot((error))
+plt.plot(u, label = "computed")
+plt.plot(exact_, label = "exact")
+plt.legend()
 plt.show()
 
 
