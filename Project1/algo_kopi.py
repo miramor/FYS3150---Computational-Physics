@@ -31,8 +31,8 @@ for i in range(n):
     exact_[i] = exact(x_i)
     g[i] = f(x_i)*h_sq
     b[i] = -2
-    a[i] = 1
-    c[i] = 1
+    a[i] = -1
+    c[i] = -1
 
 
 for i in range(1,n):
