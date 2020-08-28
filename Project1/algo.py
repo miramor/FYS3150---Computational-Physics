@@ -34,25 +34,38 @@ for i in range(n):
     a[i] = -1
     c[i] = -1
 
+
 for i in range(1,n):
-    b[i] = b[i] - a[i-1]*c[i-1]/b[i-1]
+    if a[0] == c[0]:
+        #b[i] = -(i+1.0)/i
+        b[i] = b[i] - 1/b[i-1]
+    else:
+        b[i] = b[i] - a[i-1]*c[i-1]/b[i-1]
     g[i] = g[i] - a[i-1]*g[i-1]/b[i-1]
 
+print(b)
+print(g)
 
-u[n-1] = g[n-1]/b[n-1] #boundry condition where u[n+1] = 0
+
+u[n-1] = g[n-1]/b[n-1] #boundry condition where u[n] = 0
 i = n - 2
 while i>=0:
     u[i] = (g[i] - c[i]*u[i+1])/b[i]
     i -= 1
 
-"""
-error = abs(u-exact_)/u
-plt.plot(error)
-plt.show()
-"""
 
-for i in range(n):
+error = abs(u-exact_)/exact_
+plt.plot((error))
+#plt.show()
+
+
+#print(f"Error: {abs(u[0:n:50]-exact_[0:n:50])}")
+
+#Klart veldig mye bedre når c = a
+
+
+"""for i in range(int(n/5)):
     print(f"x = {x0+i*h}:   ")
     #print(f"Calc: {u[i]}")
     #print(f"exact_: {exact_[i]}")
-    print(f"Error: {abs(u[i]-exact_[i])}")
+    print(f"Error: {abs(u[i]-exact_[i])}")"""
