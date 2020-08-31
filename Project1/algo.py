@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 f = lambda x: 100.0*np.exp(-10.0*x)
 #f = lambda x: 2*x+2
 exact = lambda x: 1.0-(1-np.exp(-10))*x-np.exp(-10*x)
-n = 10 #num of points
+n = 5000000
 
 #Matrix
 b = np.zeros(n) #diagonal
@@ -59,24 +59,26 @@ while i>0:
     u[i] = (g[i] - c[i]*u[i+1])/b[i]
     i -= 1
 
+"""
 plt.plot(u, label = "computed")
 plt.plot(exact_, linestyle = "dashed", label = "exact")
 plt.legend()
-#plt.show()
-"""
-print(exact_)
-error = abs(u-exact_)/exact_
-plt.plot((error))
 plt.show()
 """
 
 print(f"Error: {abs(u[0:n:int(n/10)]-exact_[0:n:int(n/10)])}")
 
+error = (np.abs( (u[1:n]-exact_[1:n])/exact_[1:n]))
+#print(np.log10(error))
+plt.plot(np.log10(error))
+plt.show()
+
 #Klart veldig mye bedre når c = a
 
-
-"""for i in range(int(n/5)):
+"""
+for i in range(int(n/5)):
     print(f"x = {x0+i*h}:   ")
     #print(f"Calc: {u[i]}")
     #print(f"exact_: {exact_[i]}")
-    print(f"Error: {abs(u[i]-exact_[i])}")"""
+    print(f"Error: {abs(u[i]-exact_[i])}")
+"""
