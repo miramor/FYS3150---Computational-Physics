@@ -42,7 +42,7 @@ for i in range(1,n):
         b[i] = b[i] - a[i-1]*c[i-1]/b[i-1]
     g[i] = g[i] - a[i-1]*g[i-1]/b[i-1]
 
-print(g)
+#print(g)
 #print(b)
 
 
