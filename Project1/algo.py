@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 f = lambda x: 100.0*np.exp(-10.0*x)
 #f = lambda x: 2*x+2
 exact = lambda x: 1.0-(1-np.exp(-10))*x-np.exp(-10*x)
-n = 1000
+n = 10
 
 #Matrix
 b = np.zeros(n) #diagonal
@@ -65,13 +65,13 @@ plt.plot(exact_, linestyle = "dashed", label = "exact")
 plt.legend()
 plt.show()
 """
-
-print(f"Error: {abs(u[0:n:int(n/10)]-exact_[0:n:int(n/10)])}")
+print(exact_[1::], u[1::])
+#print(f"Error: {abs(u[0:n:int(n/10)]-exact_[0:n:int(n/10)])}")
 
 error = (np.abs( (u[1:n]-exact_[1:n])/exact_[1:n]))
 #print(np.log10(error))
 plt.plot(np.log10(error))
-plt.show()
+#plt.show()
 
 #Klart veldig mye bedre når c = a
 
