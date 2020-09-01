@@ -15,15 +15,21 @@ class DiffSolver {
     double* c;
     double* g; // right side of matrix mul: A*x = g
 
+    double* x; // Linspave of x0 to xn with n values
+    double* error;
+
     double* u; //Solution
     double* exact_;// Exact solution
 
 
+
   public:
-    void Initialize(double a, double b, double c, int n, double x_0, double x_n); //Created all the needed vectors
+    void Initialize(double a_val, double b_val, double c_val, int n, double x_0, double x_n); //Created all the needed vectors
     void Solve(); // Solves the system using BackAndFw solution
     void PrintError(); //Prints the error
-    void WritetoFile(string filename);
+    void WritetoFile();
+    void Printtest();
+    double solvetime;
 };
 
 #endif
