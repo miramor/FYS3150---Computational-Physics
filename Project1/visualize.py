@@ -3,7 +3,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-
+print(pd.__version__)
 n = 100
 
 df = pd.read_csv(f"Results nval = {n}", names = ['x','solution', 'exact', 'log error'])
@@ -34,7 +34,7 @@ plt.text(0.5, exact[int(n/2)] + 0.1, "Exact", fontsize=12, color="crimson")
 """
 
 
-plt.savefig(f"Computed vs Exact sol n: {n}", dpi = 60)
+#plt.savefig(f"Computed vs Exact sol n: {n}", dpi = 60)
 plt.show()
 
 dfTG = pd.read_csv("CPUtime general", names = ['n','time'])
@@ -59,11 +59,11 @@ plt.gca().spines["top"].set_alpha(0.0)
 plt.gca().spines["bottom"].set_alpha(0.6)
 plt.gca().spines["right"].set_alpha(0.0)
 plt.gca().spines["left"].set_alpha(0.6)
-plt.savefig("Timetosolve.png", dpi=60)
+#plt.savefig("Timetosolve.png", dpi=60)
 
 plt.show()
 
-""" Maybe make a table is possible, seemed difficult. maybe use pandas plot 
+""" Maybe make a table is possible, seemed difficult. maybe use pandas plot
 fig, ax = plt.subplots()
 fig.set_figheight(15)
 fig.set_figwidth(8)
@@ -75,3 +75,17 @@ t.set_fontsize(12)
 fig.tight_layout()
 plt.show()
 """
+
+fig,  ax = plt.subplots(1,1)
+data1 = dfTG[["n", "time"]].head(6)
+data2 = dfTS[["time"]].head(6)
+vertical_stack = pd.concat([data1, data2], axis=1)
+symbols = ["integration steps", "time general [sec]", "time special [sec]"]
+vertical_stack.columns = symbols
+#vertical_stack.style.format("{:.2%}")
+print(vertical_stack)
+
+ax.axis("off")
+pd.plotting.table(ax, vertical_stack, loc="upper right", colWidths=[0.3, 0.3, 0.3])
+plt.savefig("Timetable.png")
+plt.show()
