@@ -63,6 +63,10 @@ plt.gca().spines["left"].set_alpha(0.6)
 
 plt.show()
 
+
+
+
+
 """ Maybe make a table is possible, seemed difficult. maybe use pandas plot
 fig, ax = plt.subplots()
 fig.set_figheight(15)
