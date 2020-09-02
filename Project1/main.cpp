@@ -13,7 +13,7 @@ int main(int argc, char const *argv[]) {
   cout << "Filename: " <<filename << endl;
   outfile.open(filename);
 
-  for(int n=10; n<=10e4; n*= 10){
+  for(int n=10; n<=10e5; n*= 10){
     DiffSolver dSolv;
     dSolv.Initialize(-1.0, 2.0, -1.0, n,  0.0, 1.0);
     dSolv.Solve();

@@ -83,7 +83,7 @@ vertical_stack = pd.concat([data1, data2], axis=1)
 symbols = ["integration steps", "time general [sec]", "time special [sec]"]
 vertical_stack.columns = symbols
 #vertical_stack.style.format("{:.2%}")
-print(vertical_stack)
+#print(vertical_stack)
 
 ax.axis("off")
 pd.plotting.table(ax, vertical_stack, loc="upper right", colWidths=[0.3, 0.3, 0.3])
