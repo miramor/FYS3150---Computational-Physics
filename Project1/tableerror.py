@@ -13,6 +13,7 @@ for n in n_vals:
     df = pd.read_csv(f"Results nval = {int(n)}", names = ['x','solution', 'exact', 'log error'], usecols = ["log error"], nrows = 1)
     error = df["log error"].iloc[0]
     errorlist.append(error)
+    
 dfError = pd.DataFrame({"n":n_vals,"log error":errorlist})
 
 
