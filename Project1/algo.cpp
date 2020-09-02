@@ -37,8 +37,9 @@ void DiffSolver::Initialize(double a_val, double b_val, double c_val, int n_val,
 
   u = new double[n+1];//Solution
   exact_ = new double[n+1];// Exact solution
-  double h = (x_n-x_0)/(double)n;
-  h_sq = pow( h , 2);
+  double h_val = (x_n-x_0)/(double)n;
+  h = h_val;
+  h_sq = pow( h_val , 2);
 
   for(int i = 1; i<n; i++){
       double x_i = x_0+i*h;
@@ -141,7 +142,34 @@ void DiffSolver::Printtest(){
   }
 }
 
+void DiffSolver::SolveLU(double a_val, double b_val, double c_val){
+  clock_t start, finish; // declare start and final time
+  start = clock();
+  n = n-1;
+  mat A = zeros<mat>(n,n);
+  // Set up arrays for the simple case
+  vec g(n);  vec x(n); //Ax=g
+  cout <<h<< endl;
+  A(0,0) = b_val;  A(0,1) = c_val;  x(0) = h;  g(0) =  h_sq*f(x(0));
+  x(n-1) = x(0)+(n-1)*h; g(n-1) = h_sq*f(x(n-1));
+  for (int i = 1; i < n-1; i++){
+    x(i) = x(i-1)+h;
+    g(i) = h_sq*f(x(i));
+    A(i,i-1)  = a_val;
+    A(i,i)    = b_val;
+    A(i,i+1)  = c_val;
+  }
+  A(n-1,n-1) = b_val; A(n-2,n-1) = a_val; A(n-1,n-2) = c_val;
 
+    // solve Ax = g
+  vec solution  = solve(A,g);
+  //cout << solution << endl;
+  finish = clock();
+  solvetimeLU = ( (finish - start)/(double)CLOCKS_PER_SEC );
+  
+
+
+}
 // d2_tilde = d2 - e1**2/d1
 // g2_tilde = g2 - g1*e1/d1
 

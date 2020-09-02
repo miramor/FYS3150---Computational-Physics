@@ -29,7 +29,9 @@ class DiffSolver {
     void PrintError(); //Prints the error
     void WritetoFile();
     void Printtest();
-    double solvetime;
+    double solvetime; double solvetimeLU;
+    void SolveLU(double a_val, double b_val, double c_val);
+
 };
 
 #endif

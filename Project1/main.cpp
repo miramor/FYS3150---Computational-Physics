@@ -7,7 +7,7 @@ using namespace std;
 
 
 int main(int argc, char const *argv[]) {
-
+/*
   ofstream outfile;
   string filename = "CPUtime general";
   cout << "Filename: " <<filename << endl;
@@ -29,13 +29,24 @@ int main(int argc, char const *argv[]) {
     outline.append(to_string(dSolv.solvetime));
 
     outfile << outline << endl; // Add final line to end of text file
-
-
   }
-
-
-
   outfile.close();
+
+*/
+  double a, b, c, x0, xn;
+  a = -1.0; b = 2.0; c = -1.0; x0 = 0.0; xn = 1.0;
+  double n = 100; //fjern
+  DiffSolver dSolv;
+  dSolv.Initialize(a, b, c, n, x0,  xn);
+  dSolv.SolveLU(a, b, c);
+  cout << "Time LUsolve " <<dSolv.solvetimeLU << endl;
+
+
+
+
+
+
+
 
 
 
