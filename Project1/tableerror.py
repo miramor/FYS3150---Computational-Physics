@@ -16,7 +16,7 @@ for n in n_vals:
     
 dfError = pd.DataFrame({"n":n_vals,"log error":errorlist})
 
-
+dfError.to_csv("test.csv")
 
 #Make table for logerror
 fig,  ax = plt.subplots(1,1,figsize=(5,2))
