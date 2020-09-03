@@ -35,22 +35,13 @@ int main(int argc, char const *argv[]) {
 */
   double a, b, c, x0, xn;
   a = -1.0; b = 2.0; c = -1.0; x0 = 0.0; xn = 1.0;
-  double n = 100; //fjern
+  double n = 10000; //fjern
   DiffSolver dSolv;
   dSolv.Initialize(a, b, c, n, x0,  xn);
+  dSolv.Solve();
   dSolv.SolveLU(a, b, c);
+  cout << "Time solve " <<dSolv.solvetime << endl;
   cout << "Time LUsolve " <<dSolv.solvetimeLU << endl;
-
-
-
-
-
-
-
-
-
-
-
 
   return 0;
 }

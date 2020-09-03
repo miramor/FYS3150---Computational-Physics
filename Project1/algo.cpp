@@ -149,7 +149,6 @@ void DiffSolver::SolveLU(double a_val, double b_val, double c_val){
   mat A = zeros<mat>(n,n);
   // Set up arrays for the simple case
   vec g(n);  vec x(n); //Ax=g
-  cout <<h<< endl;
   A(0,0) = b_val;  A(0,1) = c_val;  x(0) = h;  g(0) =  h_sq*f(x(0));
   x(n-1) = x(0)+(n-1)*h; g(n-1) = h_sq*f(x(n-1));
   for (int i = 1; i < n-1; i++){
@@ -166,7 +165,7 @@ void DiffSolver::SolveLU(double a_val, double b_val, double c_val){
   //cout << solution << endl;
   finish = clock();
   solvetimeLU = ( (finish - start)/(double)CLOCKS_PER_SEC );
-  
+
 
 
 }
