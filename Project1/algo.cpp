@@ -55,30 +55,36 @@ void DiffSolver::Initialize(double a_val, double b_val, double c_val, int n_val,
   exact_[n] = exact(x_n);
 }
 
-void DiffSolver::Solve(){
+void DiffSolver::Solve(bool useSpecial){
 
   clock_t start, finish, finish2; // declare start and final time
   start = clock();
-
-
+//Forward solution
   for(int i = 2; i < n; i++){
-      if (a[0] != c[0]){
-        b[i] = b[i] - 1/b[i-1];
+      if ( useSpecial = true){
+        g[i] = g[i] + g[i-1]/((i+1)/i);
       }
       else{
         b[i] = b[i] - a[i-1]*c[i-1]/b[i-1];
+        g[i] = g[i] - a[i-1]*g[i-1]/b[i-1];
       }
-      g[i] = g[i] - a[i-1]*g[i-1]/b[i-1];
+
   }
 
   u[0] = 0; //boundry condition
   u[n] = 0; //boundry condition
   u[n-1] = g[n-1]/b[n-1]; //boundry condition where u[n] = 0
 
+//Backward sub
   int i = n - 2;
   while (i>0){
+    if (useSpecial = true){
+      u[i] = (g[i] + u[i+1])/((i+1)/i); //special
+    }
+    else{
       u[i] = (g[i] - c[i]*u[i+1])/b[i];
-      i -= 1;
+    }
+    i -= 1;
 
 
   //Fill array with log of relative error:
@@ -91,13 +97,12 @@ void DiffSolver::Solve(){
   }
 
   finish = clock();
-  solvetime = ( (finish - start)/(double)CLOCKS_PER_SEC );
+  solvetime = ((finish - start)/(double)CLOCKS_PER_SEC );
   cout <<"Time to solve: (s): "<<( (finish - start)/(double)CLOCKS_PER_SEC ) << endl;
-
   finish2 = clock();
   //Delete unneccesary vectors: a, b, c, g
   delete [] a; delete [] b; delete [] c; delete [] g;
-  cout <<"Time with delete (s): "<< ( (finish2 - start)/(double)CLOCKS_PER_SEC ) << endl;
+  cout <<"Time with delete (s): "<< (double) ((finish2 - start)/CLOCKS_PER_SEC ) << endl;
   //cout << *(a) << endl;
   //cout << *(a+1) << endl;
   //cout << *(b) << endl;
@@ -166,7 +171,7 @@ void DiffSolver::SolveLU(double a_val, double b_val, double c_val){
   //cout << solution << endl;
   finish = clock();
   solvetimeLU = ( (finish - start)/(double)CLOCKS_PER_SEC );
-  
+
 
 
 }

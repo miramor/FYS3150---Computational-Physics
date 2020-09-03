@@ -1,3 +1,7 @@
+"""
+Code for putting error-values, for different n, stored in different csv-files into a table/new gathered csv file
+"""
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -15,7 +19,7 @@ for n in n_vals:
     errorlist.append(error)
 dfError = pd.DataFrame({"n":n_vals,"log error":errorlist})
 
-dfError.to_csv("test.csv")
+dfError.to_csv("Error.csv") #create new csv file with n and log error values
 
 #Make table for logerror
 fig,  ax = plt.subplots(1,1,figsize=(5,2))

@@ -21,17 +21,14 @@ class DiffSolver {
     double* u; //Solution
     double* exact_;// Exact solution
 
-
-
   public:
     void Initialize(double a_val, double b_val, double c_val, int n, double x_0, double x_n); //Created all the needed vectors
-    void Solve(); // Solves the system using BackAndFw solution
+    void Solve(bool useSpecial = false); // Solves the system using BackAndFw solution
     void PrintError(); //Prints the error
-    void WritetoFile();
+    void WritetoFile(); // write solution to csv file [x_i, solution, exact_, log_rel_error]
     void Printtest();
     double solvetime; double solvetimeLU;
-    void SolveLU(double a_val, double b_val, double c_val);
-
+    void SolveLU(double a_val, double b_val, double c_val); //Solves the system using LU decomposition
 };
 
 #endif
