@@ -14,8 +14,12 @@ using namespace std;
 
 
 int main(int argc, char const *argv[]) {
-
+  // First choose to use special or general algorithm
+  // First half of writes the time to compute the algorith to text files
+  // Second uses armadillo solve function (which uses LU?)
+  // Can print out error and u(solution) before we write to file if we wanna check it for testing.
   bool useSpecial = false;
+  int n_max = 10e4;
   string filename = "CPUtime general";
   if(useSpecial){
     filename = "CPUtime special";
@@ -23,16 +27,17 @@ int main(int argc, char const *argv[]) {
   ofstream outfile;
   outfile.open(filename);
 
-  for(int n=10; n<=10; n*= 10){
+  for(int n=10; n<=n_max; n*= 10){
     DiffSolver dSolv;
     dSolv.Initialize(-1.0, 2.0, -1.0, n,  0.0, 1.0); // a, b, c, n, x0, xn
     dSolv.Solve(useSpecial);
     dSolv.WritetoFile();
     //dSolv.PrintError();
     //dSolv.Printtest();
-    //cout << dSolv.solvetime << endl;
-    //outfile << setprecision(6) << scientific;
-    //outfile << n << ", " << dSolv.solvetime << endl;
+    outfile << setprecision(6) << scientific;
+    outfile << n << ", " << dSolv.solvetime << endl;
+
+    cout << "Finished for n: " << n << endl;
 
   }
   outfile.close();

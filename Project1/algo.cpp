@@ -60,15 +60,15 @@ void DiffSolver::Solve(bool useSpecial){
   clock_t start, finish, finish2; // declare start and final time
   start = clock();
 
-
   for(int i = 2; i < n; i++){
-      if (useSpecial){
-        b[i] = b[i] - 1/b[i-1];
-      }
-      else{
-        b[i] = b[i] - a[i-1]*c[i-1]/b[i-1];
-      }
+    if (useSpecial){
+      b[i] = (i+1.0)/i;
+      g[i] = g[i] + g[i-1]/b[i-1];
+    }
+    else{
+      b[i] = b[i] - a[i-1]*c[i-1]/b[i-1];
       g[i] = g[i] - a[i-1]*g[i-1]/b[i-1];
+    }
   }
 
   u[0] = 0; //boundry condition
@@ -77,8 +77,13 @@ void DiffSolver::Solve(bool useSpecial){
 
   int i = n - 2;
   while (i>0){
-      u[i] = (g[i] - c[i]*u[i+1])/b[i];
-      i -= 1;
+    if (useSpecial){
+      u[i] = (g[i] + u[i+1])/b[i]; //3FLOPSx(n-2)
+    }
+    else{
+      u[i] = (g[i] - c[i]*u[i+1])/b[i]; //3FLOPSx(n-2)
+    }
+    i -= 1;
 
 
   //Fill array with log of relative error:
@@ -92,12 +97,10 @@ void DiffSolver::Solve(bool useSpecial){
 
   finish = clock();
   solvetime = ( (finish - start)/(double)CLOCKS_PER_SEC );
-  cout <<"Time to solve: (s): "<<( (finish - start)/(double)CLOCKS_PER_SEC ) << endl;
+  //cout <<"Time to solve: (s): "<<( (finish - start)/(double)CLOCKS_PER_SEC ) << endl;
 
-  finish2 = clock();
-  //Delete unneccesary vectors: a, b, c, g
+  //Delete unneccesary arrays: a, b, c, g
   delete [] a; delete [] b; delete [] c; delete [] g;
-  cout <<"Time with delete (s): "<< ( (finish2 - start)/(double)CLOCKS_PER_SEC ) << endl;
 }
 
 void DiffSolver::PrintError(){
@@ -138,7 +141,7 @@ void DiffSolver::SolveLU(double a_val, double b_val, double c_val){
   mat A = zeros<mat>(n,n);
   // Set up arrays for the simple case
   vec g(n);  vec x(n); //Ax=g
-  cout <<h<< endl;
+  //cout <<h<< endl;
   A(0,0) = b_val;  A(0,1) = c_val;  x(0) = h;  g(0) =  h_sq*f(x(0));
   x(n-1) = x(0)+(n-1)*h; g(n-1) = h_sq*f(x(n-1));
   for (int i = 1; i < n-1; i++){
