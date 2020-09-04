@@ -1,1 +1,8 @@
 *.png
+*.exe
+*.csv
+
+CPUtime*
+fasit.txt
+algoError.cpp
+Results*

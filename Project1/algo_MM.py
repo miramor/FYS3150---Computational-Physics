@@ -39,10 +39,12 @@ for i in range(1,n):
     g[i] = f(x_i)*h_sq
     a[i] = -1
     c[i] = -1
-    if a[0] != c[0]: # if upper and lower diagonal not equal, b vector must be filled and cannot be precalculated
+    if a[1] != c[1]: # if upper and lower diagonal not equal, b vector must be filled and cannot be precalculated
         b[i] = 2
+
     else:
         b[i] = (i+1.0)/i  #precalculate diagonal #2FLOPSx(n-1)
+        print("")
 
 #exact values at boundary condition
 exact_[0] = exact(x_0)
@@ -50,9 +52,12 @@ exact_[n] = exact(x_n)
 
 
 for i in range(2,n):
-    if  a[0] != c[0]:
-         b[i] = b[i] - a[i-1]*c[i-1]/b[i-1] #3FLOPSx(n-2)
-    g[i] = g[i] - a[i-1]*g[i-1]/b[i-1] #3FLOPsx(n-2)
+    if  a[1] == c[1]:
+         #b[i] = b[i] - a[i-1]*c[i-1]/b[i-1] #3FLOPSx(n-2)
+         g[i] = g[i] + g[i-1]/b[i-1] #3FLOPsx(n-2)
+    else:
+        b[i] = b[i] - a[i-1]*c[i-1]/b[i-1] #3FLOPSx(n-2)
+        g[i] = g[i] - a[i-1]*g[i-1]/b[i-1] #3FLOPsx(n-2)
 
 #print(g)
 #print(b)
@@ -63,20 +68,23 @@ u[n] = 0 #boundry condition
 u[n-1] = g[n-1]/b[n-1] #boundry condition where u[n] = 0 #1FLOP
 i = n - 2
 while i>0:
-    u[i] = (g[i] - c[i]*u[i+1])/b[i] #3FLOPSx(n-2)
+    if a[1] == c[1]:
+        u[i] = (g[i] + u[i+1])/b[i] #3FLOPSx(n-2)
+    else:
+        u[i] = (g[i] - c[i]*u[i+1])/b[i] #3FLOPSx(n-2)
     i -= 1
 
 # plt.plot(u, label = "computed")
 # plt.plot(exact_, linestyle = "dashed", label = "exact")
 # plt.legend()
 # plt.show()
-
-for i in range(1, n):
-#print(exact_)
-    error = np.log10(abs((u[i]-exact_[i])/exact_[i]))
-# plt.plot((error))
-# plt.show()
-    print(error)
+print(u)
+# for i in range(1, n):
+# #print(exact_)
+#     error = np.log10(abs((u[i]-exact_[i])/exact_[i]))
+# # plt.plot((error))
+# # plt.show()
+#     print(error)
 
 #print(f"Error: {abs(u[0:n:int(n/10)]-exact_[0:n:int(n/10)])}")
 
