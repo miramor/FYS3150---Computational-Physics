@@ -1,1 +1,5 @@
 *.png
+*.exe
+*.csv
+
+Results*
