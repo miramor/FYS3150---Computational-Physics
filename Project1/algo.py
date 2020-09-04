@@ -40,16 +40,18 @@ exact_[n] = exact(x_n)
 
 
 for i in range(2,n):
-    if a[0] ==-1 and c[0] == -1:
+    print(a[1] ==-1 and c[1] == -1)
+    if a[1] !=-1 and c[1] == -1:
         #b[i] = -(i+1.0)/i
         #b[i] = b[i] - 1./b[i-1] #a*c
-        g[i] = g[i] + g[i-1]/((i+1)/i)
+        g[i] = g[i] + g[i-1]/((i)/(i-1))
+        print("if fw")
     else:
         b[i] = b[i] - a[i-1]*c[i-1]/b[i-1]
         g[i] = g[i] - a[i-1]*g[i-1]/b[i-1]
 
-#print(g)
-print("b:", b)
+print("g fw:", g)
+#print("b:", b)
 
 
 u[0] = 0 #boundry condition
@@ -57,11 +59,12 @@ u[n] = 0 #boundry condition
 u[n-1] = g[n-1]/b[n-1] #boundry condition where u[n] = 0
 i = n - 2
 while i>0:
-    if a[0] ==-1 and c[0] == -1:
+    if a[1] !=-1 and c[1] == -1:
         u[i] = (g[i] + u[i+1])/((i+1)/i) #special
     else:
         u[i] = (g[i] - c[i]*u[i+1])/b[i]
     i -= 1
+print("g back:", g)
 print("u:", u)
 """
 plt.plot(u, label = "computed")
