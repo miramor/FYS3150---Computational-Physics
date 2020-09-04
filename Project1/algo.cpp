@@ -62,7 +62,7 @@ void DiffSolver::Solve(bool useSpecial){
 
 
   for(int i = 2; i < n; i++){
-      if (a[0] != c[0]){
+      if (useSpecial){
         b[i] = b[i] - 1/b[i-1];
       }
       else{

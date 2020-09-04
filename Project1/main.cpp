@@ -25,20 +25,15 @@ int main(int argc, char const *argv[]) {
 
   for(int n=10; n<=10; n*= 10){
     DiffSolver dSolv;
-    dSolv.Initialize(-1.0, 2.0, -1.0, n,  0.0, 1.0);
+    dSolv.Initialize(-1.0, 2.0, -1.0, n,  0.0, 1.0); // a, b, c, n, x0, xn
     dSolv.Solve(useSpecial);
     dSolv.WritetoFile();
     //dSolv.PrintError();
-    //dSolv.Initialize(a_val = -1.0, b_val = 2.0, c_val = -1.0, n = 100, x_0 = 0.0, x_n = 1.0);
     //dSolv.Printtest();
     //cout << dSolv.solvetime << endl;
-    outfile << setprecision(6) << scientific;
-    outfile << n << ", " << dSolv.solvetime << endl;
-    //string outline = "";
-    //outline.append(to_string(n));
-    //outline.append(", ");
-    //outline.append(to_string(dSolv.solvetime));
-    //outfile << outline << endl; // Add final line to end of text file
+    //outfile << setprecision(6) << scientific;
+    //outfile << n << ", " << dSolv.solvetime << endl;
+
   }
   outfile.close();
 
