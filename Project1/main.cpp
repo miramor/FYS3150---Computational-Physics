@@ -19,11 +19,11 @@ int main(int argc, char const *argv[]) {
   //cout << "Filename: " <<filename << endl;
   //outfile.open(filename);
 
-  for(int n=10; n<=10e5; n*= 10){
+  for(int n=10; n<=10e3; n*= 10){
     DiffSolver dSolv;
     dSolv.Initialize(-1.0, 2.0, -1.0, n,  0.0, 1.0);
     dSolv.Solve();
-    //dSolv.WritetoFile();
+    dSolv.WritetoFile();
     //dSolv.PrintError();
     //dSolv.Initialize(a_val = -1.0, b_val = 2.0, c_val = -1.0, n = 100, x_0 = 0.0, x_n = 1.0);
     //dSolv.Printtest();

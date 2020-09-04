@@ -75,7 +75,7 @@ void DiffSolver::Solve(bool useSpecial){
   u[n] = 0; //boundry condition
   u[n-1] = g[n-1]/b[n-1]; //boundry condition where u[n] = 0
 
-//Backward sub
+//Backward substitution
   int i = n - 2;
   while (i>0){
     if (useSpecial = true){
