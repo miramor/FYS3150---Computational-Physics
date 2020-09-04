@@ -84,15 +84,13 @@ void DiffSolver::Solve(bool useSpecial){
       u[i] = (g[i] - c[i]*u[i+1])/b[i]; //3FLOPSx(n-2)
     }
     i -= 1;
-
+  }
 
   //Fill array with log of relative error:
   for(int i = 1; i<n; i++){
     double relError = fabs( (u[i] - exact_[i])/exact_[i] );
     //error[i] = 1.4;
     error[i] = log10(relError);
-  }
-
   }
 
   finish = clock();
