@@ -18,8 +18,8 @@ int main(int argc, char const *argv[]) {
   // First half of writes the time to compute the algorith to text files
   // Second uses armadillo solve function (which uses LU?)
   // Can print out error and u(solution) before we write to file if we wanna check it for testing.
-  bool useSpecial = true;
-  int n_max = 10e5;
+  bool useSpecial = false;
+  int n_max = 10;
   string filename = "CPUtime general";
   if(useSpecial){
     filename = "CPUtime special";
@@ -29,7 +29,7 @@ int main(int argc, char const *argv[]) {
 
   for(int n=10; n<=n_max; n*= 10){
     DiffSolver dSolv;
-    dSolv.Initialize(-1.0, 2.0, -1.0, n,  0.0, 1.0); // a, b, c, n, x0, xn
+    dSolv.Initialize(-1.0, 2.0, -1.0, n,  0.0, 1.0, useSpecial); // a, b, c, n, x0, xn
     dSolv.Solve(useSpecial);
     dSolv.WritetoFile();
     //dSolv.PrintError();
