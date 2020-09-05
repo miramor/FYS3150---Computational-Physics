@@ -18,8 +18,8 @@ int main(int argc, char const *argv[]) {
   // First half of writes the time to compute the algorith to text files
   // Second uses armadillo solve function (which uses LU?)
   // Can print out error and u(solution) before we write to file if we wanna check it for testing.
-  bool useSpecial = false;
-  int n_max = 10;
+  bool useSpecial = true;
+  int n_max = 10e5;
   string filename = "CPUtime general";
   if(useSpecial){
     filename = "CPUtime special";
