@@ -57,14 +57,14 @@ final,                   % draft: marks overfull hboxes, figures with paths
 % Ensure copyright on titlepage (article style) and chapter pages (book style)
 \fancypagestyle{plain}{
   \fancyhf{}
-  \fancyfoot[C]{{\footnotesize \copyright\ 1999-2020, "Computational Physics I FYS3150/FYS4150":"http://www.uio.no/studier/emner/matnat/fys/FYS3150/index-eng.html". Released under CC Attribution-NonCommercial 4.0 license}}
+  %\fancyfoot[C]{{\footnotesize \copyright\ 1999-2020, "Computational Physics I FYS3150/FYS4150":"http://www.uio.no/studier/emner/matnat/fys/FYS3150/index-eng.html". Released under CC Attribution-NonCommercial 4.0 license}}
 %  \renewcommand{\footrulewidth}{0mm}
   \renewcommand{\headrulewidth}{0mm}
 }
 % Ensure copyright on titlepages with \thispagestyle{empty}
 \fancypagestyle{empty}{
   \fancyhf{}
-  \fancyfoot[C]{{\footnotesize \copyright\ 1999-2020, "Computational Physics I FYS3150/FYS4150":"http://www.uio.no/studier/emner/matnat/fys/FYS3150/index-eng.html". Released under CC Attribution-NonCommercial 4.0 license}}
+  %\fancyfoot[C]{{\footnotesize \copyright\ 1999-2020, "Computational Physics I FYS3150/FYS4150":"http://www.uio.no/studier/emner/matnat/fys/FYS3150/index-eng.html". Released under CC Attribution-NonCommercial 4.0 license}}
   \renewcommand{\footrulewidth}{0mm}
   \renewcommand{\headrulewidth}{0mm}
 }
@@ -106,7 +106,7 @@ final,                   % draft: marks overfull hboxes, figures with paths
 \begin{center}
 {\LARGE\bf
 \begin{spacing}{1.25}
-Project 1, deadline  September 9
+Project 1
 \end{spacing}
 }
 \end{center}
@@ -170,7 +170,7 @@ Determining the equations for the boundary condition, $i=1$ holds
 \end{aligned}
 \end{equation*}
 
-since $v_0=0$. Given $v_{n+1}=0$, similarly holds for $i=n$
+since $v_0=0$. Given $v_{n+1}=0$, similarly for $i=n$ applies
 \begin{equation*}
 \begin{aligned}
   -v_{n-1}+2vn - v_{n+1}&= h^2f_n  \hspace{0.5cm} \\
@@ -252,7 +252,7 @@ In the forward substitution, the subdiagonal elements are eliminated. Starting f
 \end{aligned}
 \end{equation*}
 The first row remains unchanged. \\
-The backward substitution starts at the last row of the matrix. Here, the expression for $u_{n-1}$ in the last row becomes immediately clear
+The backward substitution starts at the last row of the matrix. Here, the expression for $u_{n-1}$ becomes immediately clear
 \begin{equation*}
 \begin{aligned}
 \tilde{b}_{n-1} u_{n-1} &= \tilde{g}_{n-1} \\
@@ -272,35 +272,44 @@ For our computation, we set identical matrix elements along the diagonal and ide
 That means that $\mathbf{\tilde{b}}$ no longer needs to be computed in the forward loop. \\
 The forward loop is therefore given by
 \begin{equation*}
-\begin{aligned}
-\tilde{g}_i &= g_i - a_{j-1} \cdot \tilde{g}_{i-1} / \tilde{b}_{i-1}  \hspace{0.5cm} \mathrm{for} \hspace{0.1cm} i=2,..., n-1 \\
-\tilde{g}_i &= g_i - a_{j-1} \cdot \tilde{g}_{i-1} / i/(i-1) \\
-\tilde{g}_i &= g_i - (i-1) \cdot a_{j-1} \cdot \tilde{g}_{i-1} / i
-\end{aligned}
+\tilde{g}_i = g_i - a_{j-1} \cdot \tilde{g}_{i-1} / \tilde{b}_{pre, i-1}  \hspace{0.5cm} \mathrm{for} \hspace{0.1cm} i=2,..., n-1 \\
 \end{equation*}
-Similarly, the backward loop is now given as......
-\begin{table}
-    \begin{tabular}{|l|l|l|l|}
-        \hline
-        FLOPs for         & Forward   & Backward  & Total    \\ \hline
-        $\mathbf{b}$      & $3 (n-2)$ & 0         & -        \\ \hline
-        $\mathbf{g}$      & $3 (n-2)$ & 0         & -        \\ \hline
-        $\mathbf{u}$      & 0         & $3 (n-2)$ & -        \\ \hline
-        Total for general & -         & -         & 27 (n-2) \\
-        \hline
-    \end{tabular}
-\end{table}
+there $\tilde{b}_{pre}$ stands for the precalculation.
+Similarly, the backward loop is now also computed with the precalculated $\mathbf{\tilde{b}}$
+\begin{equation*}
+u_i = ( \tilde{g_i}-c_i u_{i+1} )/ \tilde{b}_{pre,i} \hspace{0.5cm} \mathrm{for} \hspace{0.1cm} i=n-2,...,1 
+\end{equation*}
+The tables below show what effect this precalculation has on the number of FLOPs in the forward and backward substitution.
 
-\begin{table}
-    \begin{tabular}{|l|l|l|l|}
-        \hline
-        FLOPs for    & Forward & Backward & Total \\ \hline
-        $\mathbf{g}$ & 0       & 0        & -     \\ \hline
-        $\mathbf{u}$ & 0       & 0        & -     \\ \hline
-        Total        & 0       & 0        & -     \\
-        \hline
-    \end{tabular}
-\end{table}
+\begin{table}[ht]
+\caption{FLOPS for general algorithm}
+\centering
+	\begin{tabular}{c c c c}
+		\hline
+		FLOPs   & Forward & Backward & Total \\ [0.5ex]
+		\hline
+		$\mathbf{g}$ & $3 (n-2)$       & $3 (n-2)$        & -    \\
+        	$\mathbf{u}$ & $3 (n-2)$       & -        & -     \\
+        	Total        & -       & -        &  $9 (n-2)$      \\ [1ex]
+		\hline
+	\end{tabular}
+\end{table}	
+
+\begin{table}[ht]
+\caption{FLOPS for special algorithm}
+\centering
+	\begin{tabular}{c c c c}
+		\hline
+		FLOPs   & Forward & Backward & Total \\ [0.5ex]
+		\hline
+		$\mathbf{g}$ & $3 (n-2)$       & -        & -    \\
+        	$\mathbf{u}$ & -       & $3 (n-2)$        & -     \\
+        	Total        & -       & -        & $6 (n-2)$      \\ [1ex]
+		\hline
+	\end{tabular}
+\end{table}	
+
+\paragraph{LU decomposition}
 
 \paragraph{General Algorithm}
 %http://folk.ntnu.no/leifh/teaching/tkt4140/._main040.html
@@ -317,7 +326,7 @@ Similarly, the backward loop is now given as......
 	general case: update $\mathbf{b}, \mathbf{g}$ \\
 	special case: update $\mathbf{g}$
 
-\item Thomas algorith with backward substitution (general + special case): for (i=-2,n) compute $\mathbf{u}$
+\item Thomas algorithm with backward substitution (general + special case): for (i=-2,n) compute $\mathbf{u}$
 
 \item Testing analytic solution: compute relative error $  \epsilon =  \left\lvert \frac{u_i-exact_i}{exact_i} \right\rvert$ 
 
@@ -325,22 +334,21 @@ Similarly, the backward loop is now given as......
 
 \item Measure CPU time for the different algorithms
 
-\item Write results to file 
+\item Write results to file and if applicable plot them
 \end{enumerate}
 
-Number of FLOPS for $\mathbf{b}$ \\
-%Initialize (specific case): 2 FLOPs x (n-1) \\
-Forward loop: (special case): 2 FLOPs x (n-2) \\
-Forward loop: (general case): 3 FLOPs x (n-2) \\
-Backward loop: 1 FLOP and 3 FLOPs x (n-2) \\
 
-Number of FLOPS for $\mathbf{g}$ \\
-Initialize: 4 FLOPs x (n-1) \\
-Forward loop: 3 FLOPs x (n-2)\\
-Number of FLOPS for $exact$\\
-Initialize: 5 FLOPs x (n-1)
+\section{Results}
 
+%\begin{figure}[H]
+%\begin{center}
+%\graphicspath{ {Oppg2/} }
+%\includegraphics[width=10cm]{empRadius.png}
+%\caption{Empirisk radius til Mo, Sn og Pb samt usikkerhet}
+%\end{center}
+%\end{figure}
 
+\section{Conclusion}
 
 
 
