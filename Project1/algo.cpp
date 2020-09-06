@@ -49,9 +49,11 @@ void DiffSolver::Initialize(double a_val, double b_val, double c_val, int n_val,
       //b[i] = b_val; XXXXXXXXXXXX
       if (useSpecial){
         b[i] = (i+1.0)/i;
+        cout << b[i] << endl;
       }
       else{
         b[i] = b_val;
+        cout << b[i] << endl;
       }
       a[i] = a_val;
       c[i] = c_val;
@@ -155,10 +157,17 @@ void DiffSolver::SolveLU(double a_val, double b_val, double c_val){
     A(i,i+1)  = c_val;
   }
   A(n_-1,n_-1) = b_val; A(n_-2,n_-1) = a_val; A(n_-1,n_-2) = c_val;
+  A.print("A =");
+  mat L, U;
+  lu(L,U,A); //find LU decomposition
+  //Check that A = LU
+  //(A-L*U).print("Test of LU decomposition");
 
+  vec y = solve(L,g); // find y, Ly=g there y=Ux using forward substitution
+  vec solution = solve(U,y); // find x, Ux=y using backward substitution
   // solve Ax = g
-  vec solution  = solve(A,g);
-  //cout << solution << endl;
+  //vec solution  = solve(A,g);
+  cout << solution << endl;
   finish = clock();
   solvetimeLU = ( (finish - start)/(double)CLOCKS_PER_SEC );
 }
