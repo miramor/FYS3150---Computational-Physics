@@ -38,13 +38,15 @@ for n in n_list:
 
 
     #Make plot for time
-    dfTG = pd.read_csv("CPUtime general", names = ['n','time', 'LUtime'])
-    dfTS= pd.read_csv("CPUtime special", names = ['n','time', 'LUtime'])
+    dfTG = pd.read_csv("CPUtime general", names = ['n','time'])
+    dfTS= pd.read_csv("CPUtime special", names = ['n','time'])
+    dfLU= pd.read_csv("CPUtime LU", names = ['n','time'])
     #print(dfTG["time"])
     n = dfTG['n'].to_numpy()
     timeG = dfTG['time'].to_numpy()
     timeS = dfTS['time'].to_numpy()
-    timeLU = dfTS['LUtime'].to_numpy()
+    timeLU = dfLU['time'].to_numpy()
+
     if timeS.size != timeG.size:
         print("Has to be same nr of values in CPUtime general and CPUtime special! Exiting program")
         break
@@ -53,7 +55,7 @@ for n in n_list:
     plt.figure(figsize = (15, 8), dpi = 80)
     plt.plot(n, timeG, label = "General", color = "lightseagreen")
     plt.plot(n, timeS, linestyle = "dashed", label = "Special", color = "crimson")
-    plt.plot(n, timeLU, linestyle = "dashed", label = "LUtime", color = "cyan")
+    #plt.plot(n, timeLU, linestyle = "dashed", label = "LUtime", color = "cyan")
     plt.title("Time to solve", fontsize = 16)
     plt.grid(axis='both', alpha=.22)
     plt.xlabel("steps (n)")
@@ -73,9 +75,9 @@ for n in n_list:
 
     #Include this if want a Latex formatted table of time assuming the files
     # CPUtime* files exists.
-    """
+
     combinedTime = pd.concat([n, timeG, timeS, timeLU], axis=1)
     headers = ["n", "General time[s]", "Special time[s], "LU time[s]""]
     combinedTime.columns = headers
     vertical_stack.to_latex(index = False)
-    """
+    

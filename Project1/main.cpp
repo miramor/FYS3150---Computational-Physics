@@ -19,7 +19,8 @@ int main(int argc, char const *argv[]) {
   // Second uses armadillo solve function (which uses LU?)
   // Can print out error and u(solution) before we write to file if we wanna check it for testing.
   bool useSpecial = false;
-  int n_max = 10e6;
+  int n_max = 1e6;
+  int repeat = 8; // To avoid randomness, average out time by repeating calculation multiple times
   string filename = "CPUtime general";
   if(useSpecial){
     filename = "CPUtime special";
@@ -30,22 +31,40 @@ int main(int argc, char const *argv[]) {
   for(int n=10; n<=n_max; n*= 10){
     DiffSolver dSolv;
     dSolv.Initialize(-1.0, 2.0, -1.0, n,  0.0, 1.0, useSpecial); // a, b, c, n, x0, xn
-    dSolv.Solve();
-    dSolv.SolveLU(-1.0, 2.0, -1.0);
+
+    double totaltime = 0.0;
+    for(int i = 0; i< repeat; i++){
+      dSolv.Solve();
+      totaltime += dSolv.solvetime;
+    }
+
+
     dSolv.WritetoFile();
     //dSolv.PrintError();
     //dSolv.Printtest();
     outfile << setprecision(6) << scientific;
-    outfile << n << ", " << dSolv.solvetime <<", "<<dSolv.solvetimeLU <<endl;
-
+    outfile << n << ", " << totaltime/(double)repeat <<endl;
     cout << "Finished for n: " << n << endl;
 
   }
   outfile.close();
 
 
+  // Run up to 1e4 for LU decomp, due to error in LU when to big matrices
+  ofstream outfile2;
+  outfile2.open("CPUtime LU");
 
+  for(int n=10; n<=1e4; n*= 10){
+    DiffSolver dSolv;
+    dSolv.Initialize(-1.0, 2.0, -1.0, n,  0.0, 1.0, useSpecial); // a, b, c, n, x0, xn
+    dSolv.SolveLU(-1.0, 2.0, -1.0);
+    dSolv.WritetoFile();
+    outfile2 << setprecision(6) << scientific;
+    outfile2 << n << ", " << dSolv.solvetime <<endl;
+    cout << "Finished LU for n: " << n << endl;
 
+  }
+  outfile.close();
 
 //Run SolveLU without Initialize?
 //set precision
