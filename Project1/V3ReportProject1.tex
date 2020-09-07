@@ -206,12 +206,12 @@ The set of equations can be rewritten in matrix-form, there $ \mathbf{A} \in \R^
                            v_n\\
                       \end{bmatrix}
   =\begin{bmatrix}
-                          \tilde{ g_1}\\
-                          \tilde{g_2}\\
+                           g_1\\
+                          g_2\\
                            \dots \\
                            \dots \\
                           \dots \\
-                           \tilde{g_n}\\
+                           g_n\\
                       \end{bmatrix}.
 \]
 For simplicity, $v_i$ is from now on written as $u_i$.
@@ -233,12 +233,12 @@ Furhter, the vectors $ \mathbf{a}, \mathbf{b}, \mathbf{c}$ are defined as the ma
                            u_n\\
                       \end{bmatrix}
   =\begin{bmatrix}
-                           \tilde{g}_1\\
-                           \tilde{g}_2\\
+                           g_1\\
+                           g_2\\
                            \dots \\
                            \dots \\
                           \dots \\
-                           \tilde{g}_n\\
+                           g_n\\
                       \end{bmatrix}.
 \]
 This linear set of equations can be solved by using the Thomas algorithm.
@@ -351,7 +351,7 @@ Given below are pseudocodes for the Thomas algorithm and the LU decomposition.
 \item Setting the input variables (x0, xn, a, b, c, n) \\
 	x0 and xn confine the interval (here from 0 to 1). \\
 	n stands for the number of integration points. \\
-	In our case, the elements along the tridiagonal are constant, e.g. $a_i=a$, $b_i=b, c_i=c$. 
+	In our case, the elements along the tridiagonal are constant, e.g. $a_i=a$, $b_i=b, c_i=c$ for all i. 
 	
 \item Initialization: Defining the step size h. \\
 	Allocation of memory for $ \mathbf{a}, \mathbf{b}, \mathbf{c}, \mathbf{g}, \mathbf{exact}$  and filling them up with values.
@@ -391,7 +391,7 @@ Using armadillo
 		$\mathbf{x}$ is the solution-vector $\mathbf{u}$ 
 \end{enumerate}
 \section{Results}
-
+First, the results for computing the general Thomas algorithm for the matrices of the size $10x10$, $100x100$, $1000x1000$ which corresponds to $n=10$, $n=100$ and $n=100$.
 %\begin{figure}[H]
 %\begin{center}
 %\graphicspath{ {Oppg2/} }
@@ -401,6 +401,7 @@ Using armadillo
 %\end{figure}
 
 \section{Conclusion}
+\section{References}
 
 
 
