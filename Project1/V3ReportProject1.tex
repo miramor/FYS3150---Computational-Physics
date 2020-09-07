@@ -145,7 +145,7 @@ Given the one-dimensional Poisson equation with Dirichlet boundary conditions
 \end{equation*}
 we approximate the second derivative of $u$ with
 \begin{equation}\label{eqn:2ndDeriv}
-   -\frac{v_{i+1}+v_{i-1}-2v_i}{h^2} = f_i  \hspace{0.5cm} \mathrm{for} \hspace{0.1cm} i=1,\dots, n,
+   -\frac{v_{i+1}+v_{i-1}-2v_i}{h^2} = f_i  \hspace{0.5cm} \mathrm{for} \hspace{0.1cm} i=1,\dots, n-1,
 \end{equation}
 where $f_i=f(x_i)$ and the discretized approximation to $u$ is $v_i$ with grid points $x_i = ih$ in the interval from $x_0$ to $x_{n+1}=1$.
 Further, the step length, h,  is defined as $h=1/(n+1)$ and the boundary conditions set $v_0 = v_{n+1}=0$. \\
@@ -187,13 +187,13 @@ A combination of the above equations results in
  -v_{n-1}+ 2v_n &= h^2f_n &= \tilde{g_n}  \hspace{0.5cm} 
 \end{aligned}
 \end{equation*}
-Thus, there are $n$ equations that must be computed ($i \in [1,n])$.
+Thus, there are $n-1$ equations that must be computed ($i \in [1,n-1])$.
 The set of equations can be rewritten in matrix-form, there $ \mathbf{A} \in \R^{n \times n} $ and $ \mathbf{v}, \mathbf{g} \in \R^{n}$
 \[
      \begin{bmatrix}
                            2& -1 & 0 &\dots   & \dots &\dots \\
                            -1 & 2 & -1 &\dots &\dots &\dots \\
-                           & -1 & 2 & 0 & \dots & \dots \\
+                           & -1 & 2 & -1 & \dots & \dots \\
                            & \dots   & \dots &\dots   &\dots & \dots \\
                            &   &  &-1  &2& -1 \\
                            &    &  &   &-1 & 2 \\
@@ -244,7 +244,7 @@ Furhter, the vectors $ \mathbf{a}, \mathbf{b}, \mathbf{c}$ are defined as the ma
 This linear set of equations can be solved by using the Thomas algorithm.
 \paragraph{Thomas Algorithm}
 The Thomas algorithm can be divided into two steps: a forward substitution and a backward substitution.\\
-In the forward substitution, the subdiagonal elements are eliminated. Starting from the top, this is done by summing two successive appropriately scaled rows in the matrix. The mathematical expression for the new matrix elements is given as
+In the forward substitution, the lower-diagonal elements are eliminated. Starting from the top, this is done by summing two successive appropriately scaled rows in the matrix. The mathematical expression for the new matrix elements is given as
 \begin{equation*}
 \begin{aligned}
 \tilde{b}_i &= b_i - a_{j-1} \cdot c_{i-1}/ \tilde{b}_{i-1}  \hspace{0.5cm} \mathrm{for} \hspace{0.1cm} i=2,..., n-1 \\
@@ -302,13 +302,13 @@ The tables below show what effect this precalculation has on the number of FLOPs
 		\hline
 		FLOPs   & Forward & Backward & Total \\ [0.5ex]
 		\hline
-		$\mathbf{g}$ & $3 (n-2)$       & -        & -    \\
-        	$\mathbf{u}$ & -       & $3 (n-2)$        & -     \\
-        	Total        & -       & -        & $6 (n-2)$      \\ [1ex]
+		$\mathbf{g}$ & $2 (n-2)$       & -        & -    \\
+        	$\mathbf{u}$ & -       & $2 (n-2)$        & -     \\
+        	Total        & -       & -        & $4 (n-2)$      \\ [1ex]
 		\hline
 	\end{tabular}
 \end{table}	
-XXXXXX comment on FLOPS
+For the special algorithm, the $2(n-1)$ FLOPs for the precalculated $\mathbf{b}$ must be taken into consideration. If n is a large number $n-2 \approx n-1 \approx n$. Thus, comparing the two algorithms, the number of FLOPs are reduced from $9n$ to $6n$.
 
 \paragraph{LU decomposition}
 Another way to solve the set of linear equations is the LU decomposition.
@@ -379,9 +379,9 @@ Using armadillo
 	n stands for the number of integration points. \\
 	In our case, the elements along the tridiagonal are constant, e.g. $a_i=a$, $b_i=b, c_i=c$. 
 
-\item Setting up matrix $\mathbf{A}$ \\
+\item Setting up matrix $\mathbf{A}^{n-1 \times n-1}$ using built-in function (mat A = zeros<mat>(n-1,n-1);\\
 	 Filling in values in for(1, 
-		n-1 ???????????)
+		n-2)
 		
 \item Compute $\mathbf{L}$ and $\mathbf{U}$ (built-in function)
 
@@ -391,7 +391,7 @@ Using armadillo
 		$\mathbf{x}$ is the solution-vector $\mathbf{u}$ 
 \end{enumerate}
 \section{Results}
-First, the results for computing the general Thomas algorithm for the matrices of the size $10x10$, $100x100$, $1000x1000$ which corresponds to $n=10$, $n=100$ and $n=100$.
+First, the results for computing the general Thomas algorithm are given for the matrices of the size $10 \times 10$, $100 \times 100$, $1000 \times 1000$, which corresponds to $n=10$, $n=100$ and $n=1000$, in the interval $x \in (0,1)$. The computed solution is graphed together with the exact solution.
 %\begin{figure}[H]
 %\begin{center}
 %\graphicspath{ {Oppg2/} }
