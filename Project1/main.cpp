@@ -19,7 +19,7 @@ int main(int argc, char const *argv[]) {
   // Second uses armadillo solve function (which uses LU?)
   // Can print out error and u(solution) before we write to file if we wanna check it for testing.
   bool useSpecial = false;
-  int n_max = 10e2;
+  int n_max = 10;
   string filename = "CPUtime general";
   if(useSpecial){
     filename = "CPUtime special";
@@ -29,17 +29,30 @@ int main(int argc, char const *argv[]) {
 
   for(int n=10; n<=n_max; n*= 10){
     DiffSolver dSolv;
-    dSolv.Initialize(-1.0, 2.0, -1.0, n,  0.0, 1.0); // a, b, c, n, x0, xn
-    dSolv.Solve(useSpecial);
-    dSolv.SolveLU(-1.0, 2.0, -1.0);
-    dSolv.WritetoFile();
+    dSolv.Initialize(-1.0, 2.0, -1.0, n,  0.0, 1.0, useSpecial); // a, b, c, n, x0, xn
+    //dSolv.Solve(useSpecial);
+    //dSolv.WritetoFile();
+    //dSolv.PrintError();
+    //dSolv.Printtest();
     outfile << setprecision(6) << scientific;
-    outfile << n << ", " << dSolv.solvetime << ", " << dSolv.solvetimeLU << endl;
+    outfile << n << ", " << dSolv.solvetime << endl;
 
     cout << "Finished for n: " << n << endl;
 
   }
   outfile.close();
+
+
+
+  double a, b, c, x0, xn;
+  a = -1.0; b = 2.0; c = -1.0; x0 = 0.0; xn = 1.0;
+  double n = 10; //fjern
+  DiffSolver dSolv;
+  dSolv.Initialize(a, b, c, n, x0,  xn);
+  dSolv.SolveLU(a, b, c);
+  cout << "Time LUsolve " <<dSolv.solvetimeLU << endl;
+
+
 
 //Run SolveLU without Initialize?
 //set precision
@@ -49,5 +62,13 @@ int main(int argc, char const *argv[]) {
 // setiosflags(ios::showpoint | ios::uppercase) for scientific notation
 //cpp plus for string formatation
 //do we use LU decomposition?
+
+
+
+
+
+
+
+
   return 0;
 }
