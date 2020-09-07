@@ -27,6 +27,7 @@ void DiffSolver::Initialize(double a_val, double b_val, double c_val, int n_val,
   x_0 = x_0_val;
   x_n = x_n_val;
   n = n_val;
+  m_useSpecial = useSpecial;
   a = new double[n];
   b = new double[n]; // Diagonal
   c = new double[n];
@@ -47,7 +48,7 @@ void DiffSolver::Initialize(double a_val, double b_val, double c_val, int n_val,
       exact_[i] = exact(x_i);
       g[i] = f(x_i)*h_sq;
       //b[i] = b_val; XXXXXXXXXXXX
-      if (useSpecial){
+      if (m_useSpecial){
         b[i] = (i+1.0)/i;
         cout << b[i] << endl;
       }
@@ -63,13 +64,13 @@ void DiffSolver::Initialize(double a_val, double b_val, double c_val, int n_val,
   exact_[n] = exact(x_n);
 }
 
-void DiffSolver::Solve(bool useSpecial){
+void DiffSolver::Solve(){
 
   clock_t start, finish, finish2; // declare start and final time
   start = clock();
 
   for(int i = 2; i < n; i++){
-    if (useSpecial){
+    if (m_useSpecial){
       //b[i] = (i+1.0)/i; XXXXXXXXXXXX
       g[i] = g[i] + g[i-1]/b[i-1];
     }
@@ -85,7 +86,7 @@ void DiffSolver::Solve(bool useSpecial){
 
   int i = n - 2;
   while (i>0){
-    if (useSpecial){
+    if (m_useSpecial){
       u[i] = (g[i] + u[i+1])/b[i]; //3FLOPSx(n-2)
     }
     else{
@@ -161,13 +162,13 @@ void DiffSolver::SolveLU(double a_val, double b_val, double c_val){
   mat L, U;
   lu(L,U,A); //find LU decomposition
   //Check that A = LU
-  //(A-L*U).print("Test of LU decomposition");
+  (A-L*U).print("Test of LU decomposition");
 
   vec y = solve(L,g); // find y, Ly=g there y=Ux using forward substitution
   vec solution = solve(U,y); // find x, Ux=y using backward substitution
   // solve Ax = g
   //vec solution  = solve(A,g);
-  cout << solution << endl;
+  //cout << solution << endl;
   finish = clock();
   solvetimeLU = ( (finish - start)/(double)CLOCKS_PER_SEC );
 }
