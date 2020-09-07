@@ -121,7 +121,7 @@ Project 1
 % List of all institutions:
 \centerline{{\small Department of Physics, University of Oslo, Norway}}
 \end{center}
-    
+
 % ----------------- end author(s) -------------------------
 
 % --- begin date ---
@@ -156,17 +156,17 @@ For numerical computation, (\ref{eqn:2ndDeriv}) must be written as a linear set 
 where $\mathbf{A}$ is an $n\times n$  tridiagonal matrix.\\
 The set of equation for $h^2f_i$ is given by
 \begin{equation*}
-   -v_{i+1}-v_{i-1}+2v_i = h^2f_i  \hspace{0.5cm} 
+   -v_{i+1}-v_{i-1}+2v_i = h^2f_i  \hspace{0.5cm}
 \end{equation*}
 Rearranging the equation gives
 \begin{equation*}
-  -v_{i-1}+2v_i - v_{i+1}= h^2f_i  \hspace{0.5cm} 
+  -v_{i-1}+2v_i - v_{i+1}= h^2f_i  \hspace{0.5cm}
 \end{equation*}
-Determining the equations for the boundary condition, $i=1$ holds 
+Determining the equations for the boundary condition, $i=1$ holds
 \begin{equation*}
 \begin{aligned}
   -v_{0}+2v_1 - v_{2}&= h^2f_1  \hspace{0.5cm} \\
-  0 + 2v_1 - v_{2}&= h^2f_1  \hspace{0.5cm} 
+  0 + 2v_1 - v_{2}&= h^2f_1  \hspace{0.5cm}
 \end{aligned}
 \end{equation*}
 
@@ -174,17 +174,17 @@ since $v_0=0$. Given $v_{n+1}=0$, similarly for $i=n$ applies
 \begin{equation*}
 \begin{aligned}
   -v_{n-1}+2vn - v_{n+1}&= h^2f_n  \hspace{0.5cm} \\
- -v_{n-1}+ 2v_n - 0&= h^2f_n  \hspace{0.5cm} 
+ -v_{n-1}+ 2v_n - 0&= h^2f_n  \hspace{0.5cm}
 \end{aligned}
 \end{equation*}
-A combination of the above equations results in 
+A combination of the above equations results in
 \begin{equation*}
 \begin{aligned}
   2v_1 - v_{2}&= h^2f_1 & = \tilde{g_1}  \hspace{0.5cm} \\
   ...\\
   -v_{i-1}+2v_i - v_{i+1}&= h^2f_i &= \tilde{g_i}  \hspace{0.5cm} \\
   ...\\
- -v_{n-1}+ 2v_n &= h^2f_n &= \tilde{g_n}  \hspace{0.5cm} 
+ -v_{n-1}+ 2v_n &= h^2f_n &= \tilde{g_n}  \hspace{0.5cm}
 \end{aligned}
 \end{equation*}
 Thus, there are $n-1$ equations that must be computed ($i \in [1,n-1])$.
@@ -261,7 +261,7 @@ u_{n-1} &= \tilde{g}_{n-1} / \tilde{b}_{n-1}
 \end{equation*}
 Going up row for row, $u_i$ can be expressed as
 \begin{equation*}
-u_i = ( \tilde{g_i}-c_i u_{i+1} )/ \tilde{b_i} \hspace{0.5cm} \mathrm{for} \hspace{0.1cm} i=n-2,...,1 
+u_i = ( \tilde{g_i}-c_i u_{i+1} )/ \tilde{b_i} \hspace{0.5cm} \mathrm{for} \hspace{0.1cm} i=n-2,...,1
 \end{equation*}
 
 \subparagraph{Special Case}
@@ -277,7 +277,7 @@ The forward loop is therefore given by
 there $\tilde{b}_{pre}$ stands for the precalculation.
 Similarly, the backward loop is now also computed with the precalculated $\mathbf{\tilde{b}}$
 \begin{equation*}
-u_i = ( \tilde{g_i}-c_i u_{i+1} )/ \tilde{b}_{pre,i} \hspace{0.5cm} \mathrm{for} \hspace{0.1cm} i=n-2,...,1 
+u_i = ( \tilde{g_i}-c_i u_{i+1} )/ \tilde{b}_{pre,i} \hspace{0.5cm} \mathrm{for} \hspace{0.1cm} i=n-2,...,1
 \end{equation*}
 The tables below show what effect this precalculation has on the number of FLOPs in the forward and backward substitution.
 
@@ -293,7 +293,7 @@ The tables below show what effect this precalculation has on the number of FLOPs
         	Total        & -       & -        &  $9 (n-2)$      \\ [1ex]
 		\hline
 	\end{tabular}
-\end{table}	
+\end{table}
 
 \begin{table}[ht]
 \caption{FLOPS for special algorithm}
@@ -307,7 +307,7 @@ The tables below show what effect this precalculation has on the number of FLOPs
         	Total        & -       & -        & $4 (n-2)$      \\ [1ex]
 		\hline
 	\end{tabular}
-\end{table}	
+\end{table}
 For the special algorithm, the $2(n-1)$ FLOPs for the precalculated $\mathbf{b}$ must be taken into consideration. If n is a large number $n-2 \approx n-1 \approx n$. Thus, comparing the two algorithms, the number of FLOPs are reduced from $9n$ to $6n$.
 
 \paragraph{LU decomposition}
@@ -351,8 +351,8 @@ Given below are pseudocodes for the Thomas algorithm and the LU decomposition.
 \item Setting the input variables (x0, xn, a, b, c, n) \\
 	x0 and xn confine the interval (here from 0 to 1). \\
 	n stands for the number of integration points. \\
-	In our case, the elements along the tridiagonal are constant, e.g. $a_i=a$, $b_i=b, c_i=c$ for all i. 
-	
+	In our case, the elements along the tridiagonal are constant, e.g. $a_i=a$, $b_i=b, c_i=c$ for all i.
+
 \item Initialization: Defining the step size h. \\
 	Allocation of memory for $ \mathbf{a}, \mathbf{b}, \mathbf{c}, \mathbf{g}, \mathbf{exact}$  and filling them up with values.
 
@@ -362,7 +362,7 @@ Given below are pseudocodes for the Thomas algorithm and the LU decomposition.
 
 \item Thomas algorithm with backward substitution (general + special case): for (i=-2,n) compute $\mathbf{u}$
 
-\item Testing analytic solution: compute relative error $  \epsilon =  \left\lvert \frac{u_i-exact_i}{exact_i} \right\rvert$ 
+\item Testing analytic solution: compute relative error $  \epsilon =  \left\lvert \frac{u_i-exact_i}{exact_i} \right\rvert$
 
 \item Compute solution with LU decomposition
 
@@ -372,23 +372,23 @@ Given below are pseudocodes for the Thomas algorithm and the LU decomposition.
 \end{enumerate}
 
 \subparagraph{LU decomposition}
-Using armadillo 
+Using armadillo
 \begin{enumerate}
 \item Initialize Setting the input variables (x0, xn, a, b, c, n) \\
 	x0 and xn confine the interval (here from 0 to 1). \\
 	n stands for the number of integration points. \\
-	In our case, the elements along the tridiagonal are constant, e.g. $a_i=a$, $b_i=b, c_i=c$. 
+	In our case, the elements along the tridiagonal are constant, e.g. $a_i=a$, $b_i=b, c_i=c$.
 
 \item Setting up matrix $\mathbf{A}^{n-1 \times n-1}$ using built-in function (mat A = zeros<mat>(n-1,n-1);\\
-	 Filling in values in for(1, 
+	 Filling in values in for(1,
 		n-2)
-		
+
 \item Compute $\mathbf{L}$ and $\mathbf{U}$ (built-in function)
 
 \item Compute $\mathbf{y}$ in $\mathbf{Ly}=\mathbf{g}$ using forward substitution (built-in function)
 
 \item Compute $\mathbf{x}$ in $\mathbf{Ux}=\mathbf{y}$ using backward substitution (built-in function)\\
-		$\mathbf{x}$ is the solution-vector $\mathbf{u}$ 
+		$\mathbf{x}$ is the solution-vector $\mathbf{u}$
 \end{enumerate}
 \section{Results}
 First, the results for computing the general Thomas algorithm are given for the matrices of the size $10 \times 10$, $100 \times 100$, $1000 \times 1000$, which corresponds to $n=10$, $n=100$ and $n=1000$, in the interval $x \in (0,1)$. The computed solution is graphed together with the exact solution.
@@ -416,4 +416,3 @@ First, the results for computing the general Thomas algorithm are given for the 
 % ------------------- end of main content ---------------
 
 \end{document}
-

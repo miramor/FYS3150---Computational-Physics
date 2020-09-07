@@ -23,10 +23,11 @@ inline double exact(double x) { //u(x)
   return 1.0-(1-exp(-10))*x-exp(-10*x);
 }
 
-void DiffSolver::Initialize(double a_val, double b_val, double c_val, int n_val, double x_0_val, double x_n_val){
+void DiffSolver::Initialize(double a_val, double b_val, double c_val, int n_val, double x_0_val, double x_n_val, bool useSpecial){
   x_0 = x_0_val;
   x_n = x_n_val;
   n = n_val;
+  m_useSpecial = useSpecial;
   a = new double[n];
   b = new double[n]; // Diagonal
   c = new double[n];
@@ -46,7 +47,15 @@ void DiffSolver::Initialize(double a_val, double b_val, double c_val, int n_val,
       x[i] = x_i;
       exact_[i] = exact(x_i);
       g[i] = f(x_i)*h_sq;
-      b[i] = b_val;
+      //b[i] = b_val; XXXXXXXXXXXX
+      if (m_useSpecial){
+        b[i] = (i+1.0)/i;
+        cout << b[i] << endl;
+      }
+      else{
+        b[i] = b_val;
+        cout << b[i] << endl;
+      }
       a[i] = a_val;
       c[i] = c_val;
   }
@@ -55,14 +64,14 @@ void DiffSolver::Initialize(double a_val, double b_val, double c_val, int n_val,
   exact_[n] = exact(x_n);
 }
 
-void DiffSolver::Solve(bool useSpecial){
+void DiffSolver::Solve(){
 
   clock_t start, finish, finish2; // declare start and final time
   start = clock();
 
   for(int i = 2; i < n; i++){
-    if (useSpecial){
-      b[i] = (i+1.0)/i;
+    if (m_useSpecial){
+      //b[i] = (i+1.0)/i; XXXXXXXXXXXX
       g[i] = g[i] + g[i-1]/b[i-1];
     }
     else{
@@ -77,7 +86,7 @@ void DiffSolver::Solve(bool useSpecial){
 
   int i = n - 2;
   while (i>0){
-    if (useSpecial){
+    if (m_useSpecial){
       u[i] = (g[i] + u[i+1])/b[i]; //3FLOPSx(n-2)
     }
     else{
@@ -85,7 +94,6 @@ void DiffSolver::Solve(bool useSpecial){
     }
     i -= 1;
   }
-
   //Fill array with log of relative error:
   for(int i = 1; i<n; i++){
     double relError = fabs( (u[i] - exact_[i])/exact_[i] );
@@ -142,17 +150,24 @@ void DiffSolver::SolveLU(double a_val, double b_val, double c_val){
   //cout <<h<< endl;
   A(0,0) = b_val;  A(0,1) = c_val;  x(0) = h;  g(0) =  h_sq*f(x(0));
   x(n_-1) = x(0)+(n_-1)*h; g(n_-1) = h_sq*f(x(n_-1));
-  for (int i = 1; i < n-1; i++){
+  for (int i = 1; i < n_-1; i++){
     x(i) = x(i-1)+h;
     g(i) = h_sq*f(x(i));
     A(i,i-1)  = a_val;
     A(i,i)    = b_val;
     A(i,i+1)  = c_val;
   }
-  A(n_-1,n_-1) = b_val; A(n_-2,n_-1) = a_val; A(n_-1,n-2) = c_val;
+  A(n_-1,n_-1) = b_val; A(n_-2,n_-1) = a_val; A(n_-1,n_-2) = c_val;
+  A.print("A =");
+  mat L, U;
+  lu(L,U,A); //find LU decomposition
+  //Check that A = LU
+  (A-L*U).print("Test of LU decomposition");
 
+  vec y = solve(L,g); // find y, Ly=g there y=Ux using forward substitution
+  vec solution = solve(U,y); // find x, Ux=y using backward substitution
   // solve Ax = g
-  vec solution  = solve(A,g);
+  //vec solution  = solve(A,g);
   //cout << solution << endl;
   finish = clock();
   solvetimeLU = ( (finish - start)/(double)CLOCKS_PER_SEC );
