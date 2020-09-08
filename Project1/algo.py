@@ -1,8 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-#
+
 f = lambda x: 100.0*np.exp(-10.0*x)
-#f = lambda x: 2*x+2
 exact = lambda x: 1.0-(1-np.exp(-10))*x-np.exp(-10*x)
 n = 10
 
@@ -42,16 +41,10 @@ exact_[n] = exact(x_n)
 for i in range(2,n):
     print(a[1] ==-1 and c[1] == -1)
     if a[1] !=-1 and c[1] == -1:
-        #b[i] = -(i+1.0)/i
-        #b[i] = b[i] - 1./b[i-1] #a*c
         g[i] = g[i] + g[i-1]/((i)/(i-1))
-        print("if fw")
     else:
         b[i] = b[i] - a[i-1]*c[i-1]/b[i-1]
         g[i] = g[i] - a[i-1]*g[i-1]/b[i-1]
-
-print("g fw:", g)
-#print("b:", b)
 
 
 u[0] = 0 #boundry condition
@@ -64,23 +57,14 @@ while i>0:
     else:
         u[i] = (g[i] - c[i]*u[i+1])/b[i]
     i -= 1
-print("g back:", g)
-print("u:", u)
+
 """
+To test results do a quick plot or print out error
 plt.plot(u, label = "computed")
 plt.plot(exact_, linestyle = "dashed", label = "exact")
 plt.legend()
 plt.show()
 """
-#print(exact_[1::], u[1::])
-#print(f"Error: {abs(u[0:n:int(n/10)]-exact_[0:n:int(n/10)])}")
-
-error = (np.abs( (u[1:n]-exact_[1:n])/exact_[1:n]))
-#print(np.log10(error))
-plt.plot(np.log10(error))
-#plt.show()
-
-#Klart veldig mye bedre når c = a
 
 """
 for i in range(int(n/5)):

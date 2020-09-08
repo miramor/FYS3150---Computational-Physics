@@ -96,7 +96,6 @@ void DiffSolver::Solve(){
   //Fill array with log of relative error:
   for(int i = 1; i<n; i++){
     double relError = fabs( (u[i] - exact_[i])/exact_[i] );
-    //error[i] = 1.4;
     error[i] = log10(relError);
   }
 
@@ -122,35 +121,37 @@ void DiffSolver::WritetoFile(){
     filename = "ResultsComputation/ResultsS_nval=";
   }
   filename.append(to_string(n));
-  //cout << "Filename: " <<filename << endl;
   outfile.open(filename);
 
-  string comma = ", ";
+  //Write the results into a comma seperated file to make use of pandas read_csv()
   for(int i = 1; i < n; i++){
     outfile << setprecision(7);
     outfile << x[i] << ", " << u[i] << ", " << exact_[i] << ", " << error[i] << endl;
   }
   outfile.close();
 
-  //Delete no longer needed data, since its in a csv file
+  //Delete no longer needed data, since its available in a file
   delete[] x; delete[] error;
 }
 
 void DiffSolver::Printtest(){
+  // Simple test to verify result
   for(int i = 1; i < n; i+= 1){
     cout <<"Sol: " <<u[i] << "   Exact: " << exact_[i] <<endl;
   }
 }
 
 void DiffSolver::SolveLU(double a_val, double b_val, double c_val){
+
   clock_t start, finish; // declare start and final time
   start = clock();
+
   int n_ = n-1; //Make sure dont change the class variable n
   mat A = zeros<mat>(n_,n_);
   // Set up arrays for the simple case
   vec g(n_);  vec x(n_); //Ax=g
-  //cout <<h<< endl;
-  A(0,0) = b_val;  A(0,1) = c_val;  x(0) = h;  g(0) =  h_sq*f(x(0));
+
+  A(0,0) = b_val;  A(0,1) = c_val;  x(0) = h;  g(0) =  h_sq*f(x(0)); //Correct cases where i+1 gives error in for loop
   x(n_-1) = x(0)+(n_-1)*h; g(n_-1) = h_sq*f(x(n_-1));
   for (int i = 1; i < n_-1; i++){
     x(i) = x(i-1)+h;
@@ -163,14 +164,10 @@ void DiffSolver::SolveLU(double a_val, double b_val, double c_val){
   //A.print("A =");
   mat L, U;
   lu(L,U,A); //find LU decomposition
-  //Check that A = LU
-  //(A-L*U).print("Test of LU decomposition");
+  //(A-L*U).print("Test of LU decomposition");   //Check that A = LU
 
   vec y = solve(L,g); // find y, Ly=g there y=Ux using forward substitution
   vec solution = solve(U,y); // find x, Ux=y using backward substitution
-  // solve Ax = g
-  //vec solution  = solve(A,g);
-  //cout << solution << endl;
   finish = clock();
   solvetimeLU = ( (finish - start)/(double)CLOCKS_PER_SEC );
 }
