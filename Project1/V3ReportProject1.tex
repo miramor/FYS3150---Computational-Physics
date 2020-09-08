@@ -121,7 +121,7 @@ Project 1
 % List of all institutions:
 \centerline{{\small Department of Physics, University of Oslo, Norway}}
 \end{center}
-
+    
 % ----------------- end author(s) -------------------------
 
 % --- begin date ---
@@ -156,17 +156,17 @@ For numerical computation, (\ref{eqn:2ndDeriv}) must be written as a linear set 
 where $\mathbf{A}$ is an $n\times n$  tridiagonal matrix.\\
 The set of equation for $h^2f_i$ is given by
 \begin{equation*}
-   -v_{i+1}-v_{i-1}+2v_i = h^2f_i  \hspace{0.5cm}
+   -v_{i+1}-v_{i-1}+2v_i = h^2f_i  \hspace{0.5cm} 
 \end{equation*}
 Rearranging the equation gives
 \begin{equation*}
-  -v_{i-1}+2v_i - v_{i+1}= h^2f_i  \hspace{0.5cm}
+  -v_{i-1}+2v_i - v_{i+1}= h^2f_i  \hspace{0.5cm} 
 \end{equation*}
-Determining the equations for the boundary condition, $i=1$ holds
+Determining the equations for the boundary condition, $i=1$ holds 
 \begin{equation*}
 \begin{aligned}
   -v_{0}+2v_1 - v_{2}&= h^2f_1  \hspace{0.5cm} \\
-  0 + 2v_1 - v_{2}&= h^2f_1  \hspace{0.5cm}
+  0 + 2v_1 - v_{2}&= h^2f_1  \hspace{0.5cm} 
 \end{aligned}
 \end{equation*}
 
@@ -174,17 +174,17 @@ since $v_0=0$. Given $v_{n+1}=0$, similarly for $i=n$ applies
 \begin{equation*}
 \begin{aligned}
   -v_{n-1}+2vn - v_{n+1}&= h^2f_n  \hspace{0.5cm} \\
- -v_{n-1}+ 2v_n - 0&= h^2f_n  \hspace{0.5cm}
+ -v_{n-1}+ 2v_n - 0&= h^2f_n  \hspace{0.5cm} 
 \end{aligned}
 \end{equation*}
-A combination of the above equations results in
+A combination of the above equations results in 
 \begin{equation*}
 \begin{aligned}
   2v_1 - v_{2}&= h^2f_1 & = \tilde{g_1}  \hspace{0.5cm} \\
   ...\\
   -v_{i-1}+2v_i - v_{i+1}&= h^2f_i &= \tilde{g_i}  \hspace{0.5cm} \\
   ...\\
- -v_{n-1}+ 2v_n &= h^2f_n &= \tilde{g_n}  \hspace{0.5cm}
+ -v_{n-1}+ 2v_n &= h^2f_n &= \tilde{g_n}  \hspace{0.5cm} 
 \end{aligned}
 \end{equation*}
 Thus, there are $n-1$ equations that must be computed ($i \in [1,n-1])$.
@@ -215,7 +215,7 @@ The set of equations can be rewritten in matrix-form, there $ \mathbf{A} \in \R^
                       \end{bmatrix}.
 \]
 For simplicity, $v_i$ is from now on written as $u_i$.
-Furhter, the vectors $ \mathbf{a}, \mathbf{b}, \mathbf{c}$ are defined as the matrix-elements, there $ \mathbf{b}$ is placed along the diagonal, $\mathbf{a}$ is the lower diagonal and $\mathbf{c}$ is the upper diagonal. $g_i$ stands for $h^2f_i$, the solution for each equation. \\
+Furhter, the vectors $ \mathbf{a}, \mathbf{b}, \mathbf{c}$ are defined as the matrix-elements, there $ \mathbf{b}$ is placed along the diagonal, $\mathbf{a}$ is the lower diagonal and $\mathbf{c}$ is the upper diagonal. $g_i$ stands for $h^2f_i$, the solution for each equation (called source term) \\
 \[
     \mathbf{A} = \begin{bmatrix}
                            b_1& c_1 & 0 &\dots   & \dots &\dots \\
@@ -241,7 +241,9 @@ Furhter, the vectors $ \mathbf{a}, \mathbf{b}, \mathbf{c}$ are defined as the ma
                            g_n\\
                       \end{bmatrix}.
 \]
-This linear set of equations can be solved by using the Thomas algorithm.
+In our project, the source term is predefined to be $f(x) = 100e^{-10x}$. Given the above defined boundary conditions, this differential equation has a closed-form solution given by $u(x) = 1 - (1-e^{-10})x -e^{-10x}$. Hereafter, the function values for $u(x)$ are called $\mathbf{exact}$.
+ 
+This linear set of equations can be solved by for example using the Thomas algorithm or the LU decomposition.
 \paragraph{Thomas Algorithm}
 The Thomas algorithm can be divided into two steps: a forward substitution and a backward substitution.\\
 In the forward substitution, the lower-diagonal elements are eliminated. Starting from the top, this is done by summing two successive appropriately scaled rows in the matrix. The mathematical expression for the new matrix elements is given as
@@ -261,13 +263,13 @@ u_{n-1} &= \tilde{g}_{n-1} / \tilde{b}_{n-1}
 \end{equation*}
 Going up row for row, $u_i$ can be expressed as
 \begin{equation*}
-u_i = ( \tilde{g_i}-c_i u_{i+1} )/ \tilde{b_i} \hspace{0.5cm} \mathrm{for} \hspace{0.1cm} i=n-2,...,1
+u_i = ( \tilde{g_i}-c_i u_{i+1} )/ \tilde{b_i} \hspace{0.5cm} \mathrm{for} \hspace{0.1cm} i=n-2,...,1 
 \end{equation*}
 
 \subparagraph{Special Case}
-For our computation, we set identical matrix elements along the diagonal and identical (but different) values for the non-diagonal elements. More specific, we set $b_i = 2$ and $a_i = c_i = -1$. Thus the Thomas algorithm can be specialized to our specific case. It can be shown that the elements along the diagonal can be precalculated with
+For our computation, we set identical matrix elements along the diagonal and identical (but different) values for the non-diagonal elements. More specific, we set $b_j = 2$ and $a_j = c_j = -1$. Thus the Thomas algorithm can be specialized to our specific case. It can be shown that the elements along the diagonal can be precalculated with
 \begin{equation*}
-\tilde{b_i} = \frac{i+1}{i}
+\tilde{b_i} = \frac{i+1}{i} \hspace{0.5cm} \mathrm{for} \hspace{0.1cm} i=1,...,n-1 
 \end{equation*}
 That means that $\mathbf{\tilde{b}}$ no longer needs to be computed in the forward loop. \\
 The forward loop is therefore given by
@@ -277,9 +279,9 @@ The forward loop is therefore given by
 there $\tilde{b}_{pre}$ stands for the precalculation.
 Similarly, the backward loop is now also computed with the precalculated $\mathbf{\tilde{b}}$
 \begin{equation*}
-u_i = ( \tilde{g_i}-c_i u_{i+1} )/ \tilde{b}_{pre,i} \hspace{0.5cm} \mathrm{for} \hspace{0.1cm} i=n-2,...,1
+u_i = ( \tilde{g_i}-c_i u_{i+1} )/ \tilde{b}_{pre,i} \hspace{0.5cm} \mathrm{for} \hspace{0.1cm} i=n-2,...,1 
 \end{equation*}
-The tables below show what effect this precalculation has on the number of FLOPs in the forward and backward substitution.
+The tables below (Table \ref{tbl: G_FLOPS} and Table \ref{tbl: S_FLOPS}) show what effect this precalculation has on the number of FLOPs in the forward and backward substitution.
 
 \begin{table}[ht]
 \caption{FLOPS for general algorithm}
@@ -293,7 +295,8 @@ The tables below show what effect this precalculation has on the number of FLOPs
         	Total        & -       & -        &  $9 (n-2)$      \\ [1ex]
 		\hline
 	\end{tabular}
-\end{table}
+	\label{tbl: G_FLOPS}
+\end{table}	
 
 \begin{table}[ht]
 \caption{FLOPS for special algorithm}
@@ -307,13 +310,15 @@ The tables below show what effect this precalculation has on the number of FLOPs
         	Total        & -       & -        & $4 (n-2)$      \\ [1ex]
 		\hline
 	\end{tabular}
-\end{table}
-For the special algorithm, the $2(n-1)$ FLOPs for the precalculated $\mathbf{b}$ must be taken into consideration. If n is a large number $n-2 \approx n-1 \approx n$. Thus, comparing the two algorithms, the number of FLOPs are reduced from $9n$ to $6n$.
+	\label{tbl: S_FLOPS}
+\end{table}	
+
+For the special algorithm, the $2(n-1)$ FLOPs for the precalculated $\mathbf{b}$ must be taken into consideration. If n is a large number, the following approximation applies: $n-2 \approx n-1 \approx n$. Thus, comparing the two algorithms, the number of FLOPs are reduced from $9n$ (general) to $6n$ (special).
 
 \paragraph{LU decomposition}
 Another way to solve the set of linear equations is the LU decomposition.
 This method factorizes the given square $\mathbf{A}$ matrix into two triangular matrices, one lower triangular matrix, $ \mathbf{L}$, and one upper triangular matrix, $\mathbf{U}$.
-The original matrix $\mathbf{A}$ is then given by their matrix-product, e.g. $ \mathbf{A}= \mathbf{L} \mathbf{U}$.
+The original matrix $\mathbf{A}$ is then given by their matrix-product, i.e. $ \mathbf{A}= \mathbf{L} \mathbf{U}$.
 The Gauss Elimination Method is used on $\mathbf{A}$ to form $\mathbf{U}$.
 The diagonal elements of $\mathbf{L}$ er set to one. For a $3 \times 3$ matrix $\mathbf{A}$, the LU decomposition would look like
 \[
@@ -341,8 +346,6 @@ The LU decomposition allows to rewrite the equation $\mathbf{Ax} = \mathbf{g}$ i
 \end{aligned}
 \end{equation*}
 Forward substitution can be used to solve the system $\mathbf{Ly} = \mathbf{g}$ and backward substitution can be used to solve $\mathbf{Ux} = \mathbf{y}$.
-%https://www.geeksforgeeks.org/l-u-decomposition-system-linear-equations/
-%http://www.math4all.in/public_html/linear%20algebra/chapter2.7.html
 \paragraph{General Algorithm}
 %http://folk.ntnu.no/leifh/teaching/tkt4140/._main040.html
 Given below are pseudocodes for the Thomas algorithm and the LU decomposition.
@@ -351,47 +354,64 @@ Given below are pseudocodes for the Thomas algorithm and the LU decomposition.
 \item Setting the input variables (x0, xn, a, b, c, n) \\
 	x0 and xn confine the interval (here from 0 to 1). \\
 	n stands for the number of integration points. \\
-	In our case, the elements along the tridiagonal are constant, e.g. $a_i=a$, $b_i=b, c_i=c$ for all i.
-
+	In our case, the elements along the tridiagonal are constant, e.g. $a_i=a$, $b_i=b, c_i=c$ for all i. 
+	
 \item Initialization: Defining the step size h. \\
-	Allocation of memory for $ \mathbf{a}, \mathbf{b}, \mathbf{c}, \mathbf{g}, \mathbf{exact}$  and filling them up with values.
+	Allocation of memory for $ \mathbf{a}, \mathbf{b}, \mathbf{c}, \mathbf{g}, \mathbf{u}, \mathbf{exact}$\\
+	 $ \mathbf{a}, \mathbf{b}, \mathbf{c}, \mathbf{g}$ have length n, whereas $\mathbf{u}, \mathbf{exact}$ have length n+1\\
+	for (i=1, n-1): \\
+		 general: set $a_i=a$, $b_i=b, c_i=c$ \\
+		 special: set $a_i=a, c_i=c, b_i=(i+1)/i$ \\
+		 compute $\mathbf{exact}$  
 
-\item Thomas algorithm with forward substitution: for (i=1, n-1)\\
+\item Thomas algorithm with forward substitution\\
+	 for (2=1, n-1):\\
 	general case: update $\mathbf{b}, \mathbf{g}$ \\
 	special case: update $\mathbf{g}$
 
-\item Thomas algorithm with backward substitution (general + special case): for (i=-2,n) compute $\mathbf{u}$
+\item Thomas algorithm with backward substitution \\
+	 while (i=n-2, 1):\\ 
+	 compute $\mathbf{u}$ (general / special case)
 
-\item Testing analytic solution: compute relative error $  \epsilon =  \left\lvert \frac{u_i-exact_i}{exact_i} \right\rvert$
+\item Testing analytic solution: compute relative error $  \epsilon =  \left\lvert \frac{u_i-exact_i}{exact_i} \right\rvert$ 
 
-\item Compute solution with LU decomposition
-
-\item Measure CPU time for the different algorithms
+\item Measure average CPU time for the different algorithms
 
 \item Write results to file and if applicable plot them
 \end{enumerate}
 
 \subparagraph{LU decomposition}
-Using armadillo
+Using armadillo with its build-in functions
 \begin{enumerate}
 \item Initialize Setting the input variables (x0, xn, a, b, c, n) \\
 	x0 and xn confine the interval (here from 0 to 1). \\
 	n stands for the number of integration points. \\
-	In our case, the elements along the tridiagonal are constant, e.g. $a_i=a$, $b_i=b, c_i=c$.
+	In our case, the elements along the tridiagonal are constant, e.g. $a_i=a$, $b_i=b, c_i=c$ for all i. 
 
-\item Setting up matrix $\mathbf{A}^{n-1 \times n-1}$ using built-in function (mat A = zeros<mat>(n-1,n-1);\\
-	 Filling in values in for(1,
-		n-2)
-
+\item Setting up matrix $\mathbf{A}^{n-1 \times n-1}$ using built-in function (i.e. mat A = zeros<mat>(n-1,n-1)\\
+	 for(1, n-2): \\
+	 Fill up matrix \\
+	 First and last row must be set separately
+		
 \item Compute $\mathbf{L}$ and $\mathbf{U}$ (built-in function)
 
 \item Compute $\mathbf{y}$ in $\mathbf{Ly}=\mathbf{g}$ using forward substitution (built-in function)
 
 \item Compute $\mathbf{x}$ in $\mathbf{Ux}=\mathbf{y}$ using backward substitution (built-in function)\\
-		$\mathbf{x}$ is the solution-vector $\mathbf{u}$
+		$\mathbf{x}$ is the solution-vector $\mathbf{u}$ 
+
+\item Measure average CPU time		
 \end{enumerate}
+To ensure that all 3 algorithms have been implemented correctly, the computed solution for the general and special Thomas algorithm and LU method, for n=10, are given below. As comparison serves the given correct solution.
+
 \section{Results}
-First, the results for computing the general Thomas algorithm are given for the matrices of the size $10 \times 10$, $100 \times 100$, $1000 \times 1000$, which corresponds to $n=10$, $n=100$ and $n=1000$, in the interval $x \in (0,1)$. The computed solution is graphed together with the exact solution.
+First, the results for computing the general Thomas algorithm are given for the matrices of the size $10 \times 10$, $100 \times 100$, $1000 \times 1000$ (corresponding to $n=10$, $n=100$ and $n=1000$), in the interval $x \in (0,1)$. The computed solution is graphed together with the exact solution.
+
+Next, the table below shows the CPU time for the general and special Thomas algorithm for matrices up to $n=10^6$. As the CPU time measurement can be random, the average time of XXX8 repetitions was taken.
+
+
+To check the accuracy of the (general/specialXXXXXX) Thomas algorithm, the relative error, $  \epsilon =  \left\lvert \frac{u_i-exact_i}{exact_i} \right\rvert$, in the data set $i=1,...n-1$, was computed with the following result
+
 %\begin{figure}[H]
 %\begin{center}
 %\graphicspath{ {Oppg2/} }
@@ -402,7 +422,8 @@ First, the results for computing the general Thomas algorithm are given for the 
 
 \section{Conclusion}
 \section{References}
-
+%https://www.geeksforgeeks.org/l-u-decomposition-system-linear-equations/
+%http://www.math4all.in/public_html/linear%20algebra/chapter2.7.html
 
 
 
@@ -416,3 +437,4 @@ First, the results for computing the general Thomas algorithm are given for the 
 % ------------------- end of main content ---------------
 
 \end{document}
+
