@@ -25,6 +25,7 @@ int main(int argc, char const *argv[]) {
   if(useSpecial){
     filename = "CPUtime special";
   }
+  /*
   ofstream outfile;
   outfile.open(filename);
 
@@ -55,7 +56,13 @@ int main(int argc, char const *argv[]) {
   // Keep in mind if many repeats the process will take a long time for 1e4
   //ofstream outfile;
 
-  outfile.open("CPUtime LU");
+  for(int n=10; n<=1e4; n*= 10){
+    DiffSolver dSolv;
+    dSolv.Initialize(-1.0, 2.0, -1.0, n,  0.0, 1.0, useSpecial); // a, b, c, n, x0, xn
+    dSolv.SolveLU(-1.0, 2.0, -1.0);
+  }
+
+  /*outfile.open("CPUtime LU");
 
   for(int n=10; n<=1e4; n*= 10){
     DiffSolver dSolv;
@@ -72,7 +79,7 @@ int main(int argc, char const *argv[]) {
     cout << "Finished LU for n: " << n << endl;
 
   }
-  outfile.close();
+  outfile.close();*/
 
   return 0;
 }

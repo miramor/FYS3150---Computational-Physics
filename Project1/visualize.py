@@ -1,8 +1,14 @@
-
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+
+import os
+if not os.path.exists('ResultsComputation'):
+    os.makedirs('ResultsComputation')
+
+import os
+if not os.path.exists('ComputedvsExact'):
+    os.makedirs('ComputedvsExact')
 
 showTables = True #Prints all the tables if true.
 

@@ -169,5 +169,13 @@ void DiffSolver::SolveLU(double a_val, double b_val, double c_val){
   vec y = solve(L,g); // find y, Ly=g there y=Ux using forward substitution
   vec solution = solve(U,y); // find x, Ux=y using backward substitution
   finish = clock();
+
+  ofstream outfile;
+  string filename ="ResultsComputation/ResultsLU_nval=";
+  filename.append(to_string(n));
+  outfile.open(filename);
+  outfile << solution << endl;
+  outfile.close();
+
   solvetimeLU = ( (finish - start)/(double)CLOCKS_PER_SEC );
 }
