@@ -1,9 +1,3 @@
-%%
-%% Automatically generated file from DocOnce source
-%% (https://github.com/hplgit/doconce/)
-%%
-%%
-
 
 %-------------------- begin preamble ----------------------
 
@@ -110,7 +104,11 @@ final,                   % draft: marks overfull hboxes, figures with paths
 
 
 \section*{Abstract}
-
+In this project, the Thomas algorithm and the LU decomposition are used to approximate the one-dimensional Poisson equation.
+Both algorithms have high accuracy as the number of integration steps, $n$, increases (single precision accurate).
+In the analyzed interval, $x\in(0,1)$, some function values are close to zero, which results in deviation due to limitations in machine precision for $n>6$.
+Moreover, the numerical implementation of the LU decomposition is notably slower and is limited to $n<10^5$.
+On the other hand, a specialized Thomas algorithm can shorten the CPU time.
 
 \section*{Introduction}
 The aim of this project is to numerically solve the one-dimensional Poisson equation with Dirichlet boundary conditions. 
@@ -119,7 +117,9 @@ Therefore, two algorithms (Thomas algorithm and LU decomposition) are tested for
 Furthermore, the general Thomas algorithm is customized to the precise task in order improve efficiency. \\
 The project begins with presenting the theoretical models for the Thomas algorithm and LU decomposition. 
 Next, a general algorithm for the numerically implementation is given.
-Finally, the results are analyzed and discussed. 
+Finally, the results are analyzed and discussed. \\
+The code for the numerical computations is found on
+\href{https://github.com/EliasTRuud/FYS3150/tree/master/Project1}{Github repository}.
 
 \section*{Method}
 \paragraph{Approximation of the second derivative}
@@ -419,7 +419,9 @@ Using armadillo with its built-in functions
 
 \item Measure average CPU time		
 \end{enumerate}
-To ensure that all 3 algorithms have been implemented correctly, the computed solution for the general and special Thomas algorithm and LU method, for n=10, are given below (Table \ref{tbl:Values_n10}). As a benchmark, the correct solution is also shown.
+To ensure that all 3 algorithms have been implemented correctly
+(\href{https://github.com/EliasTRuud/FYS3150/tree/master/Project1}{found on Github repository}),
+the computed solution for the general and special Thomas algorithm and LU method, for n=10, are given below (Table \ref{tbl:Values_n10}). As a benchmark, the correct solution is also shown.
 \begin{table}[H]
 \caption{Computed values for all 3 algorithms (n=10)}
 \centering
