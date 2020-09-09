@@ -12,3 +12,6 @@ V2*
 V3*
 !*.tex
 .DS_Store
+algo_*
+*.tex
+tableerror.py

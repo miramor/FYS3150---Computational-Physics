@@ -1,12 +1,12 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-
 import os
+
 if not os.path.exists('ResultsComputation'):
     os.makedirs('ResultsComputation')
 
-import os
+
 if not os.path.exists('ComputedvsExact'):
     os.makedirs('ComputedvsExact')
 
@@ -95,26 +95,7 @@ n_LU = dfLU['n'].to_numpy()
 if timeG.size != timeS.size:#Just a check if calculated for all n with both models.
     print(f"Size of CPUtime general ({timeG.size}) and CPUtime special ({timeS.size}) does not match. Suggest running both for same n, if comparable results is wanted")
 
-""" #Plotting of time for special and general, does not contain that interesting info
-plt.figure(figsize = (15, 8), dpi = 80)
-plt.plot(n_G, timeG, label = "General", color = "lightseagreen")
-plt.plot(n_S, timeS, linestyle = "dashed", label = "Special", color = "crimson")
-#plt.plot(n_LU, timeLU, linestyle = "dashed", label = "LUtime", color = "cyan") #Blows up the scale.
-plt.title("Time to solve", fontsize = 16)
-plt.grid(axis='both', alpha=.22)
-plt.xlabel("Steps (n)")
-plt.ylabel("Time [sec]")
-plt.legend()
 
-# Remove borders
-plt.gca().spines["top"].set_alpha(0.0)
-plt.gca().spines["bottom"].set_alpha(0.6)
-plt.gca().spines["right"].set_alpha(0.0)
-plt.gca().spines["left"].set_alpha(0.6)
-plt.savefig(f"./Solvetime/Timetosolve.png", dpi=60)
-
-#plt.show()
-"""
 
 #Table of CPU times printed as latex table
 
@@ -138,3 +119,27 @@ if showTables:
 
     print("Table for solution CPUtimes for different algorithms")
     print(combinedTime)
+
+
+
+
+""" #Plotting of time for special and general, does not contain that interesting info
+plt.figure(figsize = (15, 8), dpi = 80)
+plt.plot(n_G, timeG, label = "General", color = "lightseagreen")
+plt.plot(n_S, timeS, linestyle = "dashed", label = "Special", color = "crimson")
+#plt.plot(n_LU, timeLU, linestyle = "dashed", label = "LUtime", color = "cyan") #Blows up the scale.
+plt.title("Time to solve", fontsize = 16)
+plt.grid(axis='both', alpha=.22)
+plt.xlabel("Steps (n)")
+plt.ylabel("Time [sec]")
+plt.legend()
+
+# Remove borders
+plt.gca().spines["top"].set_alpha(0.0)
+plt.gca().spines["bottom"].set_alpha(0.6)
+plt.gca().spines["right"].set_alpha(0.0)
+plt.gca().spines["left"].set_alpha(0.6)
+plt.savefig(f"./Solvetime/Timetosolve.png", dpi=60)
+
+#plt.show()
+"""

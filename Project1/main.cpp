@@ -12,20 +12,34 @@ Algortihm includes forward and backward solution
 
 using namespace std;
 
+/*
+ * NB!! - Have to make a directoary named: ResultsComputation
+ * This directoary stores all the results.
+ *
+ * First set the relevant paramaters. To make use of visualize.py its reccomended
+ * to run the program twice, once where we useSpecial = true and then = false.
+ * Repeat variable determines how many times we wanna solve the problem to find
+ * a better estimate of time, minimize external factors.
+ *
+ * First part uses thomas algorithm which allows n to exceeed 1e4.
+ * Writes the time results to a file.
+ *
+ * Second part uses LU and solves using SolveLU and writes the relevant
+ * information to 2 files the results and the CPUtime.
 
+ * If already ran LU part once, you can comment this part out.
+ */
 int main(int argc, char const *argv[]) {
-  // First choose to use special or general algorithm
-  // First half of writes the time to compute the algorithm to text files
-  // Second uses armadillo solve function (which uses LU?)
-  // Can print out error and u(solution) before we write to file if we wanna check it for testing.
   bool useSpecial = true;
   int n_max = 1e7;
   int repeat = 8; // To avoid randomness, average out time by repeating calculation multiple times. Used 40 in report
+
+  //Part 1:
   string filename = "CPUtime general";
   if(useSpecial){
     filename = "CPUtime special";
   }
-  /*
+
   ofstream outfile;
   outfile.open(filename);
 
@@ -48,21 +62,15 @@ int main(int argc, char const *argv[]) {
     cout << "Finished Solve for n: " << n << endl;
 
   }
-  outfile.close();*/
+  outfile.close();
 
   //*****************************************************************************************************************
+  // Part 2:
 
   // Run up to 1e4 for LU decomp, due to error in LU when to big matrices
   // Keep in mind if many repeats the process will take a long time for 1e4
-  //ofstream outfile;
 
-  for(int n=10; n<=1e4; n*= 10){
-    DiffSolver dSolv;
-    dSolv.Initialize(-1.0, 2.0, -1.0, n,  0.0, 1.0, useSpecial); // a, b, c, n, x0, xn
-    dSolv.SolveLU(-1.0, 2.0, -1.0);
-  }
-
-  /*outfile.open("CPUtime LU");
+  outfile.open("CPUtime LU");
 
   for(int n=10; n<=1e4; n*= 10){
     DiffSolver dSolv;
@@ -79,7 +87,7 @@ int main(int argc, char const *argv[]) {
     cout << "Finished LU for n: " << n << endl;
 
   }
-  outfile.close();*/
+  outfile.close();
 
   return 0;
 }
