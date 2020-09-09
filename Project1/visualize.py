@@ -3,20 +3,24 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-if not os.path.exists('ResultsComputation'):
-    os.makedirs('ResultsComputation')
+"""
+How to use:
 
+Simply run the visualize.py file and the showTables indicates
+if tables are to be shown or not. Makes some plots for solutions
+using Thomas algo vs exact.
+
+This file was used to make tables using pandas and printing them.
+Also to make it easy to copy straight into latex (using .to_latex)
+"""
 
 if not os.path.exists('ComputedvsExact'):
     os.makedirs('ComputedvsExact')
 
 showTables = True #Prints all the tables if true.
 
-
 n_list = [10, 10e1, 10e2, 10e3, 10e4, 10e5, 10e6] #used when making table of errors
 
-#Plot graphs for 3 first n-values
-#n_list = [10, 10e1, 10e2]
 for n in n_list[0:3]:
     dfG = pd.read_csv(f"./ResultsComputation/ResultsG_nval={int(n)}", names = ['x','solution', 'exact', 'log error'])
     dfS = pd.read_csv(f"./ResultsComputation/ResultsS_nval={int(n)}", names = ['x','solution', 'exact', 'log error'])
