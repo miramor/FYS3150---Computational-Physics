@@ -10,7 +10,6 @@ class DiffSolver {
     double x_0, x_n, h, h_sq; //Start and stop interval
     int n; //Number of steps (integration)
     bool m_useSpecial;
-    //vector<double> a, b, c, u, g; //maybe use vectors
     double* a;
     double* b;
     double* c;
@@ -27,7 +26,7 @@ class DiffSolver {
     void Solve(); // Solves the system using BackAndFw solution
     void PrintError(); //Prints the error
     void WritetoFile(); // write solution to csv file [x_i, solution, exact_, log_rel_error]
-    void Printtest();
+    void Printtest(); // simple prints the results, used for testing
     double solvetime; double solvetimeLU;
     void SolveLU(double a_val, double b_val, double c_val); //Solves the system using LU decomposition
 };

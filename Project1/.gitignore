@@ -6,6 +6,12 @@ CPUtime*
 fasit.txt
 algoError.cpp
 Results*
+Solvetime
+ComputedvsExact
 V2*
 V3*
 !*.tex
+.DS_Store
+algo_*
+*.tex
+tableerror.py
