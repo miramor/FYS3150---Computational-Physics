@@ -6,7 +6,7 @@
 #include <string>
 #include <armadillo>
 #include "algo.hpp"
-#include "time.h" // you have to include the time.h header
+#include "time.h"
 
 using namespace std;
 using namespace arma;
