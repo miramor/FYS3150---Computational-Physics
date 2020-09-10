@@ -3,7 +3,6 @@
 *.csv
 
 CPUtime*
-fasit.txt
 algoError.cpp
 Results*
 Solvetime
