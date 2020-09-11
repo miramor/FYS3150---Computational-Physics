@@ -1,5 +1,19 @@
-hello.py
-testfil
-Gruppetimer
-Forelesninger
-myfirstprogram.cpp
+# Latex files
+*.aux
+*.synctex.gz
+*.out
+*.log
+*.idx
+*.bbl
+*.blg
+
+# Data files
+Project*/ResultsComputation
+Project*/CPUtime*
+
+# cpp executables
+*.exe
+
+# Mac directory file
+.DS_Store
+
