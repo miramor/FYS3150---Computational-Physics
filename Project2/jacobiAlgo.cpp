@@ -36,6 +36,15 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int max_ite, int n
 
 // Returns a tuple of value of element and its index. (val, row, column) => f.eks (2.2, 1, 3)
 tuple<double, int, int> FindMaxEle(Mat<double> A){
+  double max = 0.0;
+  for (int i =0; i <n; i++){
+    for (int j = i+1; j<n; j++){
+      if ( fabs(A[i][j]) > max){
+        max = fabs(A[i][j]);
+      }
+    }
+  }
+  return {maks, i, j}
 
 }
 
