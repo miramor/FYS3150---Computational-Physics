@@ -7,13 +7,16 @@
 
 class JacobiEigenSolve {
   private:
+
+    // Size of matrix is n = N - 1. So use n+1 when comparing with anaylytical solution!!!
+
     Mat<double> A; // Symmetric matrix to diagonalize,  Dim: n x n
     Mat<double> V; //Matrix to contain eigenvectors
     int n; // Size of the matrix
     double eps = 1.0e-8;
     double max_iterations = (double) n * (double) n * (double) n;
     int iterations = 0;
-    double a, b, c; // a - lower diagonal, b - middle diagonal, c - upper diagonal
+    double a, b; // a - lower & upper diagonal, b - middle diagonal
     //int k, l; // Changed each time
   public:
     void Initialize(double a_val, double b_val, double c_val, int max_ite, int n_val); // make the symmetric matrix and empty V matrix.

@@ -5,19 +5,37 @@
 #include <string>
 #include <armadillo>
 #include "jacobiAlgo.hpp"
-#include "time.h"
 
 using namespace std;
 using namespace arma;
 
 
-void JacobiEigenSolve::Initialize(double a_val, double b_val, double c_val, int max_ite, int n_val){
+void JacobiEigenSolve::Initialize(double a_val, double b_val, int max_ite, int n_val){
+  //Set class variables
+  a = a_val; b = b_val; max_iterations = max_ite; n = n_val
+
+  //Use this to in a test to compare
+  /*vec X(n); X.fill(a_val);
+  vec Y(n); Y.fill(b_val);
+  A = toeplitz(X,Y);
+  A = mat(n,n);
+  */
+  //Setup the A matrix.
+  // Not finished, find a better way to fill it
+  for(int i = 0; i < n; i++){
+    for(int j = 0; j < n; j++){
+      if( i == j){
+        A[i][j] = b_val ;
+      }
+      if( i == j+1);
+      }
+    }
+  }
 
 }
 
 // Returns a tuple of value of element and its index. (val, row, column) => f.eks (2.2, 1, 3)
 tuple<double, int, int> FindMaxEle(Mat<double> A){
-
 
 }
 
