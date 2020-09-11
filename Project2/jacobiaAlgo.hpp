@@ -4,9 +4,8 @@
 #include <vector>
 #include <string.h>
 #include <tuple>
-using namespace std;
 
-class DiffSolver {
+class JacobiEigenSolve {
   private:
     Mat<double> A; // Symmetric matrix to diagonalize,  Dim: n x n
     Mat<double> V; //Matrix to contain eigenvectors
@@ -25,6 +24,7 @@ class DiffSolver {
     Mat<double> PrintA(); // Prints A, used for checks
 
     //enkel matrise 3x3, analyisk rotasjonsmatrisen. Gjøre alle steg for hånd
+    // sjekke om egenverdiene funker.
 };
 
 #endif
