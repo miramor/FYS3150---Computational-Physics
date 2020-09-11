@@ -104,9 +104,9 @@ final,                   % draft: marks overfull hboxes, figures with paths
 
 
 \section*{Abstract}
-In this project, the Thomas algorithm and the LU decomposition are used to approximate the one-dimensional Poisson equation.
+In this project, the Thomas algorithm and the LU decomposition are used to approximate the one-dimensional Poisson equation for $x\in(0,1)$.
 Both algorithms have high accuracy as the number of integration steps, $n$, increases (single precision accurate).
-In the analyzed interval, $x\in(0,1)$, some function values are close to zero, which results in deviation due to limitations in machine precision for $n>6$.
+For $n>10^5$, the deviation increases again due to limitations in machine precision.
 Moreover, the numerical implementation of the LU decomposition is notably slower and is limited to $n<10^5$.
 On the other hand, a specialized Thomas algorithm can shorten the CPU time.
 
@@ -495,7 +495,7 @@ To examine the accuracy of the general Thomas algorithm, the max relative error,
 \end{tabular}
 \label{LogError}
 \end{table}
-The relative error decreases initially with increasing $n$ as expected. Further, the error declines by a factor of $10^2$ for each each step until $n=10^4$. It continues to decrease until $n=10^5$, but starts then to increase again. In general, the computed solution is quite precise. In comparison, single machine precision is in order of $10^{-7}$. The error increasing might therefore be due to machine precision.
+The relative error decreases initially with increasing $n$ as expected. Further, the error declines by a factor of $10^2$ for each each step until $n=10^4$. For the lower values of n, the mathematical error due to truncation dominates. It continues to decrease until $n=10^5$ (not at the same pace), but then starts to increase. This is due to the machine rounding error exploding, which is proportional to $1/h^2$ \cite{FYS3150LectureNotes}. In general, the computed solution is quite precise. In comparison, single machine precision is in order of $10^{-7}$. 
 
 Next, the table below (Table \ref{CPUtime}) shows the CPU time for the general and special Thomas algorithm for matrices up to $n=10^6$. As the CPU time measurement can be random, the average time of 40 repetitions is used.
 \begin{table}[H]
@@ -517,21 +517,18 @@ Next, the table below (Table \ref{CPUtime}) shows the CPU time for the general a
 \label{CPUtime}
 \end{table}
 As expected, the special Thomas algorithm is the most rapid and LU decomposition the slowest. Since the LU method makes use of a whole matrix (instead of only allocating the tridiagonal using arrays), the memory space is to small if $n>10^4$. That is, we only get results for $n<10^5$.
-For every step, the LU time increases notably. In coherence, FLOPs are proportional to $n^3$.\\
+The exceeding of memory space can be explained with the following calculations. Double precision floating point numbers use 64 bits per number, which equals 8 bytes per number. For a $10^4 \times 10^4$ matrix $8 \cdot 10^8$ bytes are needed. This takes up almost 1 GB of memory space. For a  $10^5 \times 10^5$ matrix, more than 70 GB are needed. A standard laptop has 8-16 GB RAM, the available memory is exceeded for larger $n$.\\
+Further, for every step, the LU time increases notably. That is no surprise, since FLOPs are proportional to $n^3$.\\
 Even though the FLOPS for the special algorithm are reduced from $9n$ (general algorithm) to $6n$, other factors such as fetching variables must be considered. Moreover, the measured time is affected by the PC's granularity, temperature of the processor, number of chores the CPU is processing and so forth. This might explain why the time difference between the general and special algorithm is less than expected.
 
+\subsection*{Improvement of the code implementation} 
+The code consists of mainly three files; algo.cpp, main.cpp and visualize.py. Even though the code runs well there is certainly improvements to be made. The initial structure was built mainly to solve for the Thomas algorithm. Which in turn, when adding the LU decomposition, made certain methods such as writetofile and print* not usable for the this method. The same method SolveLU also clashed with the way initialize was built, so having to have another three parameters for this method should be excessive. However, a point was made to not have an obscene amount of class variables to store, which could make it confusing to which parameter belongs to which method.One could also make main method more user friendly, perhaps by creating a new class just to create all the necessary results in a neat way and make it accessible. Again, we did not want to overcomplicate the structure by making another class. \\
+The visualize file is separated in several parts. As this file ended up quite long towards the end, it could benefit to either split it up in several files or another class. All in all, there is room for improvement to make the code easier to read and more effective, although in simple cases where, we just solve the basic problems over a loop, it is not too complicated.
+
 \section*{Conclusion}
-In this project ,we have shown that by taking on a second order differential equation, by discretizing and using numerical methods, its possible to reach a very high precision. The result shows that their accuracy is about single machine precision high.  For each n-value the log of the relative error decreases with 2, until a threshold is reached, at about $n > 10^5$. This might be due to machine precision which may falsify the results, especially as the function values become small.
+In this project ,we have shown that by taking on a second order differential equation, by discretizing and using numerical methods, its possible to reach a very high precision. The result shows that their accuracy is about single machine precision high.  For each n-value the log of the relative error decreases with 2, until a threshold is reached, at about $n > 10^5$. This is due to machine precision which begins falsifying the results, especially as the steps size, $h$, becomes small.
 Moreover, if $n>10^4$, the LU method fails due to exceeding memory capacity. In general, the LU decomposition is much slower than the other two algorithms.
 The CPU time for the general and special Thomas algorithm is the same magnitude, although the special method consistently beats its counterpart by a slight margin. This roots in the different amount of computations needed, as LU FLOPs scales with $n^3$ opposed to just n. This is why LU decomposition exceeds the available memory at its disposal. Its important to mention that external factors will also affect the time estimations. 
-
-%https://www.geeksforgeeks.org/l-u-decomposition-system-linear-equations/
-%http://www.math4all.in/public_html/linear%20algebra/chapter2.7.html
-
-
-
-
-
 
 \bibliography{citation}
 \bibliographystyle{ieeetr}
