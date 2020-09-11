@@ -13,3 +13,10 @@ myfirstprogram.cpp
 *.bbl
 *.blg
 
+# Data files
+Project*/ResultsComputation
+Project*/CPUtime*
+
+# cpp executables
+*.exe
+
