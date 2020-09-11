@@ -20,3 +20,6 @@ Project*/CPUtime*
 # cpp executables
 *.exe
 
+# Mac directory file
+.DS_Store
+
