@@ -3,3 +3,13 @@ testfil
 Gruppetimer
 Forelesninger
 myfirstprogram.cpp
+
+# Latex files
+*.aux
+*.synctex.gz
+*.out
+*.log
+*.idx
+*.bbl
+*.blg
+
