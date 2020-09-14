@@ -34,28 +34,94 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int max_ite, int n
 
 }
 
-// Returns a tuple of value of element and its index. (val, row, column) => f.eks (2.2, 1, 3)
-tuple<double, int, int> FindMaxEle(Mat<double> A){
+// Returns a tuple of max value of matirx-element and its index. (val, row, column) => f.eks (2.2, 1, 3)
+tuple<double, int, int> JacobiEigenSolve::FindMaxEle(Mat<double> A){
   double max = 0.0;
-  for (int i =0; i <n; i++){
-    for (int j = i+1; j<n; j++){
-      if ( fabs(A[i][j]) > max){
-        max = fabs(A[i][j]);
+  for (int row =0; row <n; row++){
+    for (int col = i+1; col<n; col++){
+      if ( fabs(A(row,col) > max){
+        max = fabs(A[row][col]);
       }
     }
   }
-  return {maks, i, j}
+  return {maks, row, col}
 
 }
 
-// finds the value of cos(theta) and sin(theta) and fills up V each time
-void Rotate(Mat<double> A, int row, int col){
+// finds the value of cos(theta) and sin(theta) and rotating matrix A fills up V each time
+void JacobiEigenSolve::Rotate(Mat<double> A, int l, int k){
+  /*
+  Finding cos(theta) and sin(theta)
+  */
+  double cos_, sin_, tan_, tau;
+  if (A[l][k] != 0.0){
+    tau = (A[l][l]-A[k][k]) / (2.0*A[k][l]);
 
-}
+    if (tau > 0){
+      tan_ = 1.0 / (tau + sqrt(1.0 + tau*tau));
+    } else{
+      tan_ = -1.0 / (tau + sqrt(1.0 + tau*tau));
+    }
+
+    cos_ = 1.0 / sqrt(1.0 + tan_*tan_);
+    sin_ = cos_ * tan_;
+
+  } else{
+    cos_ = 1.0;
+    sin_ = 0.0;
+  }
+
+  }
+
+  /*
+  //Rotating matrix A
+  */
+  double a_kk, a_ll, a_ik, a_il
+  a_kk = A[k][k];
+  a_ll = A[l][l];
+
+  //Computing new matrix elements with indices k and l
+  A[k][k] = cos_*cos_*a_kk - 2.0*cos_*sin_A[k][l] + sin_*sin_*a_ll;
+  A[l][l] = sin_*sin_*a_kk + 2.0*cos_*sin_A[k][l] + cos_*cos_*a_ll;
+  A[k][l] = 0.0; //
+  A[l][k] = 0.0;
+
+  //Computing the new remaining elements
+  for (int i = 0, row <n; i++){
+    if i != k && i != l{
+      a_ik = A[i][k];
+      a_il = A[i][l];
+      A[i][k] = cos_*a_ik - sin_*a_il;
+      A[k][i] = A[i][k];
+      A[i][l] = cos_*a_il - sin_*a_ik;
+      A[l][i] = A[i][l];
+    }
+
+  //Computing new eigenvectors
+  double r_ik, r_il;
+  r_ik = R[i][k];
+  r_il = R[i][l];
+  R[i][k] = cos_*r_ik - sin_*r_il;
+  R[i][l] = cos_*r_il + sin_*r_ik;
+
+    return;
+  }
+
 
  //Runs the rotation until we reached the max ite or reached the eps
-void Solve(){
+void JacobiEigenSolve::Solve(){
+  double max_value;
+  int row, col;
+  int iterations = 0;
+  auto[max_value, row, col] = FindMaxEle(A);
 
+  while (max_value < eps && iterations < max_iterations ){
+    Rotate(row, col);
+    auto[max_value, row, col] = FindMaxEle(A);
+    iterations ++;
+  }
+
+  return;
 }
 
 // Prints A, used for checks
