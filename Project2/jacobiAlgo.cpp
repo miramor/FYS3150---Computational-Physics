@@ -60,24 +60,23 @@ void JacobiEigenSolve::Rotate(Mat<double> A, int l, int k){
 
     if (tau > 0){
       tan_ = 1.0 / (tau + sqrt(1.0 + tau*tau));
-    } else{
+    }
+    else{
       tan_ = -1.0 / (tau + sqrt(1.0 + tau*tau));
     }
 
     cos_ = 1.0 / sqrt(1.0 + tan_*tan_);
     sin_ = cos_ * tan_;
-
-  } else{
+  }
+  else{
     cos_ = 1.0;
     sin_ = 0.0;
-  }
-
   }
 
   /*
   //Rotating matrix A
   */
-  double a_kk, a_ll, a_ik, a_il
+  double a_kk, a_ll, a_ik, a_il;
   a_kk = A(k,k);
   a_ll = A(l,l);
 
@@ -89,7 +88,7 @@ void JacobiEigenSolve::Rotate(Mat<double> A, int l, int k){
 
   //Computing the new remaining elements
   for (int i = 0, row <n; i++){
-    if i != k && i != l{
+    if (i != k && i != l){
       a_ik = A(i,k);
       a_il = A(i,l);
       A(i,k) = cos_*a_ik - sin_*a_il;
@@ -97,7 +96,7 @@ void JacobiEigenSolve::Rotate(Mat<double> A, int l, int k){
       A(i,l) = cos_*a_il - sin_*a_ik;
       A(l,i) = A(i,l);
     }
-
+  }
   //Computing new eigenvectors
   double r_ik, r_il;
   r_ik = R(i,k);
@@ -105,8 +104,9 @@ void JacobiEigenSolve::Rotate(Mat<double> A, int l, int k){
   R(i,k) = cos_*r_ik - sin_*r_il;
   R(i,l) = cos_*r_il + sin_*r_ik;
 
-    return;
-  }
+  return;
+}
+
 
 
  //Runs the rotation until we reached the max ite or reached the eps
