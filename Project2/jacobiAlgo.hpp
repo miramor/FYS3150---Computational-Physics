@@ -4,6 +4,10 @@
 #include <vector>
 #include <string.h>
 #include <tuple>
+#include <armadillo>
+
+using namespace std;
+using namespace arma;
 
 class JacobiEigenSolve {
   private:
@@ -14,12 +18,12 @@ class JacobiEigenSolve {
     Mat<double> V; //Matrix to contain eigenvectors
     int n; // Size of the matrix
     double eps = 1.0e-8;
-    double max_iterations = (double) n * (double) n * (double) n;
+    double max_iterations;
     int iterations = 0;
     double a, b; // a - lower & upper diagonal, b - middle diagonal
     //int k, l; // Changed each time
   public:
-    void Initialize(double a_val, double b_val, double c_val, int max_ite, int n_val); // make the symmetric matrix and empty V matrix.
+    void Initialize(double a_val, double b_val, int max_ite, int n_val); // make the symmetric matrix and empty V matrix.
     tuple<double, int, int> FindMaxEle(Mat<double> A); // Returns a tuple of value
     //of element and its index. (val, row, column) => f.eks (2.2, 1, 3)
     void Rotate(Mat<double> A, int k, int l); // finds the value of cos(theta) and sin(theta)
