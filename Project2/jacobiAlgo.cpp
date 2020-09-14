@@ -87,7 +87,7 @@ void JacobiEigenSolve::Rotate(Mat<double> A, int l, int k){
   A(l,k) = 0.0;
 
   //Computing the new remaining elements
-  for (int i = 0, row <n; i++){
+  for (int i = 0; i <n; i++){
     if (i != k && i != l){
       a_ik = A(i,k);
       a_il = A(i,l);
@@ -96,14 +96,14 @@ void JacobiEigenSolve::Rotate(Mat<double> A, int l, int k){
       A(i,l) = cos_*a_il - sin_*a_ik;
       A(l,i) = A(i,l);
     }
-  }
-  //Computing new eigenvectors
-  double r_ik, r_il;
-  r_ik = R(i,k);
-  r_il = R(i,l);
-  R(i,k) = cos_*r_ik - sin_*r_il;
-  R(i,l) = cos_*r_il + sin_*r_ik;
 
+    //Computing new eigenvectors
+    double r_ik, r_il;
+    r_ik = R(i,k);
+    r_il = R(i,l);
+    R(i,k) = cos_*r_ik - sin_*r_il;
+    R(i,l) = cos_*r_il + sin_*r_ik;
+  }
   return;
 }
 
