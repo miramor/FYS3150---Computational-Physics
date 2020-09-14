@@ -72,12 +72,12 @@ void JacobiEigenSolve::Rotate(Mat<double> A, int l, int k){
     sin_ = 0.0;
   }
 
-  }
+
 
   /*
   //Rotating matrix A
   */
-  double a_kk, a_ll, a_ik, a_il
+  double a_kk, a_ll, a_ik, a_il;
   a_kk = A[k][k];
   a_ll = A[l][l];
 
@@ -88,25 +88,25 @@ void JacobiEigenSolve::Rotate(Mat<double> A, int l, int k){
   A[l][k] = 0.0;
 
   //Computing the new remaining elements
-  for (int i = 0, row <n; i++){
-    if i != k && i != l{
+  for (int i = 0; i <n; i++){
+    if (i != k && i != l){
       a_ik = A[i][k];
       a_il = A[i][l];
       A[i][k] = cos_*a_ik - sin_*a_il;
       A[k][i] = A[i][k];
       A[i][l] = cos_*a_il - sin_*a_ik;
       A[l][i] = A[i][l];
-    }
+      }
 
-  //Computing new eigenvectors
-  double r_ik, r_il;
-  r_ik = R[i][k];
-  r_il = R[i][l];
-  R[i][k] = cos_*r_ik - sin_*r_il;
-  R[i][l] = cos_*r_il + sin_*r_ik;
-
-    return;
+    //Computing new eigenvectors
+    double r_ik, r_il;
+    r_ik = R[i][k];
+    r_il = R[i][l];
+    R[i][k] = cos_*r_ik - sin_*r_il;
+    R[i][l] = cos_*r_il + sin_*r_ik;
   }
+  return;
+}
 
 
  //Runs the rotation until we reached the max ite or reached the eps
