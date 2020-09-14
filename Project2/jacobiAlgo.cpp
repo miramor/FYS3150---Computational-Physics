@@ -38,14 +38,17 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int max_ite, int n
 // Returns a tuple of value of element and its index. (val, row, column) => f.eks (2.2, 1, 3)
 tuple<double, int, int> JacobiEigenSolve::FindMaxEle(Mat<double> A){
   double max = 0.0;
+  int row, col;
   for (int i =0; i <n; i++){
     for (int j = i+1; j<n; j++){
       if ( fabs(A(i,j)) > max){
         max = fabs(A(i,j));
+        row = i;
+        col = j;
       }
     }
   }
-  return {max, i, j}
+  return {max, row, col};
 
 }
 
@@ -81,8 +84,8 @@ void JacobiEigenSolve::Rotate(Mat<double> A, int l, int k){
   a_ll = A(l,l);
 
   //Computing new matrix elements with indices k and l
-  A(k,k) = cos_*cos_*a_kk - 2.0*cos_*sin_A(k,l) + sin_*sin_*a_ll;
-  A(l,l) = sin_*sin_*a_kk + 2.0*cos_*sin_A(k,l) + cos_*cos_*a_ll;
+  A(k,k) = cos_*cos_*a_kk - 2.0*cos_*sin_*A(k,l) + sin_*sin_*a_ll;
+  A(l,l) = sin_*sin_*a_kk + 2.0*cos_*sin_*A(k,l) + cos_*cos_*a_ll;
   A(k,l) = 0.0; //
   A(l,k) = 0.0;
 
@@ -96,7 +99,7 @@ void JacobiEigenSolve::Rotate(Mat<double> A, int l, int k){
       A(i,l) = cos_*a_il - sin_*a_ik;
       A(l,i) = A(i,l);
     }
-
+cout << n << endl;
     //Computing new eigenvectors
     double r_ik, r_il;
     r_ik = R(i,k);
