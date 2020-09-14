@@ -15,7 +15,7 @@ class JacobiEigenSolve {
     // Size of matrix is n = N - 1. So use n+1 when comparing with anaylytical solution!!!
 
     Mat<double> A; // Symmetric matrix to diagonalize,  Dim: n x n
-    Mat<double> V; //Matrix to contain eigenvectors
+    Mat<double> R; //Matrix to contain eigenvectors
     int n; // Size of the matrix
     double eps = 1.0e-8;
     double max_iterations;

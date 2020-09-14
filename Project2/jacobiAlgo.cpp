@@ -15,7 +15,7 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int max_ite, int n
   a = a_val; b = b_val; max_iterations = max_ite; n = n_val;
   max_iterations = (double) n * (double) n * (double) n;
   A = zeros<mat>(n,n);
-  V = zeros<mat>(n,n);
+  R = zeros<mat>(n,n);
 
   //Use this to in a test to compare
   /*vec X(n); X.fill(a_val);
