@@ -14,7 +14,7 @@ class JacobiEigenSolve {
 
     // Size of matrix is n = N - 1. So use n+1 when comparing with anaylytical solution!!!
 
-    Mat<double> A; // Symmetric matrix to diagonalize,  Dim: n x n
+    Mat<double> A_; // Symmetric matrix to diagonalize,  Dim: n x n
     Mat<double> R; //Matrix to contain eigenvectors
     int n; // Size of the matrix
     double eps = 1.0e-8;
@@ -28,7 +28,7 @@ class JacobiEigenSolve {
     //of element and its index. (val, row, column) => f.eks (2.2, 1, 3)
     void Rotate(int k, int l); // finds the value of cos(theta) and sin(theta)
     void Solve(); //Simply runs the rotation until we reached the max ite or reached the eps
-    Mat<double> PrintA(); // Prints A, used for checks
+    void PrintA(); // Prints A, used for checks
 
     //enkel matrise 3x3, analyisk rotasjonsmatrisen. Gjøre alle steg for hånd
     // sjekke om egenverdiene funker.

@@ -8,6 +8,8 @@ int main(int argc, char const *argv[]) {
 
   JacobiEigenSolve jes;
 
-  jes.Initialize(2, -1, 6);
-  jes.solve();
+  jes.Initialize(1.2, 2.3, 4);
+  jes.Solve();
+  jes.PrintA();
+
 }
