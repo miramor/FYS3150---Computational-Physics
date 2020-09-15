@@ -12,7 +12,7 @@ using namespace arma;
 
 void JacobiEigenSolve::Initialize(double a_val, double b_val, int max_ite, int n_val){
   //Set class variables
-  a = a_val; b = b_val; max_iterations = max_ite; n = n_val;
+  a = a_val; b = b_val; n = n_val;
   max_iterations = (double) n * (double) n * (double) n;
   A = zeros<mat>(n,n);
   R = zeros<mat>(n,n);
@@ -36,7 +36,7 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int max_ite, int n
 }
 
 // Returns a tuple of value of element and its index. (val, row, column) => f.eks (2.2, 1, 3)
-tuple<double, int, int> JacobiEigenSolve::FindMaxEle(Mat<double> A){
+tuple<double, int, int> JacobiEigenSolve::FindMaxEle(){
   double max = 0.0;
   for (int i =0; i <n; i++){
     for (int j = i+1; j<n; j++){
@@ -50,7 +50,7 @@ tuple<double, int, int> JacobiEigenSolve::FindMaxEle(Mat<double> A){
 }
 
 // finds the value of cos(theta) and sin(theta) and rotating matrix A fills up V each time
-void JacobiEigenSolve::Rotate(Mat<double> A, int l, int k){
+void JacobiEigenSolve::Rotate(int l, int k){
   /*
   Finding cos(theta) and sin(theta)
   */

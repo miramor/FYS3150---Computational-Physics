@@ -23,10 +23,10 @@ class JacobiEigenSolve {
     double a, b; // a - lower & upper diagonal, b - middle diagonal
     //int k, l; // Changed each time
   public:
-    void Initialize(double a_val, double b_val, int max_ite, int n_val); // make the symmetric matrix and empty V matrix.
-    tuple<double, int, int> FindMaxEle(Mat<double> A); // Returns a tuple of value
+    void Initialize(double a_val, double b_val, int n_val); // make the symmetric matrix and empty V matrix.
+    tuple<double, int, int> FindMaxEle(); // Returns a tuple of value
     //of element and its index. (val, row, column) => f.eks (2.2, 1, 3)
-    void Rotate(Mat<double> A, int k, int l); // finds the value of cos(theta) and sin(theta)
+    void Rotate(int k, int l); // finds the value of cos(theta) and sin(theta)
     void Solve(); //Simply runs the rotation until we reached the max ite or reached the eps
     Mat<double> PrintA(); // Prints A, used for checks
 
