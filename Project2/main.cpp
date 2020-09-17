@@ -9,8 +9,8 @@ int main(int argc, char const *argv[]) {
   JacobiEigenSolve jes;
 
   jes.Initialize(-1, 2, 4);
-  //jes.Solve();
-  //jes.PrintA();
-  jes.TestInitialize();
+  jes.Solve();
+  jes.PrintA();
+  //jes.TestInitialize();
 
 }
