@@ -13,7 +13,7 @@ final,                   % draft: marks overfull hboxes, figures with paths
 \newcommand{\R}{\mathbb{R}} 
 
 \usepackage[pdftex]{graphicx}
-
+\usepackage{blkarray} %needed for indexing matrix
 \usepackage{fancyvrb} % packages needed for verbatim environments
 
 \usepackage[T1]{fontenc}
@@ -83,10 +83,90 @@ final,                   % draft: marks overfull hboxes, figures with paths
 \newpage
 \section{Abstract}
 \section{Introduction}
-
+\section{Methods}
 Since $\mathbf{U}$ is orthogonal holds $\mathbf{U^TU} = I$
 \begin{equation}
 w_i^Tw_j = (Uv_i)^T(Uv_j)=v_i^TU^TUv_j=v_i^TIv_j = v_i^Tv_j
 \end{equation}
+\subsection{Jacobi Method}
+The Jacobi method guarantees a solution for all real symmetric matrices. 
+The method rotates the initial matrix using similarity transformations. By discarding the off-diagonal elements, the eigenvalues stay preserved.
+How does this work? Firstly, we look at the transformation matrix. \\
+The transformation matrix is orthogonal since its inverse is equal to its transpose
+\begin{equation*}
+\mathbf{S}^T = \mathbf{S}^{-1}.
+\end{equation*}
+In $\R^2$, the transformation matrix is given by
+\[
+     \begin{bmatrix}
+     				cos(\theta) & -sin(\theta) \\
+					sin(\theta) & cos(\theta)
+                      \end{bmatrix}
+\]
+and $\theta$ denotes the degree of rotation in the plane. \\
+In $\R^3$, the rotation along the x, y and z axis respectively are 
+\[
+    R_x = \begin{bmatrix}
+     				1 			&	0 			&0				\\
+     				0			&	cos(\theta) & -sin(\theta) \\
+					0			&	sin(\theta) & cos(\theta)
+                      \end{bmatrix}
+	\hspace{0.5cm} R_y = \begin{bmatrix}
+     				cos(\theta)&	0 			& -sin(\theta)		\\
+     				0			&	1 			& 0 				\\
+					sin(\theta)	&	0			& cos(\theta)
+                      \end{bmatrix}
+	\hspace{0.5cm} R_z = \begin{bmatrix}
+     				cos(\theta)& -sin(\theta)	& 	\\
+     				sin(\theta)	& cos(\theta) 	& 0 \\
+						0		&	0			& 1
+                      \end{bmatrix}
+\]
+Generally, a rotation i $\R^n$ is given by 
+\[
+S(k,l,\theta) = \begin{blockarray}{cccccccc}
+ 		&  				& l				&			&k 				& 			&  \\
+\begin{block}{[ccccccc] c}
+  1 	& \ldots 		&  0			&  \ldots	&  0			& \ldots	& 0 	&	 \\
+  \vdots & \ddots 		& 	\vdots		& 	 		& 	\vdots		& 			& \vdots &  	 \\
+  	0	& 	\ldots		& cos(\theta) 	& \ldots 	& -sin(\theta)	& 	\ldots	& 0		& l	 \\
+  \vdots&  				& \vdots 		& \ddots 	& \vdots		& 			&\vdots&	 \\
+    0	& 	 \ldots		& sin(\theta)	& \ldots	& cos(\theta) 	& 	\ldots	&	0	& k	\\
+  \vdots &  			& \vdots		& 			& 	\vdots		& \ddots	& \vdots & 	\\
+  0 & \ldots			& 0	 			& \ldots	& 0				& \ldots	& 1 &  	\\
+\end{block}
+\end{blockarray}
+ \]
+$cos(\theta)$ and $sin(\theta)$ are now placed in the l\textsuperscript{th} row and l\textsuperscript{th} column and k\textsuperscript{th} row and k\textsuperscript{th} column. \\
+The similarity transformation 
+\begin{equation}
+\mathbf{A}_{new} = \mathbf{S}^T(k,l,\theta) \cdot \mathbf{A} \cdot \mathbf{S}(k,l,\theta)
+\end{equation}
+rotates row and column k and l of $\mathbf{A}$ an angle $\theta$ such as the entries $\mathbf{A}_  {new}(k,l)$ and $ \mathbf{A}_{new}(l,k)$ become zero.
+
+The new entries are given with
+\begin{equation}
+\begin{aligned}
+b_{ii} &= a_{ii} \hspace{0.5cm} i \neq k, i \neq l \\
+b_{ik} &= a_{ik}cos(\theta) - a_{il}sin(\theta) \hspace{0.5cm} i \neq k, i \neq l \\
+b_{il} &= a_{il}cos(\theta) + a_{ik}sin(\theta) \hspace{0.5cm} i \neq k, i \neq l\\
+b_{kk} &= a_{kk}cos^2(\theta) -2a_{kl}cos(\theta)sin(\theta) + a_llsin^2(\theta)\\
+b_{ll} &= a_{ll}cos^2(\theta) + 2a_{kl}cos(\theta)sin(\theta) + a_{kk}sin^2(\theta)\\
+b_{kl} &= (a_{kk}-a_{ll})cos(\theta)sin(\theta) + a_{kl}(cos^2(\theta)-sin^2(\theta))
+\end{aligned}
+\end{equation}
+The aim is to get zero for all non-diagonal elements $b_{kl}$. For each iteration, $\theta$ must be chosen accordingly. 
+The Jacobi Method is an iterative method, thus this procedure is continued until the sum over the squared non-diagonal matrix elements, $off(\mathbf{A})$, are less than a prefixed test, $\epsilon$, (ideally equal zero). That is
+\begin{equation}
+off(\mathbf{A}) = \sqrt{\sum_{i=1}^{n} \sum_{j=1, j \neq i}^{n} = |a_{ij}|^2} < \epsilon
+\end{equation}
+Since this is quite a time-consuming test, it can be replaced by finding the largest (absolute) value of the off-diagonal elements
+\begin{equation}
+max|a_{ij}| < \epsilon \hspace{0.5cm} i \neq j.
+\end{equation}
+Given a real symmetric matrix, the algorithm is set to succeed. However, the large amount of iterations (about $n^3$) make the method very slow.
+
+
+%https://www.patnauniversity.ac.in/e-content/science/physics/MScPhy58.pdf
 
 \end{document}
