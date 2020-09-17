@@ -12,25 +12,29 @@ using namespace arma;
 
 void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val){
   //Set class variables
-  a = a_val; b = b_val; n = n_val;
+  n = n_val; //Points
+  h = 1.0/(n+1);  // Step size (x-x0)/N = (x-x0)/(n+1)
+  a = a_val/(h*h); b = b_val/(h*h);
   max_iterations = (double) n * (double) n * (double) n;
   //max_iterations = 100;
   A = zeros<mat>(n,n);
   R.eye(n,n);
 
+
   for (int i=0; i<n; i++){
     if (i<n-1){
-      A(i,i) = b_val;
-      A(i,i+1) = a_val;
-      A(i+1,i) = a_val;
+      A(i,i) = b;
+      A(i,i+1) = a;
+      A(i+1,i) = a;
     } else{
-      A(i,i) = b_val;
+      A(i,i) = b;
     }
   }
 
   A_test = repmat(A, 1, 1); //Make a copy of A to be used in tests
-  //cout << "Fasit eigenvalues: \n" << eig_sym(A) << endl;
-  //cout << "Fasit eigenvectors: \n " << eigs_gen(A, n) << endl;
+  cout << "Fasit eigenvalues: \n" << eig_sym(A) << endl;
+  cout << "Fasit eigenvectors: \n " << eigs_gen(A, n) << endl;
+  //cout << A << endl;
   return;
 }
 
@@ -120,15 +124,17 @@ void JacobiEigenSolve::Solve(){
   auto [max_value, row, col] = FindMaxEle();
   //cout << A << endl;
 
-  while (max_value > eps && iterations < max_iterations ){
-    cout <<"Largest value: " << max_value << " På plass: " << "( " << col << ", " << row << ")" << endl;
+  while (max_value > eps || iterations < max_iterations ){
+    //cout <<"Largest value: " << max_value << " På plass: " << "( " << col << ", " << row << ")" << endl;
     Rotate(row, col);
-    cout << "Reduced to " << A(row,col) << "\n" <<  endl;
-    cout << A << endl;
+    //cout << "Reduced to " << A(row,col) << "\n" <<  endl;
+    //cout << A << endl;
     auto[max_value_, row_, col_] = FindMaxEle();
+    cout <<  "Kolonne" <<col_ << "row: "<< row_ << endl;
     max_value = max_value_; row = row_; col = col_; //Update variables outside the loop
     iterations ++;
   }
+  A.clean(eps); //Remove elements smaller than eps.
   return;
 }
 
@@ -136,21 +142,21 @@ void JacobiEigenSolve::Solve(){
 void JacobiEigenSolve::PrintA(){
   cout << "Matrix A: \n" << A << endl;
   cout << "Matrix R: \n" << R << endl;
-  A.clean(eps);
-  cout << A << endl;
   return;
 }
 
+
 //Tests 2-3 times if method finds correct value and postion
 void JacobiEigenSolve::TestFindMaxEle(){
-  Mat<double> C =
-  int i = index_max(A_test);
-  int j = index_min(A_test);
+  //Mat<double> C =
+  //int i = index_max(A_test);
+  //int j = index_min(A_test);
+/*
   while(i == j){
-    i =
+    i = 2;
   }
-  index_max
-  return;
+  //index_max
+  return;*/
 }
 
 //Tests if matrix is set up correctly initially

@@ -19,6 +19,7 @@ class JacobiEigenSolve {
     Mat<double> R; //Matrix to contain eigenvectors
     int n; // Size of the matrix
     double eps = 1.0e-10;
+    double h;
     double max_iterations;
     int iterations = 0;
     double a, b; // a - lower & upper diagonal, b - middle diagonal
