@@ -17,14 +17,6 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val){
   //max_iterations = 100;
   A = zeros<mat>(n,n);
   R.eye(n,n);
-  cout << max_iterations << endl;
-
-  //Use this to in a test to compare
-  /*vec X(n); X.fill(a_val);
-  vec Y(n); Y.fill(b_val);
-  A = toeplitz(X,Y);
-  A = mat(n,n);
-  */
 
   for (int i=0; i<n; i++){
     if (i<n-1){
@@ -35,9 +27,10 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val){
       A(i,i) = b_val;
     }
   }
-  cout << "Fasit eigenvalues: \n" << eig_sym(A) << endl;
+
+  A_test = repmat(A, 1, 1); //Make a copy of A to be used in tests
+  //cout << "Fasit eigenvalues: \n" << eig_sym(A) << endl;
   //cout << "Fasit eigenvectors: \n " << eigs_gen(A, n) << endl;
-  //cout << A << endl;
   return;
 }
 
@@ -146,4 +139,44 @@ void JacobiEigenSolve::PrintA(){
   A.clean(eps);
   cout << A << endl;
   return;
+}
+
+//Tests 2-3 times if method finds correct value and postion
+void JacobiEigenSolve::TestFindMaxEle(){
+  Mat<double> C =
+  int i = index_max(A_test);
+  int j = index_min(A_test);
+  while(i == j){
+    i =
+  }
+  index_max
+  return;
+}
+
+//Tests if matrix is set up correctly initially
+void JacobiEigenSolve::TestInitialize(){
+  //Use this to in a test to compare
+  vec X(n); X.fill(0);
+  X(0) = 2; X(1) = -1; //Horfor gir dette index out of bounds error??
+  mat B = toeplitz(X);
+
+  for(int i = 0; i < n; i++){
+    for(int j = 0; j < n; j++){
+      //cout << A(i,j) << B(i,j) << endl;
+      if( fabs(A_test(i,j) - B(i,j)) > 1e-8 ){
+        cout << "Error: A(i,j) - B(i,j) = " << A_test(i,j) - B(i,j) << endl;
+      }
+    }
+  }
+  return;
+}
+
+void JacobiEigenSolve::TestSolve(){
+  for (int i =0; i <n; i++){
+    for (int j = i+1; j<n; j++){
+      if( i != j){
+        assert(abs(A(i,j)) < eps );
+      }
+    }
+  }
 }
