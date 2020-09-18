@@ -148,6 +148,10 @@ void JacobiEigenSolve::PrintA(){
 
 //Tests 2-3 times if method finds correct value and postion
 void JacobiEigenSolve::TestFindMaxEle(){
+  arma_rng::set_seed_random();
+  A  = mat(4,4, arma::fill::randu);
+  cout << "Find max value of this matrix:\n" << A << endl;
+  A = rand
   //Mat<double> C =
   //int i = index_max(A_test);
   //int j = index_min(A_test);
