@@ -36,6 +36,9 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val){
   cout << "Fasit eigenvalues: \n" << eig_sym(A) << endl;
   //cout << "Fasit eigenvectors: \n " << eigs_gen(A, n) << endl;
   //cout << A << endl;
+
+  // Opg c - potensial. Add potential on diagonal elements.
+  if(usePotential)
   return;
 }
 
@@ -170,7 +173,7 @@ void JacobiEigenSolve::TestFindMaxEle(){
 void JacobiEigenSolve::TestInitialize(){
   //Use this to in a test to compare
   vec X(n); X.fill(0);
-  X(0) = 2; X(1) = -1; //Horfor gir dette index out of bounds error??
+  X(0) = 2; X(1) = -1;
   mat B = toeplitz(X);
 
   for(int i = 0; i < n; i++){
@@ -185,6 +188,8 @@ void JacobiEigenSolve::TestInitialize(){
 }
 
 void JacobiEigenSolve::TestSolve(){
+  // Sort egenverdiene
+  // Sjekk om egenverdiene er riktig.
   for (int i =0; i <n; i++){
     for (int j = i+1; j<n; j++){
       if( i != j){
@@ -192,4 +197,7 @@ void JacobiEigenSolve::TestSolve(){
       }
     }
   }
+  // Cross product  a x b  = 0vektor hvis de er paralellel.
+  // vector.clean(eps)
+  // Sjekk at alle elementene er 0
 }
