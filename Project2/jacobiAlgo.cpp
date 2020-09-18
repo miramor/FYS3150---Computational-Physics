@@ -5,6 +5,7 @@
 #include <string>
 #include <armadillo>
 #include "jacobiAlgo.hpp"
+#include <cassert>
 
 using namespace std;
 using namespace arma;
@@ -39,9 +40,8 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val){
 }
 
 // Returns a tuple of value of element and its index. (val, row, column) => f.eks (2.2, 1, 3)
-tuple<double, int, int> JacobiEigenSolve::FindMaxEle(){
-  double max = 0.0;
-  int row, col;
+void JacobiEigenSolve::FindMaxEle(double& max, int& row, int& col){
+  max = 0.0;
   for (int i =0; i <n; i++){
     for (int j = i+1; j<n; j++){
       if ( fabs(A(i,j)) > max){
@@ -51,7 +51,8 @@ tuple<double, int, int> JacobiEigenSolve::FindMaxEle(){
       }
     }
   }
-  return {max, row, col};
+  return;
+  //return {max, row, col};
 
 }
 
@@ -121,17 +122,19 @@ void JacobiEigenSolve::Rotate(int l, int k){
 //Runs the rotation until we reached the max ite or reached the eps
 void JacobiEigenSolve::Solve(){
   int iterations = 0;
-  auto [max_value, row, col] = FindMaxEle();
+  int row; int col;
+  double max_val;
+  FindMaxEle(max_val, row, col);
   //cout << A << endl;
 
-  while (max_value > eps || iterations < max_iterations ){
+  while (max_val > eps || iterations < max_iterations ){
+    //cout <<  "Kolonne" <<col << "  row: "<< row << endl;
     //cout <<"Largest value: " << max_value << " På plass: " << "( " << col << ", " << row << ")" << endl;
     Rotate(row, col);
     //cout << "Reduced to " << A(row,col) << "\n" <<  endl;
     //cout << A << endl;
-    auto[max_value_, row_, col_] = FindMaxEle();
-    cout <<  "Kolonne" <<col_ << "row: "<< row_ << endl;
-    max_value = max_value_; row = row_; col = col_; //Update variables outside the loop
+    FindMaxEle(max_val, row, col);
+    //cout <<  "Kolonne" <<col_ << "row: "<< row_ << endl;
     iterations ++;
   }
   A.clean(eps); //Remove elements smaller than eps.

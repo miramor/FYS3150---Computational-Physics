@@ -26,7 +26,7 @@ class JacobiEigenSolve {
     //int k, l; // Changed each time
   public:
     void Initialize(double a_val, double b_val, int n_val); // make the symmetric matrix and empty V matrix.
-    tuple<double, int, int> FindMaxEle(); // Returns a tuple of value
+    void FindMaxEle(double&, int&, int&); // Returns a tuple of value
     //of element and its index. (val, row, column) => f.eks (2.2, 1, 3)
     void Rotate(int k, int l); // finds the value of cos(theta) and sin(theta)
     void Solve(); //Simply runs the rotation until we reached the max ite or reached the eps
