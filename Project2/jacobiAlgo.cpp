@@ -13,7 +13,7 @@ using namespace arma;
 void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val){
   //Set class variables
   n = n_val; //Points
-  h = 1.0/(n+1);  // Step size (x-x0)/N = (x-x0)/(n+1)
+  h = 1.0/(n+1);  // Step size (x-x0)/N = (x-x0)/(n+1)
   a = a_val/(h*h); b = b_val/(h*h);
   max_iterations = (double) n * (double) n * (double) n;
   //max_iterations = 100;
@@ -33,7 +33,7 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val){
 
   A_test = repmat(A, 1, 1); //Make a copy of A to be used in tests
   cout << "Fasit eigenvalues: \n" << eig_sym(A) << endl;
-  cout << "Fasit eigenvectors: \n " << eigs_gen(A, n) << endl;
+  //cout << "Fasit eigenvectors: \n " << eigs_gen(A, n) << endl;
   //cout << A << endl;
   return;
 }
@@ -149,12 +149,12 @@ void JacobiEigenSolve::PrintA(){
 //Tests 2-3 times if method finds correct value and postion
 void JacobiEigenSolve::TestFindMaxEle(){
   arma_rng::set_seed_random();
-  A  = mat(4,4, arma::fill::randu);
-  cout << "Find max value of this matrix:\n" << A << endl;
-  A = rand
-  //Mat<double> C =
+  A = mat(4,4, arma::fill::randu);
+  cout << "Find max value of this matrix:\n" << A << endl;
+  //A = rand
+  //Mat<double> C =
   //int i = index_max(A_test);
-  //int j = index_min(A_test);
+  //int j = index_min(A_test);
 /*
   while(i == j){
     i = 2;
