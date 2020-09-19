@@ -104,7 +104,7 @@ final,                   % draft: marks overfull hboxes, figures with paths
 
 
 \section*{Abstract}
-In this project, the Thomas algorithm and the LU decomposition are used to approximate the one-dimensional Poisson equation for $x\in(0,1)$.
+In this report, the Thomas algorithm and the LU decomposition are used to approximate the one-dimensional Poisson equation for $x\in(0,1)$.
 Both algorithms have high accuracy as the number of integration steps, $n$, increases (single precision accurate).
 For $n>10^5$, the deviation increases again due to limitations in machine precision.
 Moreover, the numerical implementation of the LU decomposition is notably slower and is limited to $n<10^5$.
@@ -132,7 +132,7 @@ we approximate the second derivative of $u$ with
    -\frac{v_{i+1}+v_{i-1}-2v_i}{h^2} = f_i  \hspace{0.5cm} \mathrm{for} \hspace{0.1cm} i=1,\dots, n-1,
 \end{equation}
 where $f_i=f(x_i)$ and the discretized approximation to $u$ is $v_i$ with grid points $x_i = ih$ in the interval from $x_0$ to $x_{n+1}=1$.
-Further, the step length, h,  is defined as $h=1/(n+1)$ and the boundary conditions set $v_0 = v_{n+1}=0$. \\
+Further, the step length, h,  is defined as $h=1/n$ and the boundary conditions set $v_0 = v_{n}=0$. \\
 For numerical computation, (\ref{eqn:2ndDeriv}) must be written as a linear set of equations of the form
 \begin{equation*}
    \mathbf{A}\mathbf{v} = \tilde{\mathbf{g}},
@@ -419,6 +419,8 @@ Using armadillo with its built-in functions
 
 \item Measure average CPU time		
 \end{enumerate}
+
+\section*{Results}
 To ensure that all 3 algorithms have been implemented correctly
 (\href{https://github.com/EliasTRuud/FYS3150/tree/master/Project1}{found on Github repository}),
 the computed solution for the general and special Thomas algorithm and LU method, for n=10, are given below (Table \ref{tbl:Values_n10}). As a benchmark, the correct solution is also shown.
@@ -442,10 +444,9 @@ the computed solution for the general and special Thomas algorithm and LU method
 \end{tabular}
 \label{tbl:Values_n10}
 \end{table}
+The values for the general, special algorithm and LU decomposition are the same (with LU being rounded off). In addition, these values correspond well with the exact solution. It can therefore be assumed that the implementation is done correctly. \\
 
-The values for the general, special algorithm and LU decomposition are the same (with LU being rounded off). In addition, these values correspond well with the exact solution. It can therefore be assumed that the implementation is done correctly.
-\section*{Results}
-First, the results for computing the general Thomas algorithm are given for the matrices of the size $10 \times 10$, $100 \times 100$, $1000 \times 1000$ (corresponding to $n=10$, $n=100$ and $n=1000$), in the interval $x \in (0,1)$. The computed solution is graphed together with the exact solution.
+The following figures show the results for computing the general Thomas algorithm for the matrices of the size $10 \times 10$, $100 \times 100$, $1000 \times 1000$ (corresponding to $n=10$, $n=100$ and $n=1000$), in the interval $x \in (0,1)$. The computed solution is graphed together with the exact solution.
 
 \begin{figure}[H]
 \begin{center}
