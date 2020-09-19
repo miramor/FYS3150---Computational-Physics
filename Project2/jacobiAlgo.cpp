@@ -10,6 +10,11 @@
 using namespace std;
 using namespace arma;
 
+inline vec<double> f(int i, double h) {
+
+  r
+}
+
 
 void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val){
   //Set class variables
@@ -36,6 +41,17 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val){
   cout << "Fasit eigenvalues: \n" << eig_sym(A) << endl;
   //cout << "Fasit eigenvectors: \n " << eigs_gen(A, n) << endl;
   //cout << A << endl;
+
+  // Opg c - potensial. Add potential on diagonal elements.
+  if(usePotential){
+    int N = n+1;
+    int p0 = 0;
+    int pmax = 10;
+    h = (pmax - p0)/N;
+    for(int i = 1; i < N; i++){
+      A(i-1,i-1) += (p0 + i*h)**2;
+    }
+  }
   return;
 }
 
@@ -121,18 +137,13 @@ void JacobiEigenSolve::Rotate(int l, int k){
 
 //Runs the rotation until we reached the max ite or reached the eps
 void JacobiEigenSolve::Solve(){
-  int iterations = 0;
-  int row; int col;
+  int iterations = 0; int row; int col;
   double max_val;
   FindMaxEle(max_val, row, col);
   //cout << A << endl;
 
   while (max_val > eps || iterations < max_iterations ){
-    //cout <<  "Kolonne" <<col << "  row: "<< row << endl;
-    //cout <<"Largest value: " << max_value << " På plass: " << "( " << col << ", " << row << ")" << endl;
     Rotate(row, col);
-    //cout << "Reduced to " << A(row,col) << "\n" <<  endl;
-    //cout << A << endl;
     FindMaxEle(max_val, row, col);
     //cout <<  "Kolonne" <<col_ << "row: "<< row_ << endl;
     iterations ++;
@@ -170,12 +181,11 @@ void JacobiEigenSolve::TestFindMaxEle(){
 void JacobiEigenSolve::TestInitialize(){
   //Use this to in a test to compare
   vec X(n); X.fill(0);
-  X(0) = 2; X(1) = -1; //Horfor gir dette index out of bounds error??
+  X(0) = 2; X(1) = -1;
   mat B = toeplitz(X);
 
   for(int i = 0; i < n; i++){
     for(int j = 0; j < n; j++){
-      //cout << A(i,j) << B(i,j) << endl;
       if( fabs(A_test(i,j) - B(i,j)) > 1e-8 ){
         cout << "Error: A(i,j) - B(i,j) = " << A_test(i,j) - B(i,j) << endl;
       }
@@ -185,6 +195,8 @@ void JacobiEigenSolve::TestInitialize(){
 }
 
 void JacobiEigenSolve::TestSolve(){
+  // Sort egenverdiene
+  // Sjekk om egenverdiene er riktig.
   for (int i =0; i <n; i++){
     for (int j = i+1; j<n; j++){
       if( i != j){
@@ -192,4 +204,7 @@ void JacobiEigenSolve::TestSolve(){
       }
     }
   }
+  // Cross product  a x b  = null_vektor hvis de er paralellel.
+  // vector.clean(eps)
+  // Sjekk at alle elementene er 0. feks == vec zeros(n)
 }
