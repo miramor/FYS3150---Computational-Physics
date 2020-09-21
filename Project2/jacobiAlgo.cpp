@@ -10,46 +10,60 @@
 using namespace std;
 using namespace arma;
 
-inline vec<double> f(int i, double h) {
+void JacobiEigenSolve::Write_Results(string filename, Row<double> eval, Row<double> evec){
+  ofstream ofile;
+  ofile.open(filename);
+  ofile << x << endl;
+  ofile << eval << endl;
 
-  r
+  for (int i = 0; i < n; i++){
+    for (int j = 0; j < n; j++){
+      ofile << evec(i,j) << " ";
+    }
+    ofile << endl;
+  }
 }
 
 
-void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val){
+void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val, string init){
   //Set class variables
   n = n_val; //Points
   h = 1.0/(n+1);  // Step size (x-x0)/N = (x-x0)/(n+1)
+  double *x = new double[n];
   a = a_val/(h*h); b = b_val/(h*h);
   max_iterations = (double) n * (double) n * (double) n;
   //max_iterations = 100;
+  x = new double[n];
   A = zeros<mat>(n,n);
   R.eye(n,n);
 
 
-  for (int i=0; i<n; i++){
-    if (i<n-1){
+  for (int i = 0; i < n-1; i++){
+      x[i] = i*h;
       A(i,i) = b;
       A(i,i+1) = a;
       A(i+1,i) = a;
-    } else{
-      A(i,i) = b;
-    }
   }
+  A(n-1,n-1) = b;
+  x[n-1] = (n-1) * h;
+
 
   A_test = repmat(A, 1, 1); //Make a copy of A to be used in tests
-  cout << "Fasit eigenvalues: \n" << eig_sym(A) << endl;
+  eig_sym(eigval, eigvec, A_test);
+
+  cout << eigval << endl;
+  cout << eigvec << endl;
+  //cout << "Fasit eigenvalues: \n" << eig_sym(A_test) << endl;
   //cout << "Fasit eigenvectors: \n " << eigs_gen(A, n) << endl;
   //cout << A << endl;
 
   // Opg c - potensial. Add potential on diagonal elements.
-  if(usePotential){
-    int N = n+1;
+  if(init == "potential"){
     int p0 = 0;
     int pmax = 10;
-    h = (pmax - p0)/N;
-    for(int i = 1; i < N; i++){
-      A(i-1,i-1) += (p0 + i*h)**2;
+    h = (pmax - p0)/(n+1);
+    for(int i = 0; i < n; i++){
+      A(i,i) = A(i,i) + x[i]*x[i];
     }
   }
   return;

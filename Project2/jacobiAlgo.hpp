@@ -22,10 +22,13 @@ class JacobiEigenSolve {
     double h;
     double max_iterations;
     int iterations = 0;
+    Col<double> eigval;
+    Mat<double> eigvec;
     double a, b; // a - lower & upper diagonal, b - middle diagonal
     //int k, l; // Changed each time
   public:
-    void Initialize(double a_val, double b_val, int n_val); // make the symmetric matrix and empty V matrix.
+    double *x;
+    void Initialize(double a_val, double b_val, int n_val, string init); // make the symmetric matrix and empty V matrix.
     void FindMaxEle(double&, int&, int&); // Returns a tuple of value
     //of element and its index. (val, row, column) => f.eks (2.2, 1, 3)
     void Rotate(int k, int l); // finds the value of cos(theta) and sin(theta)
@@ -34,6 +37,7 @@ class JacobiEigenSolve {
     void TestInitialize();
     void TestFindMaxEle();
     void TestSolve();
+    void Write_Results(string filename, Row<double> eval, Mat<double> evec);
 
     //enkel matrise 3x3, analyisk rotasjonsmatrisen. Gjøre alle steg for hånd
     // sjekke om egenverdiene funker.
