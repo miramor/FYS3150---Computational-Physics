@@ -10,11 +10,22 @@
 using namespace std;
 using namespace arma;
 
-void JacobiEigenSolve::Write_Results(string filename, Row<double> eval, Row<double> evec){
+void JacobiEigenSolve::Write_Results(string filename, string solution){
   ofstream ofile;
   ofile.open(filename);
-  ofile << x << endl;
-  ofile << eval << endl;
+
+  if (solution == "analytical"){
+    //Define analytical eval and evec
+    int eval = 1;
+    int evec = 1;
+  }
+  else{
+    eval = max(A);
+    evec = R;
+  }
+  for (int i = 0; i < n; i ++)
+      ofile << x(i) << " ";
+  ofile << endl << eval;
 
   for (int i = 0; i < n; i++){
     for (int j = 0; j < n; j++){
@@ -29,30 +40,25 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val, string 
   //Set class variables
   n = n_val; //Points
   h = 1.0/(n+1);  // Step size (x-x0)/N = (x-x0)/(n+1)
-  double *x = new double[n];
   a = a_val/(h*h); b = b_val/(h*h);
   max_iterations = (double) n * (double) n * (double) n;
   //max_iterations = 100;
-  x = new double[n];
+  x = zeros<rowvec>(n);
   A = zeros<mat>(n,n);
   R.eye(n,n);
 
 
   for (int i = 0; i < n-1; i++){
-      x[i] = i*h;
+      x(i) = i*h;
       A(i,i) = b;
       A(i,i+1) = a;
       A(i+1,i) = a;
   }
   A(n-1,n-1) = b;
-  x[n-1] = (n-1) * h;
+  x(n-1) = (n-1) * h;
 
 
   A_test = repmat(A, 1, 1); //Make a copy of A to be used in tests
-  eig_sym(eigval, eigvec, A_test);
-
-  cout << eigval << endl;
-  cout << eigvec << endl;
   //cout << "Fasit eigenvalues: \n" << eig_sym(A_test) << endl;
   //cout << "Fasit eigenvectors: \n " << eigs_gen(A, n) << endl;
   //cout << A << endl;
