@@ -1,7 +1,13 @@
-all: compile execute
+LIB = -larmadillo -llapack -lblas
+CPPflags= c++ -std=c++17
+output: main.o jacobiAlgo.o
+	${CPPflags} main.o jacobiAlgo.o ${LIB} -o output
 
-compile:
-	c++ -std=c++17 main.cpp jacobiAlgo.cpp -o main.exe -larmadillo -O3
+main.o: main.cpp
+	${CPPflags} -c main.cpp
 
-execute:
-	./main.exe
+jacobiAlgo.o: jacobiAlgo.cpp jacobiAlgo.hpp
+	${CPPflags} -c jacobiAlgo.cpp
+
+clean:
+	rm *.o output

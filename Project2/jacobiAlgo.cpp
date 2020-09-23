@@ -40,9 +40,9 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val){
       A(i,i) = b;
     }
     //calculate analytic eigenvalues and eigenvectors
-    ana_eigval[i] = b + 2*a*cos((i+1)*pi/(n+1));
+    ana_eigval[i] = b + 2*a*cos((i+1)*pi/(n));
       for(int j = 0; j<n; j++){
-        ana_R(i,j) = sin((i+1)*(j+1)*pi/(n+1));
+        ana_R(i,j) = sin((i+1)*(j+1)*pi/(n));
         cout << (i+1)*(j+1)*pi/(n+1) << endl;
         //cout << "i,j" << i << j << endl;
       }
@@ -178,7 +178,7 @@ void JacobiEigenSolve::PrintA(){
 //Tests 2-3 times if method finds correct value and postion
 void JacobiEigenSolve::TestFindMaxEle(){
   arma_rng::set_seed_random();
-  A = mat(4,4, arma::fill::randu);
+  //A = mat(4,4, arma::fill::randu);
   cout << "Find max value of this matrix:\n" << A << endl;
   //A = rand
   //Mat<double> C =

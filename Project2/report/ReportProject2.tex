@@ -40,7 +40,7 @@ final,                   % draft: marks overfull hboxes, figures with paths
     }
 %\hyperbaseurl{}   % hyperlinks are relative to this root
 
-\setcounter{tocdepth}{2}  % levels in table of contents
+\setcounter{tocdepth}{3}  % levels in table of contents
 
 
 % prevent orhpans and widows
@@ -59,6 +59,8 @@ final,                   % draft: marks overfull hboxes, figures with paths
 
 % \usepackage{booktabs}				% for citing
 \usepackage{float}					% for placing figures
+\usepackage{algorithm} 			%for pseudocoding
+\usepackage{algpseudocode}
 %-------------------- end preamble ----------------------
 
 \begin{document}
@@ -84,41 +86,85 @@ final,                   % draft: marks overfull hboxes, figures with paths
 \section{Abstract}
 \section{Introduction}
 \section{Methods}
-Since $\mathbf{U}$ is orthogonal holds $\mathbf{U^TU} = I$
+\subsection{Mathematical properties of unitary transformations}
+\paragraph{Perservation of orthonomality}
+	A unitary transformation preserves the orthogonality of the obtained eigenvectors.
+	Given a symmetric matrix $\mathbf{A}$ with a set of eigenvectors $\mathbf{v_i}$,
+	\[
+	\mathbf{v}_i = \begin{bmatrix} v_{i1} \\ \dots \\ \dots \\v_{in} \end{bmatrix}
+	\]
+	that are orthonormal
+	\begin{equation}
+	\mathbf{v}_j^T\mathbf{v}_i = \delta_{ij},
+	\end{equation}
+	let the unitary transformation be defined by $\mathbf{S}$ such that $\mathbf{S^TS} = I$. \\
+Then, their inner product also preservers orthonomality
 \begin{equation}
-w_i^Tw_j = (Uv_i)^T(Uv_j)=v_i^TU^TUv_j=v_i^TIv_j = v_i^Tv_j
+\mathbf{S(v_i)^T(Sv_j)}= \mathbf{v_i^TS^TSv_j}=\mathbf{v_i^TIv_j} = \mathbf{v_i^Tv_j} =\delta_{ij},
 \end{equation}
+there $\delta$ is the Kronecker delta.
+\paragraph{Perservation of eigenvalues}	
+	Given the matrices $\mathbf{A}$, its set of eigenvalues $\{ \lambda_i \}$ and eigenvectors $\{ \mathbf{v_i} \}$, and $\mathbf{S}$ as defined above, a similar matrix $\mathbf{B}$ 
+	\begin{equation}
+	\mathbf{B} = \mathbf{S}^T\mathbf{A}\mathbf{S}
+	\end{equation}
+	has the same eigenvalues as $\mathbf{A}$.
+	Multiplying
+	\begin{equation}
+	\mathbf{Av_i} = \lambda \mathbf{v_i}
+	\end{equation}
+	with $\mathbf{S^T}$ on the left side and inserting $\mathbf{S^TS}=I$ between $\mathbf{A}$ and $\mathbf{v_i}$ results in
+	\begin{equation}
+	(\mathbf{S^TAS})(\mathbf{S^Tv_i}) = \lambda (\mathbf{S^Tv_i})
+	\end{equation}
+	which is the same as
+	\begin{equation}
+	\mathbf{B} (\mathbf{S^Tv_i}) = \lambda (\mathbf{S^Tv_i}).
+	\end{equation}
+	In other words, $\mathbf{B}$ has eigenvectors of the form $\mathbf{S^Tv_i}$ with eigenvalues $\lambda_i$.
+\paragraph{Similar transform eigenvectors er orthonormal}	
+	If a matrix $\mathbf{A}$ has orthonormal eigenvectors, then a similar $\mathbf{B}$ has orthonormal eigenvectors as well.
+	Taking use of the results above, that is using that $\mathbf{B}$ has eigenvectors of the form $\mathbf{S^Tv_i}$, 
+	their dot product is given by
+	\begin{equation}
+	(\mathbf{S^Tv_i})^T (\mathbf{S^Tv_j})= (\mathbf{v_i^TS})(\mathbf{S^Tv_j}) = \mathbf{v_i^T}\mathbf{v_j}=\delta_{ij}.
+	\end{equation}	
+
 \subsection{Jacobi Method}
 The Jacobi method guarantees a solution for all real symmetric matrices. 
-The method rotates the initial matrix using similarity transformations. By discarding the off-diagonal elements, the eigenvalues stay preserved.
-How does this work? Firstly, we look at the transformation matrix. \\
+The method rotates the initial matrix in a series of similarity transformations. By discarding the off-diagonal elements, the eigenvalues stay preserved along the diagonal. The corresponding eigenvectors, however, do change. For a real and symmetric $n \times n $ matrix $\mathbf{A}$ we get
+\begin{equation}
+\mathbf{S}^T \mathbf{A} \mathbf{S} = diag(\lambda_1 \lambda_2 \ldots \lambda_n).
+\end{equation}
+there $\mathbf{S}$ is the transformation matrix and $\lambda$ are the eigenvalues. \\
+In order to understand this transformation, we first look at the transformation matrix $\mathbf{S}$, also called a unitary matrix. 
 The transformation matrix is orthogonal since its inverse is equal to its transpose
 \begin{equation*}
 \mathbf{S}^T = \mathbf{S}^{-1}.
 \end{equation*}
 In $\R^2$, the transformation matrix is given by
 \[
-     \begin{bmatrix}
-     				cos(\theta) & -sin(\theta) \\
-					sin(\theta) & cos(\theta)
+     \mathbf{S} = \begin{bmatrix}
+     				cos(\theta) & sin(\theta) \\
+					-sin(\theta) & cos(\theta)
                       \end{bmatrix}
 \]
-and $\theta$ denotes the degree of rotation in the plane. \\
+and $\theta$ denotes the degree for the plane rotation in the Euclidean two dimensional space. \\
 In $\R^3$, the rotation along the x, y and z axis respectively are 
 \[
     R_x = \begin{bmatrix}
      				1 			&	0 			&0				\\
-     				0			&	cos(\theta) & -sin(\theta) \\
-					0			&	sin(\theta) & cos(\theta)
+     				0			&	cos(\theta) & sin(\theta) \\
+					0			&	-sin(\theta) & cos(\theta)
                       \end{bmatrix}
 	\hspace{0.5cm} R_y = \begin{bmatrix}
-     				cos(\theta)&	0 			& -sin(\theta)		\\
+     				cos(\theta)&	0 			& sin(\theta)		\\
      				0			&	1 			& 0 				\\
-					sin(\theta)	&	0			& cos(\theta)
+					-sin(\theta)	&	0			& cos(\theta)
                       \end{bmatrix}
 	\hspace{0.5cm} R_z = \begin{bmatrix}
-     				cos(\theta)& -sin(\theta)	& 	\\
-     				sin(\theta)	& cos(\theta) 	& 0 \\
+     				cos(\theta)& sin(\theta)	& 	\\
+     				-sin(\theta)	& cos(\theta) 	& 0 \\
 						0		&	0			& 1
                       \end{bmatrix}
 \]
@@ -129,9 +175,9 @@ S(k,l,\theta) = \begin{blockarray}{cccccccc}
 \begin{block}{[ccccccc] c}
   1 	& \ldots 		&  0			&  \ldots	&  0			& \ldots	& 0 	&	 \\
   \vdots & \ddots 		& 	\vdots		& 	 		& 	\vdots		& 			& \vdots &  	 \\
-  	0	& 	\ldots		& cos(\theta) 	& \ldots 	& -sin(\theta)	& 	\ldots	& 0		& l	 \\
+  	0	& 	\ldots		& cos(\theta) 	& \ldots 	& sin(\theta)	& 	\ldots	& 0		& l	 \\
   \vdots&  				& \vdots 		& \ddots 	& \vdots		& 			&\vdots&	 \\
-    0	& 	 \ldots		& sin(\theta)	& \ldots	& cos(\theta) 	& 	\ldots	&	0	& k	\\
+    0	& 	 \ldots		& -sin(\theta)	& \ldots	& cos(\theta) 	& 	\ldots	&	0	& k	\\
   \vdots &  			& \vdots		& 			& 	\vdots		& \ddots	& \vdots & 	\\
   0 & \ldots			& 0	 			& \ldots	& 0				& \ldots	& 1 &  	\\
 \end{block}
@@ -140,22 +186,46 @@ S(k,l,\theta) = \begin{blockarray}{cccccccc}
 $cos(\theta)$ and $sin(\theta)$ are now placed in the l\textsuperscript{th} row and l\textsuperscript{th} column and k\textsuperscript{th} row and k\textsuperscript{th} column. \\
 The similarity transformation 
 \begin{equation}
-\mathbf{A}_{new} = \mathbf{S}^T(k,l,\theta) \cdot \mathbf{A} \cdot \mathbf{S}(k,l,\theta)
+\mathbf{A}^\prime = \mathbf{S}^T(k,l,\theta) \cdot \mathbf{A} \cdot \mathbf{S}(k,l,\theta)
 \end{equation}
-rotates row and column k and l of $\mathbf{A}$ an angle $\theta$ such as the entries $\mathbf{A}_  {new}(k,l)$ and $ \mathbf{A}_{new}(l,k)$ become zero.
-
-The new entries are given with
+rotates row and column k and l of $\mathbf{A}$ an angle $\theta$ such as the entries $\mathbf{A}^\prime (k,l)$ and $ \mathbf{A}^\prime(l,k)$ become zero.
+The new entries for $\mathbf{A}^\prime$ are given with
 \begin{equation}
-\begin{aligned}
-b_{ii} &= a_{ii} \hspace{0.5cm} i \neq k, i \neq l \\
-b_{ik} &= a_{ik}cos(\theta) - a_{il}sin(\theta) \hspace{0.5cm} i \neq k, i \neq l \\
-b_{il} &= a_{il}cos(\theta) + a_{ik}sin(\theta) \hspace{0.5cm} i \neq k, i \neq l\\
-b_{kk} &= a_{kk}cos^2(\theta) -2a_{kl}cos(\theta)sin(\theta) + a_llsin^2(\theta)\\
-b_{ll} &= a_{ll}cos^2(\theta) + 2a_{kl}cos(\theta)sin(\theta) + a_{kk}sin^2(\theta)\\
-b_{kl} &= (a_{kk}-a_{ll})cos(\theta)sin(\theta) + a_{kl}(cos^2(\theta)-sin^2(\theta))
-\end{aligned}
+\begin{split}
+a_{ii}^\prime &= a_{ii} \hspace{0.5cm} i \neq k, i \neq l \\
+a_{ik}^\prime &= a_{ik}cos(\theta) - a_{il}sin(\theta) \hspace{0.5cm} i \neq k, i \neq l \\
+a_{il}^\prime &= a_{il}cos(\theta) + a_{ik}sin(\theta) \hspace{0.5cm} i \neq k, i \neq l\\
+a_{kk}^\prime &= a_{kk}cos^2(\theta) -2a_{kl}cos(\theta)sin(\theta) + a_{ll}sin^2(\theta)\\
+a_{ll}^\prime &= a_{ll}cos^2(\theta) + 2a_{kl}cos(\theta)sin(\theta) + a_{kk}sin^2(\theta)\\
+a_{kl}^\prime &= (a_{kk}-a_{ll})cos(\theta)sin(\theta) + a_{kl}(cos^2(\theta)-sin^2(\theta))
+\end{split}
 \end{equation}
-The aim is to get zero for all non-diagonal elements $b_{kl}$. For each iteration, $\theta$ must be chosen accordingly. 
+The aim is to get zero for all non-diagonal elements $a_{kl}^\prime$.
+That is
+\begin{equation}
+a_{kl}^\prime = (a_{kk}-a_{ll})cos(\theta)sin(\theta) + a_{kl}(cos^2(\theta)-sin^2(\theta)) 
+= 0.
+\end{equation}
+For each iteration, $\theta$ must be chosen accordingly. 
+Given the quantity $tan(\theta) = sin(\theta)/cos(\theta)$, abbreviated with $t=s/c$, and defining 
+\begin{equation}
+\tau = \frac{a_{ll}-a_{kk}}{2a_{kl}},
+\end{equation}
+we get 
+\begin{equation}
+t^2+2\tau t - 1 = 0.
+\end{equation}
+The solutions for t are
+\begin{equation}
+t = -\tau \pm \sqrt{1+\tau^2}.
+\end{equation}
+In order to ensure maximal numerical stability, the smallest root is chosen, corresponding to the smaller rotation.
+Consequently, $c$ and $s$ can be expressed as
+\begin{equation}
+c = \frac{1}{\sqrt{1+t^2}}
+\end{equation}
+and $s=t/c$. \\
+In the case of $a_{kl} = 0$, we have $cos(\theta) = 1 $ and $sin(\theta) = 0$. \\
 The Jacobi Method is an iterative method, thus this procedure is continued until the sum over the squared non-diagonal matrix elements, $off(\mathbf{A})$, are less than a prefixed test, $\epsilon$, (ideally equal zero). That is
 \begin{equation}
 off(\mathbf{A}) = \sqrt{\sum_{i=1}^{n} \sum_{j=1, j \neq i}^{n} = |a_{ij}|^2} < \epsilon
@@ -164,8 +234,43 @@ Since this is quite a time-consuming test, it can be replaced by finding the lar
 \begin{equation}
 max|a_{ij}| < \epsilon \hspace{0.5cm} i \neq j.
 \end{equation}
-Even though $\mathbf{A}_  {new}(k,l)$ and $ \mathbf{A}_{new}(l,k)$ are set to zero for one iteration, these values can 
-Given a real symmetric matrix, the algorithm is set to succeed. However, the large amount of iterations (about $n^3$) make the method very slow.
+Meaning $i$ and $j$ become the new indices equivalent to $k$ and $l$.
+Even though $\mathbf{A}^\prime(k,l)$ and $ \mathbf{A}^\prime(l,k)$ are set to zero for one iteration, these entries may become different from zero in the next iteration. This is one of the reason for slowing down the algorithm.
+The convergence rate can be approximated with $3n^2-5n^2$ rotations, there each rotation requires $4n$ operations. In other words, in order to zero out the non-diagonal matrix elements, it takes about $12n^3-20n^3$ operations.
+\subsubsection{Code Implementation}
+\begin{algorithm}
+	\caption{Jacobi's method} 
+	\begin{algorithmic}[1]
+		\While{$max_{i\neq j}|a_{ij}| < \epsilon$}
+			\State $a_{kl} = max_{i\neq j}|a_{ij}$
+			 \If{$a_{lk} \neq 0$}
+				\State	$\tau = (a_{ll}-a_{kk})/(2.0a_{kl})$
+				\If{$\tau \ge 0 $}
+					\State $tan = 1.0 / (\tau + \sqrt{1.0 + \tau \cdot \tau})$
+				\Else
+					\State	$ t=-1.0 / (-\tau + \sqrt{1.0 + \tau \cdot \tau})$
+				\EndIf
+				\State $cos = 1.0 / \sqrt{1.0 + tan \cdot tan}$
+				\State $sin = cos \cdot tan$
+			\Else
+				\State $cos = 1.0$
+				\State $sin = 0.0$
+			\EndIf	
+			\For{$i=0,1,...,n-1$}
+				\State $a_{kk}^\prime = a_{kk}cos^2 - 2a_{kl} cos \cdot sin + a_{ll}sin^2$
+				\State $a_{ll}^\prime = a_{ll}cos^2 + 2a_{kl} cos \cdot sin + a_{kk}sin^2$
+				\State $a_{kl}^\prime = 0$ 
+				\State $a_{l,k}^\prime = 0$
+				\If {$i \neq k \And i \neq l$}  
+					\State $a_{ik}^\prime = a_{ik}cos - a_{il}sin  $
+					\State $a_{ki} = a_{ik}$
+					\State $a_{il}^\prime = a_{il}cos + a_{ik}sin $
+					\State $a_{li}^\prime = a_{il}$
+				\EndIf
+			\EndFor
+		\EndWhile
+	\end{algorithmic} 
+\end{algorithm}
 
 
 %https://www.patnauniversity.ac.in/e-content/science/physics/MScPhy58.pdf
