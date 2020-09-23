@@ -40,14 +40,15 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val){
       A(i,i) = b;
     }
     //calculate analytic eigenvalues and eigenvectors
-    ana_eigval[i] = b + 2*a*cos((i+1)*pi/(n));
+    ana_eigval[i] = b + 2*a*cos((i+1)*pi/(n+1));
       for(int j = 0; j<n; j++){
-        ana_R(i,j) = sin((i+1)*(j+1)*pi/(n));
-        cout << (i+1)*(j+1)*pi/(n+1) << endl;
+        ana_R(i,j) = sin((i+1)*(j+1)*pi/(n+1));
+        //cout << (i+1)*(j+1)*pi/(n+1) << endl;
         //cout << "i,j" << i << j << endl;
       }
-
+//ana_R = normalise(ana_R, 3);
   }
+cout << "Matrix A \n" << A <<endl;
 cout << "Analytic eigenvalues \n" << ana_eigval << endl;
 cout << "Analytic eigenvectors \n" << ana_R << endl;
 
@@ -223,29 +224,23 @@ void JacobiEigenSolve::TestSolve(){
 }
 
 bool JacobiEigenSolve::TestOrthogonality(){
+  //Returns true if matrix R has orthonormal eigenvalues
   // Multiply R*R^t
   for (int i = 0; i < n; i++) {
-    cout << "\n" << endl;
       for (int j = 0; j < n; j++) {
         double sum = 0;
-        cout <<"\n" << endl;
         for (int s = 0; s < n; s++) {
         //mulitipling with the transpose
-          sum = sum + (R(s,i) * R(s,j));
-          cout <<"i,j,s " << i << j << s << endl;
-          cout << R(s,i) << " "<< R(s,j) << endl;
-          cout << "sum " << sum << endl;
-          cout << "\n\n";
+          sum = sum + (R(i,s) * R(j,s));
           }
-      // if (i == j && abs(sum-1) >= 1.0e-06)
-      //     cout << "Vector in column " << i << " not normalised" << endl;
-      //     return false;
-      // if (i != j && abs(sum) >= 1.0e-06)
-      //     cout <<"Vector in column " << i <<" and " << j << "not orthogonal" << endl;
-      //     return false;
+      if (i == j && abs(sum-1) >= 1.0e-06){
+          cout << "Vector in row " << i << " not normalised" << endl;
+          return false; }
+      if (i != j && abs(sum) >= 1.0e-06){
+          cout <<"Vector in row " << i <<" and " << j << " not orthogonal" << endl;
+          return false; }
       }
   }
-
   return true;
 }
   // Cross product  a x b  = null_vektor hvis de er paralellel.
