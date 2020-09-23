@@ -58,10 +58,7 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val, string 
   x(n-1) = (n-1) * h;
 
 
-  A_test = repmat(A, 1, 1); //Make a copy of A to be used in tests
-  //cout << "Fasit eigenvalues: \n" << eig_sym(A_test) << endl;
-  //cout << "Fasit eigenvectors: \n " << eigs_gen(A, n) << endl;
-  //cout << A << endl;
+  A_test = repmat(A, 1, 1);
 
   // Opg c - potensial. Add potential on diagonal elements.
   if(init == "potential"){

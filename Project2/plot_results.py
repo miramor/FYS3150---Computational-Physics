@@ -3,7 +3,7 @@ import numpy as np
 
 
 def plot(filename):
-    file = open("results_num4", 'r')
+    file = open(filename, 'r')
 
     x = np.asarray(file.readline().split(),dtype=float)
     eigval = np.asarray(file.readline().split(),dtype=float)
@@ -17,3 +17,9 @@ def plot(filename):
         for j in range(n):
             eigvec[i][j] = float(vals[j])
         i += 1
+
+
+plot("results_num4")
+
+
+for (i int)

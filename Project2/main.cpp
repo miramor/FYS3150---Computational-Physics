@@ -7,9 +7,11 @@
 int main(int argc, char const *argv[]) {
 
   JacobiEigenSolve jes;
-  int n = 4;
+  int n = atoi(argv[1]);
   string filename = "results_num";
-  jes.Initialize(-1, 2, n, "regular");
+  string solution = argv[2];
+  cout << solution << endl;
+  jes.Initialize(-1, 2, n, solution);
   jes.Solve();
   jes.PrintA();
   //jes.TestFindMaxEle();
