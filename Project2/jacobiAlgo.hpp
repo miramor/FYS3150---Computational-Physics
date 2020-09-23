@@ -17,6 +17,8 @@ class JacobiEigenSolve {
     Mat<double> A; // Symmetric matrix to diagonalize,  Dim: n x n
     Mat<double> A_test;
     Mat<double> R; //Matrix to contain eigenvectors
+    Row<double> ana_eigval; //Analytic eigenvalues stored in a vector
+    Mat<double> ana_R; //Analytic eigenvertors stored in a matrix
     int n; // Size of the matrix
     double eps = 1.0e-10;
     double h;
@@ -34,6 +36,7 @@ class JacobiEigenSolve {
     void TestInitialize();
     void TestFindMaxEle();
     void TestSolve();
+    bool TestOrthogonality();
 
     //enkel matrise 3x3, analyisk rotasjonsmatrisen. Gjøre alle steg for hånd
     // sjekke om egenverdiene funker.

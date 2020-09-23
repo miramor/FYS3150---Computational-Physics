@@ -8,10 +8,11 @@ int main(int argc, char const *argv[]) {
 
   JacobiEigenSolve jes;
 
-  jes.Initialize(-1, 2, 4);
+  jes.Initialize(-1, 2, 3);
   jes.Solve();
   jes.PrintA();
   jes.TestFindMaxEle();
+  cout << "orthogonality \n" << jes.TestOrthogonality()<< endl;
   //jes.TestInitialize();
 
 }

@@ -10,10 +10,10 @@
 using namespace std;
 using namespace arma;
 
-inline vec<double> f(int i, double h) {
-
-  r
-}
+// inline vec<double> f(int i, double h) {
+//
+//   r
+// }
 
 
 void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val){
@@ -25,6 +25,10 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val){
   //max_iterations = 100;
   A = zeros<mat>(n,n);
   R.eye(n,n);
+  ana_eigval.set_size(n);
+  double pi = 2*acos(0.0);
+  ana_R.set_size(n,n);
+
 
 
   for (int i=0; i<n; i++){
@@ -35,7 +39,17 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val){
     } else{
       A(i,i) = b;
     }
+    //calculate analytic eigenvalues and eigenvectors
+    ana_eigval[i] = b + 2*a*cos((i+1)*pi/(n+1));
+      for(int j = 0; j<n; j++){
+        ana_R(i,j) = sin((i+1)*(j+1)*pi/(n+1));
+        cout << (i+1)*(j+1)*pi/(n+1) << endl;
+        //cout << "i,j" << i << j << endl;
+      }
+
   }
+cout << "Analytic eigenvalues \n" << ana_eigval << endl;
+cout << "Analytic eigenvectors \n" << ana_R << endl;
 
   A_test = repmat(A, 1, 1); //Make a copy of A to be used in tests
   cout << "Fasit eigenvalues: \n" << eig_sym(A) << endl;
@@ -43,15 +57,15 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val){
   //cout << A << endl;
 
   // Opg c - potensial. Add potential on diagonal elements.
-  if(usePotential){
-    int N = n+1;
-    int p0 = 0;
-    int pmax = 10;
-    h = (pmax - p0)/N;
-    for(int i = 1; i < N; i++){
-      A(i-1,i-1) += (p0 + i*h)**2;
-    }
-  }
+//   if(usePotential){
+//     int N = n+1;
+//     int p0 = 0;
+//     int pmax = 10;
+//     h = (pmax - p0)/N;
+//     for(int i = 0; i < N; i++){
+//       A(i,i) += (p0 + i*h)**2;
+//     }
+//   }
   return;
 }
 
@@ -148,6 +162,7 @@ void JacobiEigenSolve::Solve(){
     //cout <<  "Kolonne" <<col_ << "row: "<< row_ << endl;
     iterations ++;
   }
+  cout << "Number of iterations needed for diagonalisation " << iterations <<endl;
   A.clean(eps); //Remove elements smaller than eps.
   return;
 }
@@ -197,6 +212,7 @@ void JacobiEigenSolve::TestInitialize(){
 void JacobiEigenSolve::TestSolve(){
   // Sort egenverdiene
   // Sjekk om egenverdiene er riktig.
+  // Test if matrix is diagonalized
   for (int i =0; i <n; i++){
     for (int j = i+1; j<n; j++){
       if( i != j){
@@ -204,7 +220,34 @@ void JacobiEigenSolve::TestSolve(){
       }
     }
   }
+}
+
+bool JacobiEigenSolve::TestOrthogonality(){
+  // Multiply R*R^t
+  for (int i = 0; i < n; i++) {
+    cout << "\n" << endl;
+      for (int j = 0; j < n; j++) {
+        double sum = 0;
+        cout <<"\n" << endl;
+        for (int s = 0; s < n; s++) {
+        //mulitipling with the transpose
+          sum = sum + (R(s,i) * R(s,j));
+          cout <<"i,j,s " << i << j << s << endl;
+          cout << R(s,i) << " "<< R(s,j) << endl;
+          cout << "sum " << sum << endl;
+          cout << "\n\n";
+          }
+      // if (i == j && abs(sum-1) >= 1.0e-06)
+      //     cout << "Vector in column " << i << " not normalised" << endl;
+      //     return false;
+      // if (i != j && abs(sum) >= 1.0e-06)
+      //     cout <<"Vector in column " << i <<" and " << j << "not orthogonal" << endl;
+      //     return false;
+      }
+  }
+
+  return true;
+}
   // Cross product  a x b  = null_vektor hvis de er paralellel.
   // vector.clean(eps)
   // Sjekk at alle elementene er 0. feks == vec zeros(n)
-}
