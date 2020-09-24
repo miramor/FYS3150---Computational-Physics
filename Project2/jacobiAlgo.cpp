@@ -10,63 +10,29 @@
 using namespace std;
 using namespace arma;
 
-// inline vec<double> f(int i, double h) {
-//
-//   r
-// }
 
-
-void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val){
+void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val, double V(double x)){
   //Set class variables
   n = n_val; //Points
-  h = 1.0/(n+1);  // Step size (x-x0)/N = (x-x0)/(n+1)
+  double rho_max = 1; //boundary interval --> ta utenfor for aa loope gjennom forskjellige rho max, rho max = 1 for V0
+  double rho_min = 0;
+  h = (rho_max-rho_min)/(n+1);  // Step size (x-x0)/N = (x-x0)/(n+1)
   a = a_val/(h*h); b = b_val/(h*h);
   max_iterations = (double) n * (double) n * (double) n;
   //max_iterations = 100;
+  vec rho = linspace(a_val + h, b_val - h, n); //values for rho along diagonal
   A = zeros<mat>(n,n);
   R.eye(n,n);
-  ana_eigval.set_size(n);
-  double pi = 2*acos(0.0);
-  ana_R.set_size(n,n);
 
-
-
-  for (int i=0; i<n; i++){
-    if (i<n-1){
-      A(i,i) = b;
+  for (int i=0; i<n-1; i++){
+      A(i,i) = b + V(rho(i));
       A(i,i+1) = a;
       A(i+1,i) = a;
-    } else{
-      A(i,i) = b;
     }
-    //calculate analytic eigenvalues and eigenvectors
-    ana_eigval[i] = b + 2*a*cos((i+1)*pi/(n+1));
-      for(int j = 0; j<n; j++){
-        ana_R(i,j) = sin((i+1)*(j+1)*pi/(n+1));
-        //cout << (i+1)*(j+1)*pi/(n+1) << endl;
-        //cout << "i,j" << i << j << endl;
-      }
-//ana_R = normalise(ana_R, 3);
-  }
-cout << "Matrix A \n" << A <<endl;
-cout << "Analytic eigenvalues \n" << ana_eigval << endl;
-cout << "Analytic eigenvectors \n" << ana_R << endl;
-
+    A(n-1,n-1) =  b + V(rho(n-1));
   A_test = repmat(A, 1, 1); //Make a copy of A to be used in tests
-  cout << "Fasit eigenvalues: \n" << eig_sym(A) << endl;
-  //cout << "Fasit eigenvectors: \n " << eigs_gen(A, n) << endl;
-  //cout << A << endl;
+  //cout << "Initial A\n" << A << endl;
 
-  // Opg c - potensial. Add potential on diagonal elements.
-//   if(usePotential){
-//     int N = n+1;
-//     int p0 = 0;
-//     int pmax = 10;
-//     h = (pmax - p0)/N;
-//     for(int i = 0; i < N; i++){
-//       A(i,i) += (p0 + i*h)**2;
-//     }
-//   }
   return;
 }
 
@@ -156,13 +122,15 @@ void JacobiEigenSolve::Solve(){
   double max_val;
   FindMaxEle(max_val, row, col);
   //cout << A << endl;
-
   while (max_val > eps || iterations < max_iterations ){
     Rotate(row, col);
     FindMaxEle(max_val, row, col);
     //cout <<  "Kolonne" <<col_ << "row: "<< row_ << endl;
     iterations ++;
   }
+  vec eigenvals = diagvec(A); //sorted eigenvalues in ascending order
+  eigenvals = sort(eigenvals, "ascend");
+  eigenvals.print("eigenvals = ");
   cout << "Number of iterations needed for diagonalisation " << iterations <<endl;
   A.clean(eps); //Remove elements smaller than eps.
   return;
@@ -211,8 +179,8 @@ void JacobiEigenSolve::TestInitialize(){
 }
 
 void JacobiEigenSolve::TestSolve(){
-  // Sort egenverdiene
-  // Sjekk om egenverdiene er riktig.
+  // Sort egenverdiene --> allerede sortert i eigenvals
+  // Sjekk om egenverdiene er riktig (pass paa hvilket potensial som brukes)
   // Test if matrix is diagonalized
   for (int i =0; i <n; i++){
     for (int j = i+1; j<n; j++){
@@ -221,22 +189,24 @@ void JacobiEigenSolve::TestSolve(){
       }
     }
   }
+
 }
 
 bool JacobiEigenSolve::TestOrthogonality(){
-  //Returns true if matrix R has orthonormal eigenvalues
-  // Multiply R*R^t
-  for (int i = 0; i < n; i++) {
-      for (int j = 0; j < n; j++) {
+  //Returns true if matrix R has orthogonal eigenvectors, also checks normality
+  // Test multiplies R*R^t
+  for (int i = 0; i < n; i++) { // row of first vector
+      for (int j = 0; j < n; j++) { // row of second vector
         double sum = 0;
-        for (int s = 0; s < n; s++) {
+        for (int s = 0; s < n; s++) { // index of vectors
         //mulitipling with the transpose
           sum = sum + (R(i,s) * R(j,s));
           }
-      if (i == j && abs(sum-1) >= 1.0e-06){
+      if (i == j && abs(sum-1) >= 1.0e-06){ //check normality for one and the same vector
           cout << "Vector in row " << i << " not normalised" << endl;
-          return false; }
-      if (i != j && abs(sum) >= 1.0e-06){
+          //return false;
+         }
+      if (i != j && abs(sum) >= 1.0e-06){ //check orthogonality if vectors differ
           cout <<"Vector in row " << i <<" and " << j << " not orthogonal" << endl;
           return false; }
       }
