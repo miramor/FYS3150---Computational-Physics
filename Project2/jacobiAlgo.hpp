@@ -25,7 +25,7 @@ class JacobiEigenSolve {
     double a, b; // a - lower & upper diagonal, b - middle diagonal
     //int k, l; // Changed each time
   public:
-    void Initialize(double a_val, double b_val, int n_val, double V(double x)); // make the symmetric matrix and empty V matrix.
+    void Initialize(double a_val, double b_val, int n_val, double rho_max_val, double V(double x)); // make the symmetric matrix and empty V matrix.
     void FindMaxEle(double&, int&, int&); // Returns a tuple of value
     //of element and its index. (val, row, column) => f.eks (2.2, 1, 3)
     void Rotate(int k, int l); // finds the value of cos(theta) and sin(theta)

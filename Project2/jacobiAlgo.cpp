@@ -11,10 +11,10 @@ using namespace std;
 using namespace arma;
 
 
-void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val, double V(double x)){
+void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val, double rho_max_val, double V(double x)){
   //Set class variables
   n = n_val; //Points
-  double rho_max = 1; //boundary interval --> ta utenfor for aa loope gjennom forskjellige rho max, rho max = 1 for V0
+  double rho_max = rho_max_val; //boundary interval --> ta utenfor for aa loope gjennom forskjellige rho max, rho max = 1 for V0
   double rho_min = 0;
   h = (rho_max-rho_min)/(n+1);  // Step size (x-x0)/N = (x-x0)/(n+1)
   a = a_val/(h*h); b = b_val/(h*h);

@@ -12,7 +12,7 @@ int main(int argc, char const *argv[]) {
 
   JacobiEigenSolve jes;
 
-  jes.Initialize(-1, 2, 3, V0); //parameter upperdiagonal, diagonal, matrix dimension, potential
+  jes.Initialize(-1, 2, 3, 1, V0); //parameter upperdiagonal, diagonal, matrix dimension, rhomax, potential
   jes.Solve();
   //jes.PrintA();
   //jes.TestFindMaxEle();
