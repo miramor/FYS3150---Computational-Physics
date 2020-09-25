@@ -58,7 +58,7 @@ void JacobiEigenSolve::Write_Results(string filename, string solution){
   */
   else if (solution == "V1"){
     ofstream ofile;
-    filename = solution + "_eigenvalues_n_" + to_string(n);
+    filename = solution + "_eigenvalues_n_" + to_string(n) + ".txt";
     ofile.open(filename);
     Col<double> eigenvals = sort(diagvec(A), "ascend");
 

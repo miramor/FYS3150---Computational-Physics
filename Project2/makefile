@@ -10,4 +10,4 @@ jacobiAlgo.o: jacobiAlgo.cpp jacobiAlgo.hpp
 	${CPPflags} -c jacobiAlgo.cpp
 
 clean:
-	rm *.o output
+	rm *.o output *.txt
