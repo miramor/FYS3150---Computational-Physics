@@ -11,64 +11,84 @@ using namespace std;
 using namespace arma;
 
 void JacobiEigenSolve::Write_Results(string filename, string solution){
-  ofstream ofile;
-  ofile.open(filename);
 
-  if (solution == "analytical"){
-    //Define analytical eval and evec
-    int eval = 1;
-    int evec = 1;
-  }
-  else{
-    eval = max(A);
-    evec = R;
-  }
-  for (int i = 0; i < n; i ++)
-      ofile << x(i) << " ";
-  ofile << endl << eval;
+  /*
+  If solution == V0:
+  Writes x to first row
+  Eigenvals to second row
+  Eigenvectors as columns below eigenvalues
+  */
+  if (solution == "V0"){
+    ofstream afile;
+    ofstream nfile;
+    //Files for analyical and numerical eigenvalues and eigenvectors
+    afile.open("analytical" + filename);
+    nfile.open("numerical" + filename);
+    rowvec x = zeros<rowvec>(n);
+    for (int i = 0; i < n; i++)
+        x(i) = i*h;
 
-  for (int i = 0; i < n; i++){
-    for (int j = 0; j < n; j++){
-      ofile << evec(i,j) << " ";
+    afile << x << endl; //First row
+    for (int i = 0; i < n; i++)
+        afile << armaEigval(i) << " " ; //Second row
+    afile << endl;
+
+    //Eigenvectors
+    for (int i = 0; i < n; i++){
+      for (int j = 0; j < n; j++)
+        afile << armaEigvec(i,j) << " ";
+      afile << endl;
     }
-    ofile << endl;
+
+
+    nfile << x << endl; //First row
+    nfile << max(A) << endl; //Second row
+
+    //Eigenvectors
+    for (int i = 0; i < n; i++){
+      for (int j = 0; j < n; j++)
+        nfile << R(i,j) << " ";
+      nfile << endl;
+    }
   }
+  /*
+  If solution == V1 or V2:
+  Analytical eigenvalues to first row
+  Numerical eigenvalues to second row
+  */
+  else {
+    ofstream ofile;
+    filename = solution + "_eigenvalues_n_" + to_string(n);
+    ofile.open("filename");
+  }
+  return;
 }
 
-
-void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val, string init){
+void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val, double rho_max_val, double V(double x)){
   //Set class variables
   n = n_val; //Points
-  h = 1.0/(n+1);  // Step size (x-x0)/N = (x-x0)/(n+1)
+  double rho_max = rho_max_val; //boundary interval --> ta utenfor for aa loope gjennom forskjellige rho max, rho max = 1 for V0
+  double rho_min = 0;
+  h = (rho_max-rho_min)/(n+1);  // Step size (x-x0)/N = (x-x0)/(n+1)
   a = a_val/(h*h); b = b_val/(h*h);
   max_iterations = (double) n * (double) n * (double) n;
   //max_iterations = 100;
-  x = zeros<rowvec>(n);
+  vec rho = linspace(a_val + h, b_val - h, n); //values for rho along diagonal
   A = zeros<mat>(n,n);
   R.eye(n,n);
 
-
-  for (int i = 0; i < n-1; i++){
-      x(i) = i*h;
-      A(i,i) = b;
+  for (int i=0; i<n-1; i++){
+      A(i,i) = b + V(rho(i));
       A(i,i+1) = a;
       A(i+1,i) = a;
-  }
-  A(n-1,n-1) = b;
-  x(n-1) = (n-1) * h;
-
-
-  A_test = repmat(A, 1, 1);
-
-  // Opg c - potensial. Add potential on diagonal elements.
-  if(init == "potential"){
-    int p0 = 0;
-    int pmax = 10;
-    h = (pmax - p0)/(n+1);
-    for(int i = 0; i < n; i++){
-      A(i,i) = A(i,i) + x[i]*x[i];
     }
-  }
+
+    A(n-1,n-1) =  b + V(rho(n-1));
+  A_test = repmat(A, 1, 1); //Make a copy of A to be used in tests
+
+  //Using armadillo to compute eigvals and eigvecs
+  eig_sym(armaEigval, armaEigvec, A);
+
   return;
 }
 
@@ -158,13 +178,16 @@ void JacobiEigenSolve::Solve(){
   double max_val;
   FindMaxEle(max_val, row, col);
   //cout << A << endl;
-
   while (max_val > eps || iterations < max_iterations ){
     Rotate(row, col);
     FindMaxEle(max_val, row, col);
     //cout <<  "Kolonne" <<col_ << "row: "<< row_ << endl;
     iterations ++;
   }
+  vec eigenvals = diagvec(A); //sorted eigenvalues in ascending order
+  eigenvals = sort(eigenvals, "ascend");
+  eigenvals.print("eigenvals = ");
+  cout << "Number of iterations needed for diagonalisation " << iterations <<endl;
   A.clean(eps); //Remove elements smaller than eps.
   return;
 }
@@ -180,7 +203,7 @@ void JacobiEigenSolve::PrintA(){
 //Tests 2-3 times if method finds correct value and postion
 void JacobiEigenSolve::TestFindMaxEle(){
   arma_rng::set_seed_random();
-  A = mat(4,4, arma::fill::randu);
+  //A = mat(4,4, arma::fill::randu);
   cout << "Find max value of this matrix:\n" << A << endl;
   //A = rand
   //Mat<double> C =
@@ -212,8 +235,9 @@ void JacobiEigenSolve::TestInitialize(){
 }
 
 void JacobiEigenSolve::TestSolve(){
-  // Sort egenverdiene
-  // Sjekk om egenverdiene er riktig.
+  // Sort egenverdiene --> allerede sortert i eigenvals
+  // Sjekk om egenverdiene er riktig (pass paa hvilket potensial som brukes)
+  // Test if matrix is diagonalized
   for (int i =0; i <n; i++){
     for (int j = i+1; j<n; j++){
       if( i != j){
@@ -221,7 +245,30 @@ void JacobiEigenSolve::TestSolve(){
       }
     }
   }
+
+}
+
+bool JacobiEigenSolve::TestOrthogonality(){
+  //Returns true if matrix R has orthogonal eigenvectors, also checks normality
+  // Test multiplies R*R^t
+  for (int i = 0; i < n; i++) { // row of first vector
+      for (int j = 0; j < n; j++) { // row of second vector
+        double sum = 0;
+        for (int s = 0; s < n; s++) { // index of vectors
+        //mulitipling with the transpose
+          sum = sum + (R(i,s) * R(j,s));
+          }
+      if (i == j && abs(sum-1) >= 1.0e-06){ //check normality for one and the same vector
+          cout << "Vector in row " << i << " not normalised" << endl;
+          //return false;
+         }
+      if (i != j && abs(sum) >= 1.0e-06){ //check orthogonality if vectors differ
+          cout <<"Vector in row " << i <<" and " << j << " not orthogonal" << endl;
+          return false; }
+      }
+  }
+  return true;
+}
   // Cross product  a x b  = null_vektor hvis de er paralellel.
   // vector.clean(eps)
   // Sjekk at alle elementene er 0. feks == vec zeros(n)
-}
