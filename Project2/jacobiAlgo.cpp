@@ -30,13 +30,13 @@ void JacobiEigenSolve::Write_Results(string filename, string solution){
 
     afile << x << endl; //First row
     for (int i = 0; i < n; i++)
-        afile << armaEigval(i) << " " ; //Second row
+        afile << anaEigval(i) << " " ; //Second row
     afile << endl;
 
     //Eigenvectors
     for (int i = 0; i < n; i++){
       for (int j = 0; j < n; j++)
-        afile << armaEigvec(i,j) << " ";
+        afile << anaEigvec(i,j) << " ";
       afile << endl;
     }
 
@@ -53,13 +53,20 @@ void JacobiEigenSolve::Write_Results(string filename, string solution){
   }
   /*
   If solution == V1 or V2:
-  Analytical eigenvalues to first row
-  Numerical eigenvalues to second row
+  Numerical eigenvalues to first column
+  Analytical eigenvalues to second column
   */
-  else {
+  else if (solution == "V1"){
     ofstream ofile;
     filename = solution + "_eigenvalues_n_" + to_string(n);
-    ofile.open("filename");
+    ofile.open(filename);
+    Col<double> eigenvals = sort(diagvec(A), "ascend");
+
+    for (int i = 0; i < n; i++){
+        int eigenval_ana = 3 + 4*i;
+        ofile << eigenvals(i) << " ";
+        ofile << eigenval_ana << endl;
+    }
   }
   return;
 }
@@ -87,7 +94,7 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val, double 
   A_test = repmat(A, 1, 1); //Make a copy of A to be used in tests
 
   //Using armadillo to compute eigvals and eigvecs
-  eig_sym(armaEigval, armaEigvec, A);
+  //eig_sym(armaEigval, armaEigvec, A);
 
   return;
 }
@@ -184,11 +191,16 @@ void JacobiEigenSolve::Solve(){
     //cout <<  "Kolonne" <<col_ << "row: "<< row_ << endl;
     iterations ++;
   }
-  vec eigenvals = diagvec(A); //sorted eigenvalues in ascending order
-  eigenvals = sort(eigenvals, "ascend");
-  eigenvals.print("eigenvals = ");
+  //vec eigenvals = diagvec(A); //sorted eigenvalues in ascending order
+  //eigenvals = sort(eigenvals, "ascend");
+  //eigenvals.print("eigenvals = ");
   cout << "Number of iterations needed for diagonalisation " << iterations <<endl;
   A.clean(eps); //Remove elements smaller than eps.
+  R.clean(eps);
+
+  //Analytical eigenpairs
+
+
   return;
 }
 

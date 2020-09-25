@@ -15,12 +15,14 @@ int main(int argc, char const *argv[]) {
   string filename = "_n_" + string(argv[1]) + "_" + string(argv[2]) + ".txt";
   string solution = argv[2];
   int n = atoi(argv[1]);
+  int rho_max = 10;
+
   if (solution == "V0")
-      jes.Initialize(-1, 2, n, 1, V0); //parameter upperdiagonal, diagonal, matrix dimension, rhomax, potential
+      jes.Initialize(-1, 2, n, rho_max, V0); //parameter upperdiagonal, diagonal, matrix dimension, rhomax, potential
   else if (solution == "V1")
-      jes.Initialize(-1, 2, n, 1, V1);
+      jes.Initialize(-1, 2, n, rho_max, V1);
   else if (solution == "V2")
-      jes.Initialize(-1, 2, n, 1, V2);
+      jes.Initialize(-1, 2, n, rho_max, V2);
 
   jes.Solve();
   jes.Write_Results(filename, solution);

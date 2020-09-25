@@ -17,8 +17,8 @@ class JacobiEigenSolve {
     Mat<double> A; // Symmetric matrix to diagonalize,  Dim: n x n
     Mat<double> A_test;
     Mat<double> R; //Matrix to contain eigenvectors
-    Mat<double> armaEigvec; //Storing eigvecs from armadillo
-    Col<double> armaEigval; //Sroting eigvals from armadillo
+    Mat<double> anaEigvec; //Storing analytical eigenvectors
+    Col<double> anaEigval; //Sroting analytical eigenvalues
     int n; // Size of the matrix
     double eps = 1.0e-10;
     double h;
