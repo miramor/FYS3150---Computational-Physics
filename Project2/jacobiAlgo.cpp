@@ -10,35 +10,89 @@
 using namespace std;
 using namespace arma;
 
+
 void JacobiEigenSolve::Write_Results(string filename, string solution){
 
-  /*
-  If solution == V0:
-  Writes x to first row
-  Eigenvals to second row
-  Eigenvectors as columns below eigenvalues
-  */
+  ofstream afile;
+  ofstream nfile;
+  //Files for analyical and numerical eigenvalues and eigenvectors
+  afile.open("analytical" + filename);
+  nfile.open("numerical" + filename);
+
   if (solution == "V0"){
-    ofstream afile;
-    ofstream nfile;
-    //Files for analyical and numerical eigenvalues and eigenvectors
-    afile.open("analytical" + filename);
-    nfile.open("numerical" + filename);
-    rowvec x = zeros<rowvec>(n);
-    for (int i = 0; i < n; i++)
-        x(i) = i*h;
+    //Fidning eigenpairs with armadillo
+    colvec eigenvals;
+    mat eigenvecs;
+    eig_sym(eigenvals, eigenvecs, A_test);
 
-    afile << x << endl; //First row
+    //Write numerical and analytical eigenvalues to file
+    //Eigenvalues to first row
     for (int i = 0; i < n; i++)
-        afile << anaEigval(i) << " " ; //Second row
+        afile << eigenvals(i) << " ";
+    nfile << max(A);
     afile << endl;
-
-    //Eigenvectors
+    //Eigenvectors below as column vectors
     for (int i = 0; i < n; i++){
-      for (int j = 0; j < n; j++)
-        afile << anaEigvec(i,j) << " ";
+      for (int j = 0; j < n; j++){
+        afile << eigenvecs(i,j) << " ";
+        nfile << R(i,j) << " ";
+        }
       afile << endl;
+      nfile << endl;
     }
+  }
+
+  if (solution == "V1"){
+    //Fidning eigenpairs with armadillo
+    colvec eigenvals;
+    mat eigenvecs;
+    eig_sym(eigenvals, eigenvecs, A_test);
+
+  //  for (int i = 0; i < n; i++)
+  //      eigenvals(i) = 3*i;
+    //Write numerical and analytical eigenvalues to file
+    //Eigenvalues to first row
+    for (int i = 0; i < n; i++)
+        afile << eigenvals(i) << " ";
+    nfile << max(A);
+    afile << endl;
+    //Eigenvectors below as column vectors
+    for (int i = 0; i < n; i++){
+      for (int j = 0; j < n; j++){
+        afile << eigenvecs(i,j) << " ";
+        nfile << R(i,j) << " ";
+        }
+      afile << endl;
+      nfile << endl;
+    }
+  }
+
+  if (solution == "V2"){
+    //Fidning eigenpairs with armadillo
+    colvec eigenvals;
+    mat eigenvecs;
+    eig_sym(eigenvals, eigenvecs, A_test);
+
+    //Write numerical and analytical eigenvalues to file
+    //Eigenvalues to first row
+    for (int i = 0; i < n; i++)
+        afile << eigenvals(i) << " ";
+    nfile << max(A);
+    afile << endl;
+    //Eigenvectors below as column vectors
+    for (int i = 0; i < n; i++){
+      for (int j = 0; j < n; j++){
+        afile << eigenvecs(i,j) << " ";
+        nfile << R(i,j) << " ";
+        }
+      afile << endl;
+      nfile << endl;
+    }
+  }
+
+
+    /*
+    //Eigenvectors
 
 
     nfile << x << endl; //First row
@@ -55,7 +109,7 @@ void JacobiEigenSolve::Write_Results(string filename, string solution){
   If solution == V1 or V2:
   Numerical eigenvalues to first column
   Analytical eigenvalues to second column
-  */
+
   else if (solution == "V1"){
     ofstream ofile;
     filename = solution + "_eigenvalues_n_" + to_string(n) + ".txt";
@@ -68,6 +122,7 @@ void JacobiEigenSolve::Write_Results(string filename, string solution){
         ofile << eigenval_ana << endl;
     }
   }
+  */
   return;
 }
 
@@ -90,7 +145,7 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val, double 
       A(i+1,i) = a;
     }
 
-    A(n-1,n-1) =  b + V(rho(n-1));
+  A(n-1,n-1) =  b + V(rho(n-1));
   A_test = repmat(A, 1, 1); //Make a copy of A to be used in tests
 
   //Using armadillo to compute eigvals and eigvecs
