@@ -10,11 +10,10 @@
 using namespace std;
 using namespace arma;
 
+/*
 inline vec<double> f(int i, double h) {
-
-  r
 }
-
+*/
 
 void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val){
   //Set class variables
@@ -38,18 +37,20 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val){
   }
 
   A_test = repmat(A, 1, 1); //Make a copy of A to be used in tests
+  vec eig = eig_sym(A);
   cout << "Fasit eigenvalues: \n" << eig_sym(A) << endl;
   //cout << "Fasit eigenvectors: \n " << eigs_gen(A, n) << endl;
   //cout << A << endl;
 
-  // Opg c - potensial. Add potential on diagonal elements.
+  // Opg d - potensial. Add potential on diagonal elements.
+  bool usePotential = false; //implement this later
   if(usePotential){
-    int N = n+1;
+    int N = n+1;
     int p0 = 0;
     int pmax = 10;
     h = (pmax - p0)/N;
     for(int i = 1; i < N; i++){
-      A(i-1,i-1) += (p0 + i*h)**2;
+      A(i-1,i-1) += (p0 + i*h); // remember to change to squared
     }
   }
   return;
@@ -162,19 +163,24 @@ void JacobiEigenSolve::PrintA(){
 
 //Tests 2-3 times if method finds correct value and postion
 void JacobiEigenSolve::TestFindMaxEle(){
+  int row; int col;
+  double max_val;
   arma_rng::set_seed_random();
-  A = mat(4,4, arma::fill::randu);
+  A = mat(4 ,4, arma::fill::randn);
+  FindMaxEle(max_val, row, col);
   cout << "Find max value of this matrix:\n" << A << endl;
-  //A = rand
-  //Mat<double> C =
-  //int i = index_max(A_test);
-  //int j = index_min(A_test);
-/*
-  while(i == j){
-    i = 2;
-  }
-  //index_max
-  return;*/
+
+  //To make use of index_max remove all diag and take abs value of all elements
+  A.diag().zeros();
+  A = abs(A);
+
+  cout << A << endl;
+  uvec s = ind2sub( size(A), A.index_max() );
+
+  cout << "Armadillo:  " << "Row:" << s(0) << " Col: " << s(1) << endl;
+  cout << "Classfunc:  " << "Row:" << row << " Col: " << col << endl;
+
+  return;
 }
 
 //Tests if matrix is set up correctly initially
@@ -196,14 +202,19 @@ void JacobiEigenSolve::TestInitialize(){
 
 void JacobiEigenSolve::TestSolve(){
   // Sort egenverdiene
-  // Sjekk om egenverdiene er riktig.
-  for (int i =0; i <n; i++){
-    for (int j = i+1; j<n; j++){
-      if( i != j){
-        assert(abs(A(i,j)) < eps );
-      }
+  // Sjekk om egenverdiene er riktig etter vi har kjørt Solve()
+  // Enten kan vi oppretee nytt objekt her eller anta at vi har kjørt løsning
+  // Ved å opprette nytt betyr det at vi kan teste når som helst.
+  JacobiEigenSolve jes;
+  vec sortedEign =  sort(A.diag());
+  cout << sortedEign << endl;
+  cout << eig << endl;
+  for(int i = 0; i < eig.size(); i++){
+    if( fabs(eig(i) - sortedEign(i) ) > eps ){
+      cout << "Error the eig values does not match index: " << i << "  Exact" << eig(i) << " Solved: "<< sortedEign(i) << endl;
     }
   }
+  cout << "Succesful test. Correct eigenvalues" << endl;
   // Cross product  a x b  = null_vektor hvis de er paralellel.
   // vector.clean(eps)
   // Sjekk at alle elementene er 0. feks == vec zeros(n)

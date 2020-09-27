@@ -23,6 +23,7 @@ class JacobiEigenSolve {
     double max_iterations;
     int iterations = 0;
     double a, b; // a - lower & upper diagonal, b - middle diagonal
+    vec eig;
     //int k, l; // Changed each time
   public:
     void Initialize(double a_val, double b_val, int n_val); // make the symmetric matrix and empty V matrix.
