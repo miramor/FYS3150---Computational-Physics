@@ -11,7 +11,7 @@ int main(int argc, char const *argv[]) {
   jes.Initialize(-1, 2, 4);
   jes.Solve();
   //jes.PrintA();
-  //jes.TestFindMaxEle();
+  jes.TestFindMaxEle();
   jes.TestSolve();
   //jes.TestInitialize();
 

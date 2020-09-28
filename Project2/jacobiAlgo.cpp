@@ -38,7 +38,7 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val){
 
   A_test = repmat(A, 1, 1); //Make a copy of A to be used in tests
   vec eig = eig_sym(A);
-  cout << "Fasit eigenvalues: \n" << eig_sym(A) << endl;
+  //cout << "Fasit eigenvalues: \n" << eig_sym(A) << endl;
   //cout << "Fasit eigenvectors: \n " << eigs_gen(A, n) << endl;
   //cout << A << endl;
 
@@ -167,18 +167,26 @@ void JacobiEigenSolve::TestFindMaxEle(){
   double max_val;
   arma_rng::set_seed_random();
   A = mat(4 ,4, arma::fill::randn);
+  A= trimatu(A);//make matrix upper triangular
   FindMaxEle(max_val, row, col);
-  cout << "Find max value of this matrix:\n" << A << endl;
+  //cout << "Find max value of this matrix:\n" << A << endl;
 
   //To make use of index_max remove all diag and take abs value of all elements
+  A = trimatu(A);//make matrix upper triangular since only search upper
   A.diag().zeros();
   A = abs(A);
 
   cout << A << endl;
   uvec s = ind2sub( size(A), A.index_max() );
 
-  cout << "Armadillo:  " << "Row:" << s(0) << " Col: " << s(1) << endl;
-  cout << "Classfunc:  " << "Row:" << row << " Col: " << col << endl;
+  //cout << "Armadillo:  " << "Row:" << s(0) << " Col: " << s(1) << endl;
+  //cout << "Classfunc:  " << "Row:" << row << " Col: " << col << endl;
+  if( row == s(0) && col == s(1)){
+    cout << "Test Succesful! Correct index for max element" << endl;
+  }
+  else{
+    cout << "Col and Row does not match: (Arma vs Classfunc)\n" << "Col: " << s(0) << ", " << col << "\nRow: " << s(1) << ", " << row << endl;
+  }
 
   return;
 }
@@ -207,15 +215,12 @@ void JacobiEigenSolve::TestSolve(){
   // Ved å opprette nytt betyr det at vi kan teste når som helst.
   JacobiEigenSolve jes;
   vec sortedEign =  sort(A.diag());
-  cout << sortedEign << endl;
-  cout << eig << endl;
+  //cout << sortedEign << endl;
+  //cout << eig << endl;
   for(int i = 0; i < eig.size(); i++){
     if( fabs(eig(i) - sortedEign(i) ) > eps ){
       cout << "Error the eig values does not match index: " << i << "  Exact" << eig(i) << " Solved: "<< sortedEign(i) << endl;
     }
   }
   cout << "Succesful test. Correct eigenvalues" << endl;
-  // Cross product  a x b  = null_vektor hvis de er paralellel.
-  // vector.clean(eps)
-  // Sjekk at alle elementene er 0. feks == vec zeros(n)
 }
