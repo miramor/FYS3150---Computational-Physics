@@ -3,7 +3,7 @@ import sys
 import numpy as np
 
 
-N = int(sys.argv[1])#int(input("Choose n: "))
+N = int(float(sys.argv[1]))#int(input("Choose n: "))
 solution = sys.argv[2]#"V1" #input("Choose a potential V0, V1 or V2: ")
 
 os.system("echo compiling...")

@@ -8,6 +8,7 @@
 double V0(double x, double omega);
 double V1(double x, double omega);
 double V2(double x, double omega);
+void writeTimeResults(double omega);
 
 int main(int argc, char const *argv[]) {
 
@@ -44,6 +45,7 @@ int main(int argc, char const *argv[]) {
   //jes.TestOrthogonality(); //writes out 1 if matrix is orthogonal else 0
 
   //jes.TestInitialize();
+  writeTimeResults(omega);
 
 }
 
@@ -57,4 +59,17 @@ double V1(double x, double omega){
 
 double V2(double x, double omega){
   return omega*omega*x*x + 1/x;
+}
+
+void writeTimeResults(double omega){
+  JacobiEigenSolve jes;
+  ofstream outfile;
+  outfile.open("TimeTable.csv");
+  outfile << setprecision(4);
+
+  for(int n = 0; n < 20; n += 10){
+    jes.Initialize(-1, 2, n, 1, V0, omega);
+    jes.Solve();
+    outfile << n << jes.timeArma << jes.timeClass << jes.iterations << endl;
+  }
 }

@@ -21,8 +21,6 @@ class JacobiEigenSolve {
     double eps = 1.0e-10;
     double h;
     double max_iterations;
-    int iterations = 0;
-
     double a, b; // a - lower & upper diagonal, b - middle diagonal
     vec eig;
     //int k, l; // Changed each time
@@ -39,6 +37,8 @@ class JacobiEigenSolve {
     bool TestOrthogonality();
     void Write_Results(string filename, string solution);
 
+    double timeArma; double timeClass;
+    int iterations = 0;
 
     //enkel matrise 3x3, analyisk rotasjonsmatrisen. Gjøre alle steg for hånd
     // sjekke om egenverdiene funker.
