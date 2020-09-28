@@ -6,6 +6,7 @@
 *.idx
 *.bbl
 *.blg
+*.PNG
 
 # Data files
 Project*/ResultsComputation
@@ -13,6 +14,7 @@ Project*/CPUtime*
 
 # cpp executables
 *.exe
+*.o
 
 # Mac directory file
 .DS_Store

@@ -25,7 +25,11 @@ num_eigval, num_eigvec, num_sort = plot("numerical" + filename)
 arma_eigval, arma_eigvec, arma_sort = plot("armadillo" + filename)
 
 n_plots = 2
-rho_max = 15
+if V == "V0":
+    rho_max = 1
+else:
+    rho_max = 5
+
 h = rho_max/(n+1)
 x = np.asarray([i*h for i in range(n)])
 for i in range(n_plots):

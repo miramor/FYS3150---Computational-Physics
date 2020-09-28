@@ -1,7 +1,7 @@
 LIB = -larmadillo -llapack -lblas
 CPPflags= c++ -std=c++17
 output: main.o jacobiAlgo.o
-	${CPPflags} main.o jacobiAlgo.o ${LIB} -o output
+	${CPPflags} main.o jacobiAlgo.o ${LIB} -o output.exe
 
 main.o: main.cpp
 	${CPPflags} -c main.cpp
