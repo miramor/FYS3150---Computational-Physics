@@ -23,6 +23,8 @@ void JacobiEigenSolve::Write_Results(string filename, string solution){
   //Fidning eigenpairs with armadillo
   colvec eigenvals;
   mat eigenvecs;
+
+
   eig_sym(eigenvals, eigenvecs, A_test);
 
   //Write numerical and analytical eigenvalues to file
@@ -176,6 +178,7 @@ void JacobiEigenSolve::Solve(){
   int iterations = 0; int row; int col;
   double max_val;
   FindMaxEle(max_val, row, col);
+  
   //cout << A << endl;
   while (max_val > eps || iterations < max_iterations ){
     Rotate(row, col);

@@ -10,7 +10,8 @@ os.system("echo compiling...")
 os.system("make") #compile codes
 
 os.system("echo executing...")
-os.system("./output " + str(N) + " " + solution)
+
+os.system("./output.exe " + str(N) + " " + solution)
 
 os.system("echo creating plots...")
 os.system("python3 plot_results.py " + str(N) + " " + solution)
