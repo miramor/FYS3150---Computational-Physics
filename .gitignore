@@ -6,12 +6,13 @@
 *.idx
 *.bbl
 *.blg
-*.PNG
-*.txt
 
 # Data files
 Project*/ResultsComputation
 Project*/CPUtime*
+*.txt
+*.PNG
+*.csv
 
 # cpp executables
 *.exe

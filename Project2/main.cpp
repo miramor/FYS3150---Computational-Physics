@@ -14,21 +14,18 @@ int main(int argc, char const *argv[]) {
 
 
   JacobiEigenSolve jes;
-
-  double omega = 0.05;
   string filename;
-  string solution = argv[2];
   int n = atoi(argv[1]);
+  string solution = argv[2];
+  double rho_max = stod(argv[3]);
+  double omega = stod(argv[4]);
 
   if (solution =="V2"){
-    filename = "_n_" + to_string(n) + "_" + solution + "_" + to_string(omega) + ".txt";
-    filename.insert(0,omega);
-    cout << filename << endl;
+    filename = "_n_" + to_string(n) + "_" + solution + "_w_" + to_string(omega) + ".txt";
   }
   else {
     filename = "_n_" + to_string(n) + "_" + solution + ".txt";
   }
-  int rho_max = 4.6;
   if (solution == "V0")
       jes.Initialize(-1, 2, n, 1, V0, omega); //parameter upperdiagonal, diagonal, matrix dimension, rhomax, potential
   else if (solution == "V1")
@@ -45,7 +42,6 @@ int main(int argc, char const *argv[]) {
   //jes.TestOrthogonality(); //writes out 1 if matrix is orthogonal else 0
 
   //jes.TestInitialize();
-  writeTimeResults(omega);
 
 }
 
@@ -67,9 +63,10 @@ void writeTimeResults(double omega){
   outfile.open("TimeTable.csv");
   outfile << setprecision(4);
 
-  for(int n = 0; n < 20; n += 10){
+  for(int n = 10; n <= 70; n += 10){
     jes.Initialize(-1, 2, n, 1, V0, omega);
     jes.Solve();
-    outfile << n << jes.timeArma << jes.timeClass << jes.iterations << endl;
+    outfile << n << "," << jes.timeArma << "," << jes.timeClass << "," << jes.iterations << endl;
+    int a = 0;
   }
 }

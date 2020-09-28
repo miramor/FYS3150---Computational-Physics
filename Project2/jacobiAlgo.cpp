@@ -60,7 +60,7 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val, double 
   double rho_min = 0;
   h = (rho_max-rho_min)/(n+1);  // Step size (x-x0)/N = (x-x0)/(n+1)
   a = a_val/(h*h); b = b_val/(h*h);
-  max_iterations = 2 * (double) n * (double) n * (double) n;
+  max_iterations = (double) n* (double) n * (double) n * (double) n;
   //max_iterations = 100;
   vec rho = linspace(rho_min + h, rho_max - h, n); //values for rho along diagonal
   A = zeros<mat>(n,n);
@@ -180,7 +180,7 @@ void JacobiEigenSolve::Rotate(int l, int k){
 
 //Runs the rotation until we reached the max ite or reached the eps
 void JacobiEigenSolve::Solve(){
-  int iterations = 0; int row; int col;
+  int row; int col;
   double max_val;
   FindMaxEle(max_val, row, col);
 
@@ -189,7 +189,7 @@ void JacobiEigenSolve::Solve(){
   //Measure time to solve with armadillo
   clock_t start, finish; // declare start and final time
   start = clock();
-  while (max_val > eps || iterations < max_iterations ){
+  while (max_val > eps && iterations < max_iterations ){
     Rotate(row, col);
     FindMaxEle(max_val, row, col);
     //cout <<  "Kolonne" <<col_ << "row: "<< row_ << endl;
