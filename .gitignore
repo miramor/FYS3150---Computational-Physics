@@ -13,6 +13,7 @@ Project*/CPUtime*
 
 # cpp executables
 *.exe
+*.o
 
 # Mac directory file
 .DS_Store

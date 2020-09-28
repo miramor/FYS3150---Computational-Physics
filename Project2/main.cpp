@@ -37,6 +37,7 @@ int main(int argc, char const *argv[]) {
   //jes.TestFindMaxEle();
   //jes.TestSolve();
   //jes.TestOrthogonality(); //writes out 1 if matrix is orthogonal else 0
+
   //jes.TestInitialize();
 
 }
