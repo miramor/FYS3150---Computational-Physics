@@ -25,13 +25,14 @@ num_eigval, num_eigvec, num_sort = plot("numerical" + filename)
 arma_eigval, arma_eigvec, arma_sort = plot("armadillo" + filename)
 
 n_plots = 2
-h = 15/(n+1)
+rho_max = 15
+h = rho_max/(n+1)
 x = np.asarray([i*h for i in range(n)])
 for i in range(n_plots):
-    plt.plot(num_eigvec[num_sort[i]], label="Num eigenvalue = %.4f" %(num_eigval[num_sort[i]]))
-    plt.plot(arma_eigvec[arma_sort[i]], label="Arma eigenvalue = %.4f" %(ana_eigval[ana_sort[i]]))
+    plt.plot(x,num_eigvec[num_sort[i]], label="Num eigenvalue = %.4f" %(num_eigval[num_sort[i]]))
+    plt.plot(x,arma_eigvec[arma_sort[i]], label="Arma eigenvalue = %.4f" %(arma_eigval[arma_sort[i]]))
 
 plt.legend()
-plt.title("Eigenvectors for %s" %(solution))
-plt.savefig("eigenvectors_plot.PNG")
+plt.title("Eigenvectors for %s" %(V))
+plt.savefig("eigenvectors_%s_n_%i_plot.PNG" %(V,n))
 plt.show()

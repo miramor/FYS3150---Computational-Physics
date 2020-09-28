@@ -4,9 +4,9 @@
 #include <fstream>
 #include <iomanip>
 
-double V0(double x);
-double V1(double x);
-double V2(double x);
+double V0(double x, double omega);
+double V1(double x, double omega);
+double V2(double x, double omega);
 
 int main(int argc, char const *argv[]) {
 

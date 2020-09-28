@@ -93,7 +93,7 @@ void JacobiEigenSolve::Write_Results(string filename, string solution){
   return;
 }
 
-void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val, double rho_max_val, double V(double x, double omega), double omega_r){
+void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val, double rho_max_val, double V(double x, double omega), double omega){
   //Set class variables
   n = n_val; //Points
   double rho_max = rho_max_val; //boundary interval --> ta utenfor for aa loope gjennom forskjellige rho max, rho max = 1 for V0
@@ -105,7 +105,7 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val, double 
   vec rho = linspace(a_val + h, b_val - h, n); //values for rho along diagonal
   A = zeros<mat>(n,n);
   R.eye(n,n);
-  double omega = omega_r;
+
   for (int i=0; i<n-1; i++){
       A(i,i) = b + V(rho(i), omega);
       A(i,i+1) = a;
