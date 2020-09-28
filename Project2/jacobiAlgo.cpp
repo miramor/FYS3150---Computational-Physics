@@ -10,33 +10,117 @@
 using namespace std;
 using namespace arma;
 
+
+
+void JacobiEigenSolve::Write_Results(string filename, string solution){
+
+  ofstream afile;
+  ofstream nfile;
+  //Files for analyical and numerical eigenvalues and eigenvectors
+  afile.open("armadillo" + filename);
+  nfile.open("numerical" + filename);
+
+  //Fidning eigenpairs with armadillo
+  colvec eigenvals;
+  mat eigenvecs;
+  eig_sym(eigenvals, eigenvecs, A_test);
+
+  //Write numerical and analytical eigenvalues to file
+  //Eigenvalues to first row
+  for (int i = 0; i < n; i++)
+      afile << eigenvals(i) << " ";
+  nfile << max(A);
+  afile << endl;
+  //Eigenvectors below as column vectors
+  for (int i = 0; i < n; i++){
+    for (int j = 0; j < n; j++){
+      afile << eigenvecs(i,j) << " ";
+      nfile << R(i,j) << " ";
+      }
+    afile << endl;
+    nfile << endl;
+  }
+
 /*
-inline vec<double> f(int i, double h) {
-}
-*/
+  if (solution == "V1"){
+    //Fidning eigenpairs with armadillo
+    colvec eigenvals;
+    mat eigenvecs;
+    eig_sym(eigenvals, eigenvecs, A_test);
 
-void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val){
-  //Set class variables
-  n = n_val; //Points
-  h = 1.0/(n+1);  // Step size (x-x0)/N = (x-x0)/(n+1)
-  a = a_val/(h*h); b = b_val/(h*h);
-  max_iterations = (double) n * (double) n * (double) n;
-  //max_iterations = 100;
-  A = zeros<mat>(n,n);
-  R.eye(n,n);
-
-
-  for (int i=0; i<n; i++){
-    if (i<n-1){
-      A(i,i) = b;
-      A(i,i+1) = a;
-      A(i+1,i) = a;
-    } else{
-      A(i,i) = b;
+  //  for (int i = 0; i < n; i++)
+  //      eigenvals(i) = 3*i;
+    //Write numerical and analytical eigenvalues to file
+    //Eigenvalues to first row
+    for (int i = 0; i < n; i++)
+        afile << eigenvals(i) << " ";
+    nfile << max(A);
+    afile << endl;
+    //Eigenvectors below as column vectors
+    for (int i = 0; i < n; i++){
+      for (int j = 0; j < n; j++){
+        afile << eigenvecs(i,j) << " ";
+        nfile << R(i,j) << " ";
+        }
+      afile << endl;
+      nfile << endl;
     }
   }
 
+  if (solution == "V2"){
+    //Fidning eigenpairs with armadillo
+    colvec eigenvals;
+    mat eigenvecs;
+    eig_sym(eigenvals, eigenvecs, A_test);
+
+    //Write numerical and analytical eigenvalues to file
+    //Eigenvalues to first row
+    for (int i = 0; i < n; i++)
+        afile << eigenvals(i) << " ";
+    nfile << max(A);
+    afile << endl;
+    //Eigenvectors below as column vectors
+    for (int i = 0; i < n; i++){
+      for (int j = 0; j < n; j++){
+        afile << eigenvecs(i,j) << " ";
+        nfile << R(i,j) << " ";
+        }
+      afile << endl;
+      nfile << endl;
+    }
+  }
+*/
+
+  return;
+}
+
+
+void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val, double rho_max_val, double V(double x, double omega), double omega){
+  //Set class variables
+  n = n_val; //Points
+  double rho_max = rho_max_val; //boundary interval --> ta utenfor for aa loope gjennom forskjellige rho max, rho max = 1 for V0
+  double rho_min = 0;
+  h = (rho_max-rho_min)/(n+1);  // Step size (x-x0)/N = (x-x0)/(n+1)
+  a = a_val/(h*h); b = b_val/(h*h);
+  max_iterations = (double) n * (double) n * (double) n;
+  //max_iterations = 100;
+  vec rho = linspace(a_val + h, b_val - h, n); //values for rho along diagonal
+  A = zeros<mat>(n,n);
+  R.eye(n,n);
+
+  for (int i=0; i<n-1; i++){
+      A(i,i) = b + V(rho(i), omega);
+      A(i,i+1) = a;
+      A(i+1,i) = a;
+    }
+
+  A(n-1,n-1) =  b + V(rho(n-1), omega);
   A_test = repmat(A, 1, 1); //Make a copy of A to be used in tests
+
+
+  //Using armadillo to compute eigvals and eigvecs
+  //eig_sym(armaEigval, armaEigvec, A);
+
   vec eig = eig_sym(A);
   //cout << "Fasit eigenvalues: \n" << eig_sym(A) << endl;
   //cout << "Fasit eigenvectors: \n " << eigs_gen(A, n) << endl;
@@ -142,14 +226,22 @@ void JacobiEigenSolve::Solve(){
   double max_val;
   FindMaxEle(max_val, row, col);
   //cout << A << endl;
-
   while (max_val > eps || iterations < max_iterations ){
     Rotate(row, col);
     FindMaxEle(max_val, row, col);
     //cout <<  "Kolonne" <<col_ << "row: "<< row_ << endl;
     iterations ++;
   }
+  //vec eigenvals = diagvec(A); //sorted eigenvalues in ascending order
+  //eigenvals = sort(eigenvals, "ascend");
+  //eigenvals.print("eigenvals = ");
+  cout << "Number of iterations needed for diagonalisation " << iterations <<endl;
   A.clean(eps); //Remove elements smaller than eps.
+  R.clean(eps);
+
+  //Analytical eigenpairs
+
+
   return;
 }
 
@@ -166,6 +258,7 @@ void JacobiEigenSolve::TestFindMaxEle(){
   int row; int col;
   double max_val;
   arma_rng::set_seed_random();
+
   A = mat(4 ,4, arma::fill::randn);
   A= trimatu(A);//make matrix upper triangular
   FindMaxEle(max_val, row, col);
@@ -209,10 +302,6 @@ void JacobiEigenSolve::TestInitialize(){
 }
 
 void JacobiEigenSolve::TestSolve(){
-  // Sort egenverdiene
-  // Sjekk om egenverdiene er riktig etter vi har kjørt Solve()
-  // Enten kan vi oppretee nytt objekt her eller anta at vi har kjørt løsning
-  // Ved å opprette nytt betyr det at vi kan teste når som helst.
   JacobiEigenSolve jes;
   vec sortedEign =  sort(A.diag());
   //cout << sortedEign << endl;
@@ -223,4 +312,28 @@ void JacobiEigenSolve::TestSolve(){
     }
   }
   cout << "Succesful test. Correct eigenvalues" << endl;
+  return;
+}
+
+
+bool JacobiEigenSolve::TestOrthogonality(){
+  //Returns true if matrix R has orthogonal eigenvectors, also checks normality
+  // Test multiplies R*R^t
+  for (int i = 0; i < n; i++) { // row of first vector
+      for (int j = 0; j < n; j++) { // row of second vector
+        double sum = 0;
+        for (int s = 0; s < n; s++) { // index of vectors
+        //mulitipling with the transpose
+          sum = sum + (R(i,s) * R(j,s));
+          }
+      if (i == j && abs(sum-1) >= 1.0e-06){ //check normality for one and the same vector
+          cout << "Vector in row " << i << " not normalised" << endl;
+          //return false;
+         }
+      if (i != j && abs(sum) >= 1.0e-06){ //check orthogonality if vectors differ
+          cout <<"Vector in row " << i <<" and " << j << " not orthogonal" << endl;
+          return false; }
+      }
+  }
+  return true;
 }
