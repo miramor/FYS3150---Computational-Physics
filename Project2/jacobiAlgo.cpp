@@ -6,6 +6,7 @@
 #include <armadillo>
 #include "jacobiAlgo.hpp"
 #include <cassert>
+#include "time.h"
 
 using namespace std;
 using namespace arma;
@@ -23,7 +24,13 @@ void JacobiEigenSolve::Write_Results(string filename, string solution){
   //Fidning eigenpairs with armadillo
   colvec eigenvals;
   mat eigenvecs;
+
+  //Measure time to solve with armadillo
+  clock_t start, finish, finish2; // declare start and final time
+  start = clock();
   eig_sym(eigenvals, eigenvecs, A_test);
+  finish = clock();
+  timeArma = ( (finish - start)/(double)CLOCKS_PER_SEC );
 
   //Write numerical and analytical eigenvalues to file
   //Eigenvalues to first row
@@ -226,12 +233,19 @@ void JacobiEigenSolve::Solve(){
   double max_val;
   FindMaxEle(max_val, row, col);
   //cout << A << endl;
+
+  //Measure time to solve with armadillo
+  clock_t start, finish; // declare start and final time
+  start = clock();
   while (max_val > eps || iterations < max_iterations ){
     Rotate(row, col);
     FindMaxEle(max_val, row, col);
     //cout <<  "Kolonne" <<col_ << "row: "<< row_ << endl;
     iterations ++;
   }
+  finish = clock();
+  timeClass = ( (finish - start)/(double)CLOCKS_PER_SEC );
+
   //vec eigenvals = diagvec(A); //sorted eigenvalues in ascending order
   //eigenvals = sort(eigenvals, "ascend");
   //eigenvals.print("eigenvals = ");
@@ -269,7 +283,7 @@ void JacobiEigenSolve::TestFindMaxEle(){
   A.diag().zeros();
   A = abs(A);
 
-  cout << A << endl;
+  //cout << A << endl;
   uvec s = ind2sub( size(A), A.index_max() );
 
   //cout << "Armadillo:  " << "Row:" << s(0) << " Col: " << s(1) << endl;
