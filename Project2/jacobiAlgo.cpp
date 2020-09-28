@@ -11,6 +11,7 @@ using namespace std;
 using namespace arma;
 
 
+
 void JacobiEigenSolve::Write_Results(string filename, string solution){
 
   ofstream afile;
@@ -44,6 +45,7 @@ void JacobiEigenSolve::Write_Results(string filename, string solution){
   return;
 }
 
+
 void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val, double rho_max_val, double V(double x, double omega), double omega){
   //Set class variables
   n = n_val; //Points
@@ -66,9 +68,26 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val, double 
   A(n-1,n-1) =  b + V(rho(n-1), omega);
   A_test = repmat(A, 1, 1); //Make a copy of A to be used in tests
 
+
   //Using armadillo to compute eigvals and eigvecs
   //eig_sym(armaEigval, armaEigvec, A);
 
+  vec eig = eig_sym(A);
+  //cout << "Fasit eigenvalues: \n" << eig_sym(A) << endl;
+  //cout << "Fasit eigenvectors: \n " << eigs_gen(A, n) << endl;
+  //cout << A << endl;
+
+  // Opg d - potensial. Add potential on diagonal elements.
+  bool usePotential = false; //implement this later
+  if(usePotential){
+    int N = n+1;
+    int p0 = 0;
+    int pmax = 10;
+    h = (pmax - p0)/N;
+    for(int i = 1; i < N; i++){
+      A(i-1,i-1) += (p0 + i*h); // remember to change to squared
+    }
+  }
   return;
 }
 
@@ -187,19 +206,33 @@ void JacobiEigenSolve::PrintA(){
 
 //Tests 2-3 times if method finds correct value and postion
 void JacobiEigenSolve::TestFindMaxEle(){
+  int row; int col;
+  double max_val;
   arma_rng::set_seed_random();
-  //A = mat(4,4, arma::fill::randu);
-  cout << "Find max value of this matrix:\n" << A << endl;
-  //A = rand
-  //Mat<double> C =
-  //int i = index_max(A_test);
-  //int j = index_min(A_test);
-/*
-  while(i == j){
-    i = 2;
+
+  A = mat(4 ,4, arma::fill::randn);
+  A= trimatu(A);//make matrix upper triangular
+  FindMaxEle(max_val, row, col);
+  //cout << "Find max value of this matrix:\n" << A << endl;
+
+  //To make use of index_max remove all diag and take abs value of all elements
+  A = trimatu(A);//make matrix upper triangular since only search upper
+  A.diag().zeros();
+  A = abs(A);
+
+  cout << A << endl;
+  uvec s = ind2sub( size(A), A.index_max() );
+
+  //cout << "Armadillo:  " << "Row:" << s(0) << " Col: " << s(1) << endl;
+  //cout << "Classfunc:  " << "Row:" << row << " Col: " << col << endl;
+  if( row == s(0) && col == s(1)){
+    cout << "Test Succesful! Correct index for max element" << endl;
   }
-  //index_max
-  return;*/
+  else{
+    cout << "Col and Row does not match: (Arma vs Classfunc)\n" << "Col: " << s(0) << ", " << col << "\nRow: " << s(1) << ", " << row << endl;
+  }
+
+  return;
 }
 
 //Tests if matrix is set up correctly initially
@@ -220,18 +253,19 @@ void JacobiEigenSolve::TestInitialize(){
 }
 
 void JacobiEigenSolve::TestSolve(){
-  // Sort egenverdiene --> allerede sortert i eigenvals
-  // Sjekk om egenverdiene er riktig (pass paa hvilket potensial som brukes)
-  // Test if matrix is diagonalized
-  for (int i =0; i <n; i++){
-    for (int j = i+1; j<n; j++){
-      if( i != j){
-        assert(abs(A(i,j)) < eps );
-      }
+  JacobiEigenSolve jes;
+  vec sortedEign =  sort(A.diag());
+  //cout << sortedEign << endl;
+  //cout << eig << endl;
+  for(int i = 0; i < eig.size(); i++){
+    if( fabs(eig(i) - sortedEign(i) ) > eps ){
+      cout << "Error the eig values does not match index: " << i << "  Exact" << eig(i) << " Solved: "<< sortedEign(i) << endl;
     }
   }
-
+  cout << "Succesful test. Correct eigenvalues" << endl;
+  return;
 }
+
 
 bool JacobiEigenSolve::TestOrthogonality(){
   //Returns true if matrix R has orthogonal eigenvectors, also checks normality
@@ -254,6 +288,3 @@ bool JacobiEigenSolve::TestOrthogonality(){
   }
   return true;
 }
-  // Cross product  a x b  = null_vektor hvis de er paralellel.
-  // vector.clean(eps)
-  // Sjekk at alle elementene er 0. feks == vec zeros(n)
