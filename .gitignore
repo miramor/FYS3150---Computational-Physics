@@ -6,6 +6,7 @@
 *.idx
 *.bbl
 *.blg
+*.PNG
 
 # Data files
 Project*/ResultsComputation

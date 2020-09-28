@@ -11,6 +11,7 @@ void writeTimeResults(double omega);
 
 int main(int argc, char const *argv[]) {
 
+
   JacobiEigenSolve jes;
 
   double omega = 0.25;
@@ -24,7 +25,7 @@ int main(int argc, char const *argv[]) {
   else {
     filename = "_n_" + to_string(n) + "_" + solution + ".txt";
   }
-  int rho_max = 15;
+  int rho_max = 5;
   if (solution == "V0")
       jes.Initialize(-1, 2, n, 1, V0, omega); //parameter upperdiagonal, diagonal, matrix dimension, rhomax, potential
   else if (solution == "V1")

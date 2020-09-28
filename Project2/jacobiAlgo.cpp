@@ -48,55 +48,6 @@ void JacobiEigenSolve::Write_Results(string filename, string solution){
     nfile << endl;
   }
 
-/*
-  if (solution == "V1"){
-    //Fidning eigenpairs with armadillo
-    colvec eigenvals;
-    mat eigenvecs;
-    eig_sym(eigenvals, eigenvecs, A_test);
-
-  //  for (int i = 0; i < n; i++)
-  //      eigenvals(i) = 3*i;
-    //Write numerical and analytical eigenvalues to file
-    //Eigenvalues to first row
-    for (int i = 0; i < n; i++)
-        afile << eigenvals(i) << " ";
-    nfile << max(A);
-    afile << endl;
-    //Eigenvectors below as column vectors
-    for (int i = 0; i < n; i++){
-      for (int j = 0; j < n; j++){
-        afile << eigenvecs(i,j) << " ";
-        nfile << R(i,j) << " ";
-        }
-      afile << endl;
-      nfile << endl;
-    }
-  }
-
-  if (solution == "V2"){
-    //Fidning eigenpairs with armadillo
-    colvec eigenvals;
-    mat eigenvecs;
-    eig_sym(eigenvals, eigenvecs, A_test);
-
-    //Write numerical and analytical eigenvalues to file
-    //Eigenvalues to first row
-    for (int i = 0; i < n; i++)
-        afile << eigenvals(i) << " ";
-    nfile << max(A);
-    afile << endl;
-    //Eigenvectors below as column vectors
-    for (int i = 0; i < n; i++){
-      for (int j = 0; j < n; j++){
-        afile << eigenvecs(i,j) << " ";
-        nfile << R(i,j) << " ";
-        }
-      afile << endl;
-      nfile << endl;
-    }
-  }
-*/
 
   return;
 }
@@ -109,9 +60,9 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val, double 
   double rho_min = 0;
   h = (rho_max-rho_min)/(n+1);  // Step size (x-x0)/N = (x-x0)/(n+1)
   a = a_val/(h*h); b = b_val/(h*h);
-  max_iterations = (double) n * (double) n * (double) n;
+  max_iterations = 2 * (double) n * (double) n * (double) n;
   //max_iterations = 100;
-  vec rho = linspace(a_val + h, b_val - h, n); //values for rho along diagonal
+  vec rho = linspace(rho_min + h, rho_max - h, n); //values for rho along diagonal
   A = zeros<mat>(n,n);
   R.eye(n,n);
 
