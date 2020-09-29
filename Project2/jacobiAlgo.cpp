@@ -173,11 +173,17 @@ void JacobiEigenSolve::Solve(){
   clock_t start, finish; // declare start and final time
   start = clock();
   double progress = 0.1;
+
   while (max_val > eps && iterations < max_iterations ){
-    if(iterations > progress*max_iterations){
-      cout << progress*10 << "% of max iterations" << endl;
-      progress = progress + 0.1;
+    map<int, int> dictIte = { {10 , 137}, {20 , 655}, {30 , 1543}, {40 , 2762}, {50 , 4373}, {60 , 6312}, {70 , 8603}, {80 , 11205}, {90 , 14216}, {100 , 17601},
+    {110 , 21384}, {120 , 25528}, {130 , 29765}, {140 , 34809}, {150 , 40020} };//add more values if needed
+    if(dictIte.find(n) != dictIte.end()){
+      if(iterations > progress*dictIte[n]){
+        cout << progress*100 << "% of " << dictIte[n] << " iterations." << endl;
+        progress = progress + 0.1;
+      }
     }
+
     Rotate(row, col);
     FindMaxEle(max_val, row, col);
     //cout <<  "Kolonne" <<col_ << "row: "<< row_ << endl;

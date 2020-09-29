@@ -7,15 +7,10 @@ import numpy as np
 n = int(input("Choose n value:  "))
 solution = input("Choose potential type (V0, V1 or V2):  ")
 omega = "0"
-
-if solution == "V0":
-    rho_max = "1"
-
-if solution == "V1":
-    rho_max = "4.6"
+dictRho = {"V0" : "1", "V1" : "4.6", "V2" : "9"}
+rho_max = dictRho[solution]
 
 if solution == "V2":
-    rho_max = "9"
     dict = {"1" : "0.25", "2" : str(1/20), "3" : str(1/54.7386)}
     omegaChoice = input("Choose omega value( 1 = 1/4, 2 = 1/20, 3 = 1/54.7386 ):  ")
     omega = dict[omegaChoice]

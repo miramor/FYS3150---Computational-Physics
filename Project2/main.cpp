@@ -63,7 +63,7 @@ void writeTimeResults(double omega){
   outfile << setprecision(4);
 
   for(int n = 10; n <= 150; n += 10){
-    for (int j = 0; j < 10; j ++){
+    for (int j = 0; j < 1; j ++){
       JacobiEigenSolve jes;
       jes.Initialize(-1, 2, n, 1, V0, omega);
       jes.Solve();
