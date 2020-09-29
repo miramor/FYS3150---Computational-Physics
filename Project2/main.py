@@ -3,19 +3,43 @@ import sys
 import numpy as np
 
 
-N = int(sys.argv[1])#int(input("Choose n: "))
+n = int(float(sys.argv[1]))#int(input("Choose n: "))
 solution = sys.argv[2]#"V1" #input("Choose a potential V0, V1 or V2: ")
+rho_max = sys.argv[3]
+omega = str(round(float(sys.argv[4]), 6))
+cla = str(n) + " " + solution + " " + rho_max + " " + omega
+
+if solution == "V2":
+    filename_data = "_n_" + str(n) + "_" + solution + "_w_" + omega + ".txt"
+    filename_plot = "eigplot_" + solution + "_n_" + str(n) + omega + "_plot.PNG"
+else:
+    filename_data = "_n_" + str(n) + "_" + solution + ".txt"
+    filename_plot = "eigplots_" + solution + "_n_" + str(n) +  "_plot.PNG"
+
 
 os.system("echo compiling...")
 os.system("make") #compile codes
 
 os.system("echo executing...")
-os.system("./output " + str(N) + " " + solution)
+os.system("./output.exe " + cla)
+
+plot_path = "/".join([".", "plots", solution])
+data_path = "/".join([".", "results", solution])
+
+if not os.path.exists(data_path):
+    os.makedirs(data_path)
+if not os.path.exists(plot_path):
+    os.makedirs(plot_path)
+
 
 os.system("echo creating plots...")
-os.system("python3 plot_results.py " + str(N) + " " + solution)
-
+os.system("python3 plot_results.py " + cla)
 os.system("echo done.")
+
+os.system("mv" + " numerical" + filename_data + " " + data_path) #Move data file to results directory.
+os.system("mv" + " armadillo" + filename_data + " " + data_path)
+os.system("mv" + " " + "TimeTable.csv" + " " + data_path)
+os.system("mv" + " " + filename_plot + " " + plot_path) #Move file to correct directory.
 
 #Calculating analytical eigenvalues for V0 and V1
 ana_eigvalV0 = np.zeros(N)
