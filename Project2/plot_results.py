@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import sys
+import pandas as pd
 n = sys.argv[1]
 V = sys.argv[2]
 omega = sys.argv[4]
@@ -54,3 +55,29 @@ else:
     plt.savefig("eigplots_%s_n_%i.PNG" %(V,n))
 
 plt.show()
+
+
+def time_results():
+    #data = pd.read_csv("TimeTable.csv", names = ["n", "t_arma", "t_class", "iterations"])
+    #N = data["N"]; iterations = data["iterations"]
+    t_arma = np.zeros(15)
+    t_class = np.zeros(15)
+
+    with open("TimeTable.csv", 'r') as f:
+        lines = f.readlines()
+        for line in lines:
+            data = line.split(",")
+            t_arma[int(data[0]/10)-1] += data[1]
+            t_class[int(data[0]/10)-1] += data[2]
+    t_arma /= 10
+    t_class /= 10
+
+    N = np.linspace(10,150,15)
+
+    plt.plot(N, t_arma, label='Armadillo')
+    plt.plot(N, t_class, label='Jacobi Algorithm')
+    plt.legend()
+    plt.xlabel("n")
+    plt.ylabel("time [s]")
+    plt.title("Times for eigenvalue solvers")
+    plt.savefig("times_plot_V0.pdf")
