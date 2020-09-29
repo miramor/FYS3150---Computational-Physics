@@ -6,10 +6,16 @@ import numpy as np
 #n = int(float(sys.argv[1]))#int(input("Choose n: "))
 n = int(input("Choose n value:  "))
 solution = input("Choose potential type (V0, V1 or V2):  ")
-rho_max = input("Choose rho_max:  ")
-rho_max = "4.6"
 omega = "0"
+
+if solution == "V0":
+    rho_max = "1"
+
+if solution == "V0":
+    rho_max = "4.6"
+
 if solution == "V2":
+    rho_max = "9"
     dict = {"1" : "0.25", "2" : str(1/20), "3" : str(1/54.7386)}
     omegaChoice = input("Choose omega value( 1 = 1/4, 2 = 1/20, 3 = 1/54.7386 ):  ")
     omega = dict[omegaChoice]
