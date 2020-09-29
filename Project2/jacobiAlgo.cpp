@@ -263,6 +263,7 @@ void JacobiEigenSolve::TestSolve(){
   for(int i = 0; i < eig.size(); i++){
     if( fabs(eig(i) - sortedEign(i) ) > eps ){
       cout << "Error the eig values does not match index: " << i << "  Exact" << eig(i) << " Solved: "<< sortedEign(i) << endl;
+      exit(1);
     }
   }
   cout << "Succesful test. Correct eigenvalues" << endl;
@@ -270,7 +271,7 @@ void JacobiEigenSolve::TestSolve(){
 }
 
 
-bool JacobiEigenSolve::TestOrthogonality(){
+void JacobiEigenSolve::TestOrthogonality(){
   //Returns true if matrix R has orthogonal eigenvectors, also checks normality
   // Test multiplies R*R^t
   for (int i = 0; i < n; i++) { // row of first vector
@@ -281,13 +282,15 @@ bool JacobiEigenSolve::TestOrthogonality(){
           sum = sum + (R(i,s) * R(j,s));
           }
       if (i == j && abs(sum-1) >= 1.0e-06){ //check normality for one and the same vector
-          cout << "Vector in column " << i << " not normalised" << endl;
-          //return false;
+          cout << "Error: Vector in column " << i << " not normalised" << endl;
+
          }
       if (i != j && abs(sum) >= 1.0e-06){ //check orthogonality if vectors differ
-          cout <<"Vector in column " << i <<" and " << j << " not orthogonal" << endl;
-          return false; }
+          cout <<"Error: Vector in column " << i <<" and " << j << " not orthogonal" << endl;
+          exit(1);
+           }
       }
   }
-  return true;
+  cout << "Succesful test. Eigenvalues are orthogonal" << endl;
+  return;
 }

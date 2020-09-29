@@ -39,7 +39,7 @@ def read_results(filename): #Read result files
 num_eigval, num_eigvec, num_sort = read_results("numerical" + filename)
 arma_eigval, arma_eigvec, arma_sort = read_results("armadillo" + filename)
 
-n_eigval = 1 #Number of eigenvectors to plot
+n_eigval = 4 #Number of eigenvectors to plot
 h = rho_max/(n+1)
 x = np.asarray([i*h for i in range(n)])
 for i in range(n_eigval):
@@ -60,6 +60,26 @@ else:
     plt.savefig("eigplots_%s_n_%i.PDF" %(V,n))
 
 plt.show()
+plt.clf()
+#-------------
+#Plot u^2
+for i in range(n_eigval):
+    plt.plot(x,num_eigvec[num_sort[i]]**2, label="Num eigenvalue = %.4f" %(num_eigval[num_sort[i]]))
+
+plt.xlabel("rho")
+plt.ylabel("u(rho)^2")
+plt.legend()
+
+if V == "V2":
+    plt.title("Squared Eigenvectors for %s, omega=%.3f" %(V, float(omega)))
+    #plt.savefig("plots/%s/Sqr_eigplot_%s_n_%i_w_%.3f.PNG" %(V,V,n, float(omega)))
+    plt.savefig("plots/%s/Sqr_eigplot_%s_n_%i_w_%.3f.PDF" %(V,V,n, float(omega)))
+else:
+    plt.title("Squared Eigenvectors for %s" %(V))
+    #plt.savefig("plots/%s/Sqr_eigplots_%s_n_%i.PNG" %(V,V,n))
+    plt.savefig("plots/%s/Sqr_eigplots_%s_n_%i.PDF" %(V,V,n))
+
+plt.show()
 
 def time_results():
     #data = pd.read_csv("TimeTable.csv", names = ["n", "t_arma", "t_class", "iterations"])
@@ -67,12 +87,12 @@ def time_results():
     t_arma = np.zeros(15)
     t_class = np.zeros(15)
 
-    with open("TimeTable.csv", 'r') as f:
+    with open("results/V0/TimeTable.csv", 'r') as f:
         lines = f.readlines()
         for line in lines:
             data = line.split(",")
-            t_arma[int(data[0]/10)-1] += data[1]
-            t_class[int(data[0]/10)-1] += data[2]
+            t_arma[int(data[0])/10-1] += data[1]
+            t_class[int(data[0])/10-1] += data[2]
     t_arma /= 10
     t_class /= 10
 
@@ -86,7 +106,7 @@ def time_results():
     plt.title("Times for eigenvalue solvers")
     plt.savefig("times_plot_V0.pdf")
 
-time_results()
+#time_results()
 
 def analyicalEigenvalues():
     #Calculating analytical eigenvalues for V0 and V1

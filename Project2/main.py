@@ -27,12 +27,12 @@ if solution == "V2":
 cla = str(n) + " " + solution + " " + rho_max + " " + omega
 
 if solution == "V2":
-    filename_data = "_n_" + str(n) + "_" + solution + "_w_%.6f.txt" %(float(omega))
-    filename_plot1 = "eigplot_" + solution + "_n_" + str(n) + "_w_%.6f.PNG" %(float(omega))
-    filename_plot2 = "eigplot_" + solution + "_n_" + str(n) + "_w_%.6f.PDF" %(float(omega))
+    filename_data = "_n_" + str(n) + "_" + solution + "_w_%.3f.txt" %(float(omega))
+    #filename_plot1 = "eigplot_" + solution + "_n_" + str(n) + "_w_%.6f.PNG" %(float(omega))
+    filename_plot2 = "eigplot_" + solution + "_n_" + str(n) + "_w_%.3f.PDF" %(float(omega))
 else:
     filename_data = "_n_" + str(n) + "_" + solution + ".txt"
-    filename_plot1 = "eigplots_" + solution + "_n_" + str(n) +  ".PNG"
+    #filename_plot1 = "eigplots_" + solution + "_n_" + str(n) +  ".PNG"
     filename_plot2 = "eigplots_" + solution + "_n_" + str(n) +  ".PDF"
 
 
