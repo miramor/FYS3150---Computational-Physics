@@ -76,8 +76,8 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val, double 
   A_test = repmat(A, 1, 1); //Make a copy of A to be used in tests
 
   vec eig = eig_sym(A);
-    }
-  }
+
+
   return;
 }
 
@@ -192,7 +192,7 @@ void JacobiEigenSolve::Solve(){
   //vec eigenvals = diagvec(A); //sorted eigenvalues in ascending order
   //eigenvals = sort(eigenvals, "ascend");
   //eigenvals.print("eigenvals = ");
-  cout << "Number of iterations needed for diagonalisation " << iterations <<endl;
+  //cout << "Number of iterations needed for diagonalisation " << iterations <<endl;
   A.clean(eps); //Remove elements smaller than eps.
   R.clean(eps);
 

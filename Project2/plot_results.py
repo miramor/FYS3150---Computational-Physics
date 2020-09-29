@@ -86,21 +86,24 @@ def time_results():
     plt.title("Times for eigenvalue solvers")
     plt.savefig("times_plot_V0.pdf")
 
-#Calculating analytical eigenvalues for V0 and V1
-ana_eigvalV0 = np.zeros(n)
-ana_eigvalV1 = np.zeros(n)
-ana_eigvalV2 = np.zeros(3)
-ana_eigvalV2[0] = 0.6259*2 #omega = 1/4
-ana_eigvalV2[1] = 0.1750*2 #omega = 1/20
-ana_eigvalV2[2] = 0.0822*2 #omega = 1/54.7386
+time_results()
 
-h = 1/(n+1)
-d = 2/(h**2)
-a = -1/(h**2)
-print("\n")
-for i in range(n):
-    ana_eigvalV0[i] = d + 2*a*np.cos((i+1)*np.pi/(n+1))
-    ana_eigvalV1[i] = 3.0 + 4*i
-print("Analytic eigenvalues: V0\n", ana_eigvalV0)
-print("Analytic eigenvalues: V1 \n", ana_eigvalV1)
-print("Analytic eigenvalues: V2 \n", ana_eigvalV2)
+def analyicalEigenvalues():
+    #Calculating analytical eigenvalues for V0 and V1
+    ana_eigvalV0 = np.zeros(n)
+    ana_eigvalV1 = np.zeros(n)
+    ana_eigvalV2 = np.zeros(3)
+    ana_eigvalV2[0] = 0.6259*2 #omega = 1/4
+    ana_eigvalV2[1] = 0.1750*2 #omega = 1/20
+    ana_eigvalV2[2] = 0.0822*2 #omega = 1/54.7386
+
+    h = 1/(n+1)
+    d = 2/(h**2)
+    a = -1/(h**2)
+    print("\n")
+    for i in range(n):
+        ana_eigvalV0[i] = d + 2*a*np.cos((i+1)*np.pi/(n+1))
+        ana_eigvalV1[i] = 3.0 + 4*i
+    print("Analytic eigenvalues: V0\n", ana_eigvalV0)
+    print("Analytic eigenvalues: V1 \n", ana_eigvalV1)
+    print("Analytic eigenvalues: V2 \n", ana_eigvalV2)
