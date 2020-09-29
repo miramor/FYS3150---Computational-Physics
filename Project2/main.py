@@ -40,16 +40,3 @@ os.system("mv" + " numerical" + filename_data + " " + data_path) #Move data file
 os.system("mv" + " armadillo" + filename_data + " " + data_path)
 os.system("mv" + " " + "TimeTable.csv" + " " + data_path)
 os.system("mv" + " " + filename_plot + " " + plot_path) #Move file to correct directory.
-
-#Calculating analytical eigenvalues for V0 and V1
-ana_eigvalV0 = np.zeros(N)
-ana_eigvalV1 = np.zeros(N)
-h = 1/(N+1)
-d = 2/(h**2)
-a = -1/(h**2)
-print("\n")
-for i in range(N):
-    ana_eigvalV0[i] = d + 2*a*np.cos((i+1)*np.pi/(N+1))
-    ana_eigvalV1[i] = 3.0 + 4*i
-print("Analytic eigenvalues: V0\n", ana_eigvalV0)
-print("Analytic eigenvalues: V1 \n", ana_eigvalV1)
