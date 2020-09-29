@@ -173,11 +173,11 @@ void JacobiEigenSolve::Solve(){
   clock_t start, finish; // declare start and final time
   start = clock();
   double progress = 0.1;
-  
+
   while (max_val > eps && iterations < max_iterations ){
 
     if(iterations > progress*max_iterations){
-      cout << progress*10 << "% of max iterations" << endl;
+      cout << progress*100 << "% of max iterations" << endl;
       progress = progress + 0.1;
     }
 
