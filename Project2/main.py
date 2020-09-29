@@ -11,7 +11,7 @@ omega = "0"
 if solution == "V0":
     rho_max = "1"
 
-if solution == "V0":
+if solution == "V1":
     rho_max = "4.6"
 
 if solution == "V2":
