@@ -6,15 +6,15 @@ import numpy as np
 n = int(float(sys.argv[1]))#int(input("Choose n: "))
 solution = sys.argv[2]#"V1" #input("Choose a potential V0, V1 or V2: ")
 rho_max = sys.argv[3]
-omega = str(round(float(sys.argv[4]), 6))
+omega = sys.argv[4]
 cla = str(n) + " " + solution + " " + rho_max + " " + omega
 
 if solution == "V2":
-    filename_data = "_n_" + str(n) + "_" + solution + "_w_" + omega + ".txt"
-    filename_plot = "eigplot_" + solution + "_n_" + str(n) + omega + "_plot.PNG"
+    filename_data = "_n_" + str(n) + "_" + solution + "_w_%.6f.txt" %(float(omega))
+    filename_plot = "eigplot_" + solution + "_n_" + str(n) + "_w_%.6f.PNG" %(float(omega))
 else:
     filename_data = "_n_" + str(n) + "_" + solution + ".txt"
-    filename_plot = "eigplots_" + solution + "_n_" + str(n) +  "_plot.PNG"
+    filename_plot = "eigplots_" + solution + "_n_" + str(n) +  ".PNG"
 
 
 os.system("echo compiling...")
