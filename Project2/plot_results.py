@@ -11,7 +11,7 @@ else:
     rho_max = float(sys.argv[3])
 
 if V == "V2":
-    filename = "_n_" + n + "_" + V + "_w_" + omega + ".txt"
+    filename = "_n_" + n + "_" + V + "_w_%.6f.txt" %(float(omega))
 else:
     filename = "_n_" + n + "_" + V + ".txt"
 
@@ -47,10 +47,10 @@ for i in range(n_eigval):
 
 plt.legend()
 if V == "V2":
-    plt.title("Eigenvectors for %s, %.2f" %(V, omega))
-    plt.savefig("eigplot_%s_n_%i_w_%.2f.PNG" %(V,n, omega))
+    plt.title("Eigenvectors for %s, %.6f" %(V, float(omega)))
+    plt.savefig("eigplot_%s_n_%i_w_%.6f.PNG" %(V,n, float(omega)))
 else:
     plt.title("Eigenvectors for %s" %(V))
-    plt.savefig("eigplots_%s_n_%i_plot.PNG" %(V,n))
+    plt.savefig("eigplots_%s_n_%i.PNG" %(V,n))
 
 plt.show()
