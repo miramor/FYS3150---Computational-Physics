@@ -49,8 +49,11 @@ os.system("echo creating plots...")
 os.system("python3 plot_results.py " + cla)
 os.system("echo done.")
 
-os.system("mv" + " numerical" + filename_data + " " + data_path) #Move data file to results directory.
-os.system("mv" + " armadillo" + filename_data + " " + data_path)
-os.system("mv" + " " + "TimeTable.csv" + " " + data_path)
-os.system("mv" + " " + filename_plot1 + " " + plot_path) #Move file to correct directory.
-os.system("mv" + " " + filename_plot2 + " " + plot_path)
+try:
+    os.system("mv" + " numerical" + filename_data + " " + data_path) #Move data file to results directory.
+    os.system("mv" + " armadillo" + filename_data + " " + data_path)
+    os.system("mv" + " " + "TimeTable.csv" + " " + data_path)
+    os.system("mv" + " " + filename_plot + " " + plot_path) #Move file to correct directory.
+    os.system("mv" + " " + "times_plot_V0.pdf" + " " + plot_path)
+except:
+    pass
