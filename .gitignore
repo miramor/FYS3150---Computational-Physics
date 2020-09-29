@@ -13,6 +13,7 @@ Project*/CPUtime*
 *.txt
 *.PNG
 *.csv
+*.PDF
 
 # cpp executables
 *.exe
