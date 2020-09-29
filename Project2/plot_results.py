@@ -5,7 +5,7 @@ n = sys.argv[1]
 V = sys.argv[2]
 omega = sys.argv[4]
 
-if V == "V1":
+if V == "V0":
     rho_max = 1
 else:
     rho_max = float(sys.argv[3])
@@ -45,25 +45,36 @@ for i in range(n_eigval):
     plt.plot(x,num_eigvec[num_sort[i]], label="Num eigenvalue = %.4f" %(num_eigval[num_sort[i]]))
     plt.plot(x,arma_eigvec[arma_sort[i]], label="Arma eigenvalue = %.4f" %(arma_eigval[arma_sort[i]]))
 
+plt.xlabel("rho")
+plt.ylabel("u(rho)")
 plt.legend()
+
 if V == "V2":
     plt.title("Eigenvectors for %s, %.6f" %(V, float(omega)))
     plt.savefig("eigplot_%s_n_%i_w_%.6f.PNG" %(V,n, float(omega)))
+    plt.savefig("eigplot_%s_n_%i_w_%.6f.PDF" %(V,n, float(omega)))
 else:
     plt.title("Eigenvectors for %s" %(V))
     plt.savefig("eigplots_%s_n_%i.PNG" %(V,n))
+    plt.savefig("eigplots_%s_n_%i.PDF" %(V,n))
 
 plt.show()
 
 #Calculating analytical eigenvalues for V0 and V1
 ana_eigvalV0 = np.zeros(n)
 ana_eigvalV1 = np.zeros(n)
-h = 1/(N+1)
+ana_eigvalV2 = np.zeros(3)
+ana_eigvalV2[0] = 0.6259*2 #omega = 1/4
+ana_eigvalV2[1] = 0.1750*2 #omega = 1/20
+ana_eigvalV2[2] = 0.0822*2 #omega = 1/54.7386
+
+h = 1/(n+1)
 d = 2/(h**2)
 a = -1/(h**2)
 print("\n")
-for i in range(N):
+for i in range(n):
     ana_eigvalV0[i] = d + 2*a*np.cos((i+1)*np.pi/(n+1))
     ana_eigvalV1[i] = 3.0 + 4*i
 print("Analytic eigenvalues: V0\n", ana_eigvalV0)
 print("Analytic eigenvalues: V1 \n", ana_eigvalV1)
+print("Analytic eigenvalues: V2 \n", ana_eigvalV2)

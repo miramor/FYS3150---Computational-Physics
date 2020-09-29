@@ -11,10 +11,12 @@ cla = str(n) + " " + solution + " " + rho_max + " " + omega
 
 if solution == "V2":
     filename_data = "_n_" + str(n) + "_" + solution + "_w_%.6f.txt" %(float(omega))
-    filename_plot = "eigplot_" + solution + "_n_" + str(n) + "_w_%.6f.PNG" %(float(omega))
+    filename_plot1 = "eigplot_" + solution + "_n_" + str(n) + "_w_%.6f.PNG" %(float(omega))
+    filename_plot2 = "eigplot_" + solution + "_n_" + str(n) + "_w_%.6f.PDF" %(float(omega))
 else:
     filename_data = "_n_" + str(n) + "_" + solution + ".txt"
-    filename_plot = "eigplots_" + solution + "_n_" + str(n) +  ".PNG"
+    filename_plot1 = "eigplots_" + solution + "_n_" + str(n) +  ".PNG"
+    filename_plot2 = "eigplots_" + solution + "_n_" + str(n) +  ".PDF"
 
 
 os.system("echo compiling...")
@@ -39,4 +41,5 @@ os.system("echo done.")
 os.system("mv" + " numerical" + filename_data + " " + data_path) #Move data file to results directory.
 os.system("mv" + " armadillo" + filename_data + " " + data_path)
 os.system("mv" + " " + "TimeTable.csv" + " " + data_path)
-os.system("mv" + " " + filename_plot + " " + plot_path) #Move file to correct directory.
+os.system("mv" + " " + filename_plot1 + " " + plot_path) #Move file to correct directory.
+os.system("mv" + " " + filename_plot2 + " " + plot_path)
