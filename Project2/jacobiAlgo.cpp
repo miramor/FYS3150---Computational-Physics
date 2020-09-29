@@ -60,7 +60,7 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val, double 
   double rho_min = 0;
   h = (rho_max-rho_min)/(n+1);  // Step size (x-x0)/N = (x-x0)/(n+1)
   a = a_val/(h*h); b = b_val/(h*h);
-  max_iterations = (double) n* (double) n * (double) n * (double) n;
+  max_iterations =  (double) n* (double) n * (double) n;
   //max_iterations = 100;
   vec rho = linspace(rho_min + h, rho_max - h, n); //values for rho along diagonal
   A = zeros<mat>(n,n);
@@ -75,24 +75,7 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val, double 
   A(n-1,n-1) =  b + V(rho(n-1), omega);
   A_test = repmat(A, 1, 1); //Make a copy of A to be used in tests
 
-
-  //Using armadillo to compute eigvals and eigvecs
-  //eig_sym(armaEigval, armaEigvec, A);
-
   vec eig = eig_sym(A);
-  //cout << "Fasit eigenvalues: \n" << eig_sym(A) << endl;
-  //cout << "Fasit eigenvectors: \n " << eigs_gen(A, n) << endl;
-  //cout << A << endl;
-
-  // Opg d - potensial. Add potential on diagonal elements.
-  bool usePotential = false; //implement this later
-  if(usePotential){
-    int N = n+1;
-    int p0 = 0;
-    int pmax = 10;
-    h = (pmax - p0)/N;
-    for(int i = 1; i < N; i++){
-      A(i-1,i-1) += (p0 + i*h); // remember to change to squared
     }
   }
   return;
@@ -189,7 +172,12 @@ void JacobiEigenSolve::Solve(){
   //Measure time to solve with armadillo
   clock_t start, finish; // declare start and final time
   start = clock();
+  double progress = 0.1;
   while (max_val > eps && iterations < max_iterations ){
+    if(iterations > progress*max_iterations){
+      cout << progress*10 << "% of max iterations" << endl;
+      progress = progress + 0.1;
+    }
     Rotate(row, col);
     FindMaxEle(max_val, row, col);
     //cout <<  "Kolonne" <<col_ << "row: "<< row_ << endl;

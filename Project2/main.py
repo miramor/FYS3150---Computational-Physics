@@ -3,10 +3,21 @@ import sys
 import numpy as np
 
 
-n = int(float(sys.argv[1]))#int(input("Choose n: "))
-solution = sys.argv[2]#"V1" #input("Choose a potential V0, V1 or V2: ")
-rho_max = sys.argv[3]
-omega = sys.argv[4]
+#n = int(float(sys.argv[1]))#int(input("Choose n: "))
+n = int(input("Choose n value:  "))
+solution = input("Choose potential type (V0, V1 or V2):  ")
+rho_max = input("Choose rho_max:  ")
+rho_max = "4.6"
+omega = "0"
+if solution == "V2":
+    dict = {"1" : "0.25", "2" : str(1/20), "3" : str(1/54.7386)}
+    omegaChoice = input("Choose omega value( 1 = 1/4, 2 = 1/20, 3 = 1/54.7386 ):  ")
+    omega = dict[omegaChoice]
+    print(omega)
+
+#solution = sys.argv[2]#"V1" #input("Choose a potential V0, V1 or V2: ")
+#rho_max = sys.argv[3]
+#omega = sys.argv[4]
 cla = str(n) + " " + solution + " " + rho_max + " " + omega
 
 if solution == "V2":
@@ -38,8 +49,11 @@ os.system("echo creating plots...")
 os.system("python3 plot_results.py " + cla)
 os.system("echo done.")
 
-os.system("mv" + " numerical" + filename_data + " " + data_path) #Move data file to results directory.
-os.system("mv" + " armadillo" + filename_data + " " + data_path)
-os.system("mv" + " " + "TimeTable.csv" + " " + data_path)
-os.system("mv" + " " + filename_plot1 + " " + plot_path) #Move file to correct directory.
-os.system("mv" + " " + filename_plot2 + " " + plot_path)
+try:
+    os.system("mv" + " numerical" + filename_data + " " + data_path) #Move data file to results directory.
+    os.system("mv" + " armadillo" + filename_data + " " + data_path)
+    os.system("mv" + " " + "TimeTable.csv" + " " + data_path)
+    os.system("mv" + " " + filename_plot + " " + plot_path) #Move file to correct directory.
+    os.system("mv" + " " + "times_plot_V0.pdf" + " " + plot_path)
+except:
+    pass
