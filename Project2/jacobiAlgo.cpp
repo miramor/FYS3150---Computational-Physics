@@ -179,7 +179,7 @@ void JacobiEigenSolve::Solve(){
     {110 , 21384}, {120 , 25528}, {130 , 29765}, {140 , 34809}, {150 , 40020} };//add more values if needed
     if(dictIte.find(n) != dictIte.end()){
       if(iterations > progress*dictIte[n]){
-        cout << progress*100 << "% of " << dictIte[n] << " iterations." << endl;
+        //cout << progress*100 << "% of " << dictIte[n] << " iterations." << endl;
         progress = progress + 0.1;
       }
     }

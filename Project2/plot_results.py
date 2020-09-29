@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import sys
 import pandas as pd
+"""
 n = sys.argv[1]
 V = sys.argv[2]
 omega = sys.argv[4]
@@ -127,3 +128,28 @@ def analyicalEigenvalues():
     print("Analytic eigenvalues: V0\n", ana_eigvalV0)
     print("Analytic eigenvalues: V1 \n", ana_eigvalV1)
     print("Analytic eigenvalues: V2 \n", ana_eigvalV2)
+"""
+def plotTimeV0vsN():
+    df = pd.read_csv("results/V0/TimeTable.csv", names = ['n','timeA', 'timeC', 'ite'])
+    df = df.drop_duplicates(subset='n', keep='first')
+    n = df['n'].to_numpy()
+    ite = df['ite'].to_numpy()
+    n_values = np.linspace(0,200,201)
+
+    z = np.polyfit(n, ite, 2)
+
+    for i in range(n_values.size):
+        n_values[i] = z[0]*n_values[i]**2 #- 1.55*n_values[i]
+
+
+    plt.plot(n, ite/1000, label = f"Iterations ca: {z[0]:.2f}*nˆ2")
+    #plt.plot(n_values, label = "func") #to see how the single x affected the curve, which is basically none
+    plt.plot(n, n**2/1000, label= "nˆ2")
+    plt.legend()
+    plt.title("Nr of Iterations vs N")
+    plt.ylabel("Iterations/1000")
+    plt.xlabel("n-value")
+    plt.savefig("iterations.pdf")
+    plt.show()
+
+plotTimeV0vsN()
