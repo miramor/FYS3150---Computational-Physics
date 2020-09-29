@@ -276,11 +276,11 @@ bool JacobiEigenSolve::TestOrthogonality(){
           sum = sum + (R(i,s) * R(j,s));
           }
       if (i == j && abs(sum-1) >= 1.0e-06){ //check normality for one and the same vector
-          cout << "Vector in row " << i << " not normalised" << endl;
+          cout << "Vector in column " << i << " not normalised" << endl;
           //return false;
          }
       if (i != j && abs(sum) >= 1.0e-06){ //check orthogonality if vectors differ
-          cout <<"Vector in row " << i <<" and " << j << " not orthogonal" << endl;
+          cout <<"Vector in column " << i <<" and " << j << " not orthogonal" << endl;
           return false; }
       }
   }

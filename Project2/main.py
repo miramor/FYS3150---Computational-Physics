@@ -11,10 +11,12 @@ cla = str(n) + " " + solution + " " + rho_max + " " + omega
 
 if solution == "V2":
     filename_data = "_n_" + str(n) + "_" + solution + "_w_%.6f.txt" %(float(omega))
-    filename_plot = "eigplot_" + solution + "_n_" + str(n) + "_w_%.6f.PNG" %(float(omega))
+    filename_plot1 = "eigplot_" + solution + "_n_" + str(n) + "_w_%.6f.PNG" %(float(omega))
+    filename_plot2 = "eigplot_" + solution + "_n_" + str(n) + "_w_%.6f.PDF" %(float(omega))
 else:
     filename_data = "_n_" + str(n) + "_" + solution + ".txt"
-    filename_plot = "eigplots_" + solution + "_n_" + str(n) +  ".PNG"
+    filename_plot1 = "eigplots_" + solution + "_n_" + str(n) +  ".PNG"
+    filename_plot2 = "eigplots_" + solution + "_n_" + str(n) +  ".PDF"
 
 
 os.system("echo compiling...")
@@ -44,15 +46,3 @@ try:
     os.system("mv" + " " + "times_plot_V0.pdf" + " " + plot_path)
 except:
     pass
-
-
-#Calculating analytical eigenvalues for V0 and V1
-ana_eigvalV0 = np.zeros(n)
-ana_eigvalV1 = np.zeros(n)
-print("\n")
-for i in range(n):
-    #ana_eigvalV0[i] = (i+1)*np.pi**2
-    #ana_eigvalV0[i] = (i+1)**2*np.pi**2
-    ana_eigvalV1[i] = 3.0 + 4*i
-#print("Analytic eigenvalues: V0\n", ana_eigvalV0)
-#print("Analytic eigenvalues: V1 \n", ana_eigvalV1)

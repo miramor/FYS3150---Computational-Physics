@@ -42,7 +42,7 @@ int main(int argc, char const *argv[]) {
   //jes.TestOrthogonality(); //writes out 1 if matrix is orthogonal else 0
   //writeTimeResults(omega);
   //jes.TestInitialize();
-
+  //writeTimeResults(omega);
 }
 
 //Potential added along diagonal
