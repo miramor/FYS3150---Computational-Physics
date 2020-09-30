@@ -85,20 +85,25 @@ else:
 
 
 def time_results():
-    #data = pd.read_csv("TimeTable.csv", names = ["n", "t_arma", "t_class", "iterations"])
-    #N = data["N"]; iterations = data["iterations"]
-    t_arma = np.zeros(20)
-    t_class = np.zeros(20)
+    """
+    Reads TimeTable.csv and plots the CPU run time.
+    Unncomment writeTimeResults(omega) in main.cpp to
+    produce the TimeTable.csv file.
+    """
 
     with open("results/V0/TimeTable.csv", 'r') as f:
         lines = f.readlines()
+        size = int(len(lines)/10)
+        t_arma = np.zeros(size)
+        t_class = np.zeros(size)
+
         for line in lines:
             data = line.split(",")
             t_arma[int(int(data[0])/10)-1] += float(data[1])
             t_class[int(int(data[0])/10)-1] += float(data[2])
     t_arma /= 10
     t_class /= 10
-    N = np.linspace(10,200,20)
+    N = np.linspace(10,n,size)
     z = np.polyfit(N[4:], t_class[4:], 2)
     plt.clf()
     plt.plot(N[4:], z[0]*N[4:]**2+z[1]*N[4:]+z[2], ':', label="2nd degree fit")
@@ -114,7 +119,6 @@ def time_results():
 
 
 
-#time_results()
 
 def analyicalEigenvalues():
     #Calculating analytical eigenvalues for V0 and V1
@@ -137,27 +141,34 @@ def analyicalEigenvalues():
     print("Analytic eigenvalues: V2 \n", ana_eigvalV2)
 
 def plotTimeV0vsN():
+    """
+    Reads TimeTable.csv and the number of iterations vs n.
+    Unncomment writeTimeResults(omega) in main.cpp to
+    produce the TimeTable.csv file.
+    """
     df = pd.read_csv("results/V0/TimeTable.csv", names = ['n','timeA', 'timeC', 'ite'])
     df = df.drop_duplicates(subset='n', keep='first')
-    n = df['n'].to_numpy()
+    n1 = df['n'].to_numpy()
     ite = df['ite'].to_numpy()
-    n_values = np.linspace(0,200,201)
+    size = int(len(n1)/10)
+    n_values = np.linspace(10, n, size)
 
-    z = np.polyfit(n, ite, 2)
+    z = np.polyfit(n1, ite, 2)
 
     for i in range(n_values.size):
         n_values[i] = z[0]*n_values[i]**2 #- 1.55*n_values[i]
 
     plt.clf()
-    plt.plot(n, ite/1000, label = f"Iterations")
+    plt.plot(n1, ite/1000, label = f"Iterations")
     #plt.plot(n_values, label = "func") #to see how the single x affected the curve, which is basically none
-    plt.plot(n, z[0]*n**2/1000, ':', label= "2nd degree fit, %.3fnˆ2" %(z[0]))
+    plt.plot(n1, z[0]*n1**2/1000, ':', label= "2nd degree fit, %.3fnˆ2" %(z[0]))
     plt.legend()
     plt.title("Nr of Iterations vs N")
     plt.ylabel("Iterations/1000")
     plt.xlabel("n-value")
     plt.grid()
-    plt.savefig("/plots/V0/iterations.pdf", dpi = 200)
+    plt.savefig("plots/V0/iterations.pdf", dpi = 200)
     plt.show()
 
-#plotTimeV0vsN() have to comment in writeTimeResults() in main.cpp to get results to be plotted by this function.s
+plotTimeV0vsN()
+#time_results()
