@@ -3,19 +3,31 @@ import sys
 import numpy as np
 
 
-n = int(float(sys.argv[1]))#int(input("Choose n: "))
-solution = sys.argv[2]#"V1" #input("Choose a potential V0, V1 or V2: ")
-rho_max = sys.argv[3]
-omega = sys.argv[4]
+#n = int(float(sys.argv[1]))#int(input("Choose n: "))
+n = int(input("Choose n value:  "))
+solution = input("Choose potential type (V0, V1 or V2):  ")
+omega = "0"
+dictRho = {"V0" : "1", "V1" : "4.6", "V2" : "9"}
+rho_max = dictRho[solution]
+
+if solution == "V2":
+    dict = {"1" : "0.25", "2" : str(1/20), "3" : str(1/54.7386)}
+    omegaChoice = input("Choose omega value( 1 = 1/4, 2 = 1/20, 3 = 1/54.7386 ):  ")
+    omega = dict[omegaChoice]
+    print(omega)
+
+#solution = sys.argv[2]#"V1" #input("Choose a potential V0, V1 or V2: ")
+#rho_max = sys.argv[3]
+#omega = sys.argv[4]
 cla = str(n) + " " + solution + " " + rho_max + " " + omega
 
 if solution == "V2":
-    filename_data = "_n_" + str(n) + "_" + solution + "_w_%.6f.txt" %(float(omega))
-    filename_plot1 = "eigplot_" + solution + "_n_" + str(n) + "_w_%.6f.PNG" %(float(omega))
-    filename_plot2 = "eigplot_" + solution + "_n_" + str(n) + "_w_%.6f.PDF" %(float(omega))
+    filename_data = "_n_" + str(n) + "_" + solution + "_w_%.3f.txt" %(float(omega))
+    #filename_plot1 = "eigplot_" + solution + "_n_" + str(n) + "_w_%.6f.PNG" %(float(omega))
+    filename_plot2 = "eigplot_" + solution + "_n_" + str(n) + "_w_%.3f.PDF" %(float(omega))
 else:
     filename_data = "_n_" + str(n) + "_" + solution + ".txt"
-    filename_plot1 = "eigplots_" + solution + "_n_" + str(n) +  ".PNG"
+    #filename_plot1 = "eigplots_" + solution + "_n_" + str(n) +  ".PNG"
     filename_plot2 = "eigplots_" + solution + "_n_" + str(n) +  ".PDF"
 
 

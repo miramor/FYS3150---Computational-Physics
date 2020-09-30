@@ -76,8 +76,8 @@ void JacobiEigenSolve::Initialize(double a_val, double b_val, int n_val, double 
   A_test = repmat(A, 1, 1); //Make a copy of A to be used in tests
 
   vec eig = eig_sym(A);
-    }
-  }
+
+
   return;
 }
 
@@ -172,7 +172,18 @@ void JacobiEigenSolve::Solve(){
   //Measure time to solve with armadillo
   clock_t start, finish; // declare start and final time
   start = clock();
+  double progress = 0.1;
+
   while (max_val > eps && iterations < max_iterations ){
+    map<int, int> dictIte = { {10 , 137}, {20 , 655}, {30 , 1543}, {40 , 2762}, {50 , 4373}, {60 , 6312}, {70 , 8603}, {80 , 11205}, {90 , 14216}, {100 , 17601},
+    {110 , 21384}, {120 , 25528}, {130 , 29765}, {140 , 34809}, {150 , 40020} };//add more values if needed
+    if(dictIte.find(n) != dictIte.end()){
+      if(iterations > progress*dictIte[n]){
+        //cout << progress*100 << "% of " << dictIte[n] << " iterations." << endl;
+        progress = progress + 0.1;
+      }
+    }
+
     Rotate(row, col);
     FindMaxEle(max_val, row, col);
     //cout <<  "Kolonne" <<col_ << "row: "<< row_ << endl;
@@ -184,7 +195,7 @@ void JacobiEigenSolve::Solve(){
   //vec eigenvals = diagvec(A); //sorted eigenvalues in ascending order
   //eigenvals = sort(eigenvals, "ascend");
   //eigenvals.print("eigenvals = ");
-  cout << "Number of iterations needed for diagonalisation " << iterations <<endl;
+  //cout << "Number of iterations needed for diagonalisation " << iterations <<endl;
   A.clean(eps); //Remove elements smaller than eps.
   R.clean(eps);
 
@@ -258,6 +269,7 @@ void JacobiEigenSolve::TestSolve(){
   for(int i = 0; i < eig.size(); i++){
     if( fabs(eig(i) - sortedEign(i) ) > eps ){
       cout << "Error the eig values does not match index: " << i << "  Exact" << eig(i) << " Solved: "<< sortedEign(i) << endl;
+      exit(1);
     }
   }
   cout << "Succesful test. Correct eigenvalues" << endl;
@@ -265,7 +277,7 @@ void JacobiEigenSolve::TestSolve(){
 }
 
 
-bool JacobiEigenSolve::TestOrthogonality(){
+void JacobiEigenSolve::TestOrthogonality(){
   //Returns true if matrix R has orthogonal eigenvectors, also checks normality
   // Test multiplies R*R^t
   for (int i = 0; i < n; i++) { // row of first vector
@@ -276,13 +288,15 @@ bool JacobiEigenSolve::TestOrthogonality(){
           sum = sum + (R(i,s) * R(j,s));
           }
       if (i == j && abs(sum-1) >= 1.0e-06){ //check normality for one and the same vector
-          cout << "Vector in column " << i << " not normalised" << endl;
-          //return false;
+          cout << "Error: Vector in column " << i << " not normalised" << endl;
+
          }
       if (i != j && abs(sum) >= 1.0e-06){ //check orthogonality if vectors differ
-          cout <<"Vector in column " << i <<" and " << j << " not orthogonal" << endl;
-          return false; }
+          cout <<"Error: Vector in column " << i <<" and " << j << " not orthogonal" << endl;
+          exit(1);
+           }
       }
   }
-  return true;
+  cout << "Succesful test. Eigenvalues are orthogonal" << endl;
+  return;
 }

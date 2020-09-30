@@ -34,7 +34,7 @@ class JacobiEigenSolve {
     void TestInitialize();
     void TestFindMaxEle();
     void TestSolve();
-    bool TestOrthogonality();
+    void TestOrthogonality();
     void Write_Results(string filename, string solution);
 
     double timeArma; double timeClass;

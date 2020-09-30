@@ -33,14 +33,14 @@ int main(int argc, char const *argv[]) {
   else if (solution == "V2")
       jes.Initialize(-1, 2, n, rho_max, V2, omega);
 
-  jes.Solve();
+  //jes.Solve();
 
-  jes.Write_Results(filename, solution);
+  //jes.Write_Results(filename, solution);
   //jes.PrintA();
   //jes.TestFindMaxEle();
   //jes.TestSolve();
   //jes.TestOrthogonality(); //writes out 1 if matrix is orthogonal else 0
-  //writeTimeResults(omega);
+  writeTimeResults(omega);
   //jes.TestInitialize();
   //writeTimeResults(omega);
 }
@@ -59,10 +59,10 @@ double V2(double x, double omega){
 
 void writeTimeResults(double omega){
   ofstream outfile;
-  outfile.open("TimeTable.csv");
+  outfile.open("results/V0/TimeTable.csv");
   outfile << setprecision(4);
 
-  for(int n = 10; n <= 150; n += 10){
+  for(int n = 10; n <= 200; n += 10){
     for (int j = 0; j < 10; j ++){
       JacobiEigenSolve jes;
       jes.Initialize(-1, 2, n, 1, V0, omega);
