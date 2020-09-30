@@ -33,16 +33,18 @@ int main(int argc, char const *argv[]) {
   else if (solution == "V2")
       jes.Initialize(-1, 2, n, rho_max, V2, omega);
 
-  //jes.Solve();
-
+  jes.Solve();
   jes.Write_Results(filename, solution);
   //jes.PrintA();
+
+  //Tests
+  //jes.TestInitialize();
   //jes.TestFindMaxEle();
   //jes.TestSolve();
-  //jes.TestOrthogonality(); //writes out 1 if matrix is orthogonal else 0
-  //writeTimeResults(omega);
-  //jes.TestInitialize();
+  //jes.TestOrthogonality();
 
+  //Write results for time
+  //writeTimeResults(omega); // Writes to a TimeTable.csv file in results/V0
 }
 
 //Potential added along diagonal
@@ -57,7 +59,7 @@ double V2(double x, double omega){
   return omega*omega*x*x + 1/x;
 }
 
-void writeTimeResults(double omega){
+void writeTimeResults(double omega){ // this takes forever and prints too much due to running it 10* every n value.
   ofstream outfile;
   outfile.open("results/V0/TimeTable.csv");
   outfile << setprecision(4);

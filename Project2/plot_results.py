@@ -55,12 +55,14 @@ plt.legend()
 
 if V == "V2":
     plt.title("Eigenvectors for %s, omega=%.3f" %(V, float(omega)))
-    plt.savefig("eigplot_%s_n_%i_w_%.3f.PNG" %(V,n, float(omega)))
-    plt.savefig("eigplot_%s_n_%i_w_%.3f.PDF" %(V,n, float(omega)))
+    #plt.savefig("eigplot_%s_n_%i_w_%.3f.PNG" %(V,n, float(omega)))
+    #plt.savefig("eigplot_%s_n_%i_w_%.3f.PDF" %(V,n, float(omega)))
+    plt.savefig("plots/%s/eigplot_%s_n_%i_w_%.3f.PDF" %(V,V,n, float(omega)))
 else:
     plt.title("Eigenvectors for %s" %(V))
-    plt.savefig("eigplot_%s_n_%i.PNG" %(V,n))
-    plt.savefig("eigplot_%s_n_%i.PDF" %(V,n))
+    #plt.savefig("eigplots_%s_n_%i.PNG" %(V,n))
+    #plt.savefig("eigplots_%s_n_%i.PDF" %(V,n))
+    plt.savefig("plots/%s/eigplot_%s_n_%i_w_%.3f.PDF" %(V,V,n, float(omega)))
 
 plt.clf()
 #-------------
@@ -158,4 +160,4 @@ def plotTimeV0vsN():
     plt.savefig("/plots/V0/iterations.pdf", dpi = 200)
     plt.show()
 
-#plotTimeV0vsN()
+#plotTimeV0vsN() have to comment in writeTimeResults() in main.cpp to get results to be plotted by this function.s
