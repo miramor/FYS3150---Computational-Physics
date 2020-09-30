@@ -86,6 +86,8 @@ def time_results():
     plt.title("Times for eigenvalue solvers")
     plt.savefig("times_plot_V0.pdf")
 
+plt.time_results()
+
 #Calculating analytical eigenvalues for V0 and V1
 ana_eigvalV0 = np.zeros(n)
 ana_eigvalV1 = np.zeros(n)
