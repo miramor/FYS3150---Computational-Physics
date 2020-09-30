@@ -35,14 +35,14 @@ int main(int argc, char const *argv[]) {
 
   //jes.Solve();
 
-  //jes.Write_Results(filename, solution);
+  jes.Write_Results(filename, solution);
   //jes.PrintA();
   //jes.TestFindMaxEle();
   //jes.TestSolve();
   //jes.TestOrthogonality(); //writes out 1 if matrix is orthogonal else 0
-  writeTimeResults(omega);
-  //jes.TestInitialize();
   //writeTimeResults(omega);
+  //jes.TestInitialize();
+
 }
 
 //Potential added along diagonal

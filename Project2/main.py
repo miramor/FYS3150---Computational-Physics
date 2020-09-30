@@ -5,7 +5,7 @@ import numpy as np
 
 #n = int(float(sys.argv[1]))#int(input("Choose n: "))
 n = int(input("Choose n value:  "))
-solution = input("Choose potential type (V0, V1 or V2):  ")
+solution = input("Choose potential type (V0, V1 or V2):  ").upper()
 omega = "0"
 dictRho = {"V0" : "1", "V1" : "4.6", "V2" : "9"}
 rho_max = dictRho[solution]
@@ -22,13 +22,13 @@ if solution == "V2":
 cla = str(n) + " " + solution + " " + rho_max + " " + omega
 
 if solution == "V2":
-    filename_data = "_n_" + str(n) + "_" + solution + "_w_%.3f.txt" %(float(omega))
-    #filename_plot1 = "eigplot_" + solution + "_n_" + str(n) + "_w_%.6f.PNG" %(float(omega))
+    filename_data = "_n_" + str(n) + "_" + solution + "_w_%.6f.txt" %(float(omega))
+    filename_plot1 = "eigplot_" + solution + "_n_" + str(n) + "_w_%.3f.PNG" %(float(omega))
     filename_plot2 = "eigplot_" + solution + "_n_" + str(n) + "_w_%.3f.PDF" %(float(omega))
 else:
     filename_data = "_n_" + str(n) + "_" + solution + ".txt"
-    #filename_plot1 = "eigplots_" + solution + "_n_" + str(n) +  ".PNG"
-    filename_plot2 = "eigplots_" + solution + "_n_" + str(n) +  ".PDF"
+    filename_plot1 = "eigplot_" + solution + "_n_" + str(n) +  ".PNG"
+    filename_plot2 = "eigplot_" + solution + "_n_" + str(n) +  ".PDF"
 
 
 os.system("echo compiling...")
@@ -53,8 +53,8 @@ os.system("echo done.")
 try:
     os.system("mv" + " numerical" + filename_data + " " + data_path) #Move data file to results directory.
     os.system("mv" + " armadillo" + filename_data + " " + data_path)
-    os.system("mv" + " " + "TimeTable.csv" + " " + data_path)
-    os.system("mv" + " " + filename_plot + " " + plot_path) #Move file to correct directory.
+    os.system("mv" + " " + filename_plot1 + " " + plot_path) #Move file to correct directory.
+    os.system("mv" + " " + filename_plot2 + " " + plot_path) #Move file to correct directory.
     os.system("mv" + " " + "times_plot_V0.pdf" + " " + plot_path)
 except:
     pass
