@@ -52,12 +52,14 @@ plt.legend()
 
 if V == "V2":
     plt.title("Eigenvectors for %s, omega=%.3f" %(V, float(omega)))
-    plt.savefig("eigplot_%s_n_%i_w_%.3f.PNG" %(V,n, float(omega)))
-    plt.savefig("eigplot_%s_n_%i_w_%.3f.PDF" %(V,n, float(omega)))
+    #plt.savefig("eigplot_%s_n_%i_w_%.3f.PNG" %(V,n, float(omega)))
+    #plt.savefig("eigplot_%s_n_%i_w_%.3f.PDF" %(V,n, float(omega)))
+    plt.savefig("plots/%s/eigplot_%s_n_%i_w_%.3f.PDF" %(V,V,n, float(omega)))
 else:
     plt.title("Eigenvectors for %s" %(V))
-    plt.savefig("eigplots_%s_n_%i.PNG" %(V,n))
-    plt.savefig("eigplots_%s_n_%i.PDF" %(V,n))
+    #plt.savefig("eigplots_%s_n_%i.PNG" %(V,n))
+    #plt.savefig("eigplots_%s_n_%i.PDF" %(V,n))
+    plt.savefig("plots/%s/eigplot_%s_n_%i_w_%.3f.PDF" %(V,V,n))
 
 plt.show()
 plt.clf()
