@@ -40,7 +40,7 @@ def read_results(filename): #Read result files
 num_eigval, num_eigvec, num_sort = read_results("numerical" + filename)
 arma_eigval, arma_eigvec, arma_sort = read_results("armadillo" + filename)
 
-n_eigval = 4 #Number of eigenvectors to plot
+n_eigval = 3 #Number of eigenvectors to plot
 h = rho_max/(n+1)
 x = np.asarray([i*h for i in range(n)])
 for i in range(n_eigval):
@@ -60,7 +60,7 @@ else:
     plt.title("Eigenvectors for %s" %(V))
     #plt.savefig("eigplots_%s_n_%i.PNG" %(V,n))
     #plt.savefig("eigplots_%s_n_%i.PDF" %(V,n))
-    plt.savefig("plots/%s/eigplot_%s_n_%i_w_%.3f.PDF" %(V,V,n))
+    plt.savefig("plots/%s/eigplot_%s_n_%i_w_%.3f.PDF" %(V,V,n, float(omega)))
 
 plt.show()
 plt.clf()
@@ -153,4 +153,4 @@ def plotTimeV0vsN():
     plt.savefig("iterations.pdf", dpi = 200)
     plt.show()
 
-plotTimeV0vsN()
+#plotTimeV0vsN() have to comment in writeTimeResults() in main.cpp to get results to be plotted by this function.s

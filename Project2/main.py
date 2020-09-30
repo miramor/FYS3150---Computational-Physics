@@ -3,8 +3,7 @@ import sys
 import numpy as np
 
 
-#n = int(float(sys.argv[1]))#int(input("Choose n: "))
-n = int(input("Choose n value:  "))
+n = int(input("Choose n value (10 - 200, delta n = 10):  "))
 solution = input("Choose potential type (V0, V1 or V2):  ")
 omega = "0"
 dictRho = {"V0" : "1", "V1" : "4.6", "V2" : "9"}
@@ -16,9 +15,6 @@ if solution == "V2":
     omega = dict[omegaChoice]
     print(omega)
 
-#solution = sys.argv[2]#"V1" #input("Choose a potential V0, V1 or V2: ")
-#rho_max = sys.argv[3]
-#omega = sys.argv[4]
 cla = str(n) + " " + solution + " " + rho_max + " " + omega
 
 if solution == "V2":
@@ -53,7 +49,7 @@ os.system("echo done.")
 try:
     os.system("mv" + " numerical" + filename_data + " " + data_path) #Move data file to results directory.
     os.system("mv" + " armadillo" + filename_data + " " + data_path)
-    os.system("mv" + " " + "TimeTable.csv" + " " + data_path)
+    #os.system("mv" + " " + "TimeTable.csv" + " " + data_path)
     os.system("mv" + " " + filename_plot + " " + plot_path) #Move file to correct directory.
     os.system("mv" + " " + "times_plot_V0.pdf" + " " + plot_path)
 except:
