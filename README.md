@@ -20,4 +20,4 @@ We defined the potentials V0, V1 and V2, respectively for the buckling beam, qua
 
 In order to use the function that records the CPU run time and number of iterations for the Buckling Beam problem, uncomment the function "writeTimeResults(omega)" in the main.cpp file, and the two functions at the bottom of "plot_results.py".
 
-In order to use the tests, uncomment the test functions in main.cpp.
+In order to run the tests, uncomment the test functions in main.cpp.
