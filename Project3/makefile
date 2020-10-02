@@ -15,4 +15,4 @@ solve.o: solve.cpp solve.hpp
 ${CPPflags} -c solve.cpp
 
 clean:
-rm *.o output *.txt
+rm *.o output.exe *.txt
