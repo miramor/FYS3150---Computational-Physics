@@ -5,7 +5,7 @@
 #include <string.h>
 #include <armadillo>
 
-using namespace std;
+using std::double;
 using arma::vec;
 
 class Planet{
@@ -17,11 +17,11 @@ class Planet{
     double pE;
 
   public:
-    planet(double mass, vec position, vec velo);
-    distanceOther(Planet otherPlanet)
-    GravitationForce()
-    kineticEnergy()
-    potentialEnergy()
+    double planet(double mass, vec position, vec velo);
+    vec distanceOther(Planet otherPlanet);
+    vec gravitationForce(Planet otherPlanet);
+    double kineticEnergy();
+    double potentialEnergy();
 
 
 }
