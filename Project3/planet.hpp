@@ -6,13 +6,22 @@
 #include <armadillo>
 
 using namespace std;
-using namespace arma;
+using arma::vec;
 
 class Planet{
   private:
     double mass;
-    vec position(3);
+    vec pos(3);
+    vec vel(3);
+    double kE;
+    double pE;
 
   public:
+    planet(double mass, vec position, vec velo);
+    distanceOther(Planet otherPlanet)
+    GravitationForce()
+    kineticEnergy()
+    potentialEnergy()
+
 
 }
