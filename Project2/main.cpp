@@ -44,7 +44,7 @@ int main(int argc, char const *argv[]) {
   //jes.TestOrthogonality();
 
   //Write results for time
-  //riteTimeResults(omega); // Writes to a TimeTable.csv file in results/V0
+  //writeTimeResults(omega); // Writes to a TimeTable.csv file in results/V0
 }
 
 //Potential added along diagonal
