@@ -9,7 +9,6 @@ using arma::vec;
 
 class Planet{
   private:
-
     double mass;
     vec pos;
     vec vel;
@@ -18,13 +17,13 @@ class Planet{
     double pE;
     double G = 6.67408e-11; //Gravitational constant
 
+
   public:
-    double planet(double m, vec position, vec velocity);
-    vec distanceOther(Planet otherPlanet);
-    vec gravitationForce(Planet otherPlanet);
+    Planet(double m, vec position, vec velocity);
+    double distanceOther(const Planet& otherPlanet);
+    vec gravitationForce(const Planet& otherPlanet);
     double kineticEnergy();
     double potentialEnergy();
-
-}
+};
 
 #endif

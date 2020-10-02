@@ -1,19 +1,19 @@
-#ifndef PLANET.HPP
-#define PLANET_HPP
+#ifndef SOLVER_HPP
+#define SOLVER_HPP
 
 #include <vector>
 #include <string.h>
 #include <armadillo>
 #include <fstream>
 #include <iomanip>
-
+#include "planet.hpp"
 class Solver{
   private:
 
-    friend class planet;
+    friend class Planet;
 
     int totalPlanets;
-    vec<planet> planets;
+    std::vector<Planet> planets;
 
     double totalKE;
     double totalPE;
@@ -21,6 +21,6 @@ class Solver{
 
     //void addPlanet(Planet planet);
     void verletSolve();
-}
+};
 
 #endif
