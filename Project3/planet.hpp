@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <string.h>
-#include <tuple>
 #include <armadillo>
 
 using namespace std;
@@ -11,7 +10,8 @@ using namespace arma;
 
 class Planet{
   private:
-    
+    double mass;
+    vec position(3);
 
   public:
 
