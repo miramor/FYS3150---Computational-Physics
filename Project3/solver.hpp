@@ -25,6 +25,6 @@ class Solver{
 
     //void addPlanet(Planet planet);
     void verletSolve();
-}
+};
 
 #endif

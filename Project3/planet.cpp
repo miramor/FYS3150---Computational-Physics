@@ -11,13 +11,14 @@ Planet::Planet(double m, vec position, vec velocity){
 
 
 
-double Planet::distanceOther(){
+Planet::distanceOther(const Planet& otherPlanet){
   vec dr = pos - otherPlanet.pos;
   return sqrt(dr(0)*dr(0) + dr(1)*dr(1) + dr(2)*dr(2));
 }
 
-Planet::gravitationalForce(Planet otherPlanet){
-  double r = distanceOther(Planet otherPlanet);
-  vec Fg = this->G * this->mass * otherPlanet.mass / (r * r);
+Planet::gravitationalForce(const Planet& otherPlanet){
+
+  double r = distanceOther(otherPlanet);
+  vec Fg = G * mass * otherPlanet.mass / (r * r);
   return Fg
 }
