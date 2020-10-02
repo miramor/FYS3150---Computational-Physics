@@ -11,8 +11,9 @@ using arma::vec;
 class Planet{
   private:
     double mass;
-    vec pos(3);
-    vec vel(3);
+    vec<double> pos;
+    vec<double> vel;
+    vec<double> acceleration;
     double kE;
     double pE;
 
@@ -25,3 +26,5 @@ class Planet{
 
 
 }
+
+#endif

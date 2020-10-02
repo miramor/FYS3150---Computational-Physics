@@ -11,7 +11,7 @@ ${CPPflags} -c main.cpp
 planet.o: planet.cpp planet.hpp
 ${CPPflags} -c planet.cpp
 
-solve.o: solve.cpp solve.hpp
+solve.o: solver.cpp solver.hpp
 ${CPPflags} -c solve.cpp
 
 clean:
