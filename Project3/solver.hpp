@@ -17,7 +17,8 @@ class Solver{
     double totalPE;
   public:
 
-    //addPlanet(Planet planet);
+    //void addPlanet(Planet planet);
+    void verletSolve();
 }
 
 #endif
