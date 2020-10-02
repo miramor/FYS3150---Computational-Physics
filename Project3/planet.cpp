@@ -1,16 +1,20 @@
 #inlucde planet.hpp
 
-Planet::planet(vec<double> pos):
+Planet::planet(double m, vec position){
+  mass = m;
+  pos = position;
+  vel = velocity;
+}
 
 
 
 Planet::distanceOther(){
-  vec<double> dr = this->pos - otherPlanet.pos;
+  vec<double> dr = pos - otherPlanet.pos;
   return sqrt(dr(0)*dr(0) + dr(1)*dr(1) + dr(2)*dr(2));
 }
 
 Planet::gravitationalForce(Planet otherPlanet){
   double r = distanceOther(Planet otherPlanet);
-  vec<double> Fg = this->G * this->mass * otherPlanet.mass / (r * r)
+  vec<double> Fg = G * mass * otherPlanet.mass / (r * r)
   return Fg
 }
