@@ -4,6 +4,8 @@
 #include <vector>
 #include <string.h>
 #include <armadillo>
+#include <fstream>
+#include <iomanip>
 
 class Solver{
   private:

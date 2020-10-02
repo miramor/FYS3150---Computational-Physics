@@ -1,13 +1,15 @@
 #include "planet.hpp"
 
-Planet::planet(vec pos){
-
+Planet::planet(double m, vec position, vec velocity){
+  mass = m;
+  pos = position;
+  vel = velocity;
 }
 
 
 
 Planet::distanceOther(){
-  vec dr = this->pos - otherPlanet.pos;
+  vec dr = pos - otherPlanet.pos;
   return sqrt(dr(0)*dr(0) + dr(1)*dr(1) + dr(2)*dr(2));
 }
 
