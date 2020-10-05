@@ -21,10 +21,14 @@ class Solver{
 
     double totalKE;
     double totalPE;
+    double pi = 2*acos(0.0);
+    double G_scale = 4*pi*pi;
   public:
 
     //void addPlanet(Planet planet);
     void verletSolve();
+    void EulerCromer();
+    double TotalForceOnPlanet(const Planet& planet);
 };
 
 #endif

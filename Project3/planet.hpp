@@ -16,6 +16,8 @@ class Planet{
     double kE;
     double pE;
     double G = 6.67408e-11; //Gravitational constant
+    double pi = 2*acos(0.0);
+    double G_scale = 4*pi*pi;
 
 
   public:

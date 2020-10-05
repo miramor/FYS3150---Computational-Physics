@@ -19,6 +19,7 @@ Planet::distanceOther(const Planet& otherPlanet){
 Planet::gravitationalForce(const Planet& otherPlanet){
 
   double r = distanceOther(otherPlanet);
-  vec Fg = G * mass * otherPlanet.mass / (r * r);
+  //vec Fg = G_scale * mass * otherPlanet.mass / (r * r);
+  vec Fg =  otherPlanet.mass / (r * r); //use if TotalForceOnPlanet is used in solve
   return Fg
 }
