@@ -3,7 +3,8 @@
 using namespace std;
 using namespace arma;
 
-Planet::Planet(double m, vec position, vec velocity){
+Planet::Planet(string name, double m, vector<double> position, vector<double> velocity){
+  name = name;
   mass = m;
   pos = position;
   vel = velocity;
@@ -12,13 +13,13 @@ Planet::Planet(double m, vec position, vec velocity){
 
 
 Planet::distanceOther(const Planet& otherPlanet){
-  vec dr = pos - otherPlanet.pos;
+  vector dr = pos - otherPlanet.pos;
   return sqrt(dr(0)*dr(0) + dr(1)*dr(1) + dr(2)*dr(2));
 }
 
 Planet::gravitationalForce(const Planet& otherPlanet){
 
   double r = distanceOther(otherPlanet);
-  vec Fg = G * mass * otherPlanet.mass / (r * r);
+  vector<double> Fg = G * mass * otherPlanet.mass / (r * r);
   return Fg
 }

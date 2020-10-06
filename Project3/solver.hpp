@@ -10,6 +10,7 @@
 #include "planet.hpp"
 
 using std::vector;
+using namespace std;
 
 class Solver{
   private:

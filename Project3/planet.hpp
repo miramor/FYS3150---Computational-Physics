@@ -6,22 +6,24 @@
 #include <armadillo>
 
 using arma::vec;
+using namespace std;
 
 class Planet{
   private:
+    string name;
     double mass;
-    vec pos;
-    vec vel;
-    vec acceleration;
+    vector<double> pos;
+    vector<double> vel;
+    vector<double> acceleration;
     double kE;
     double pE;
     double G = 6.67408e-11; //Gravitational constant
 
 
   public:
-    Planet(double m, vec position, vec velocity);
+    Planet(string name, double m, vector<double> position, vector<double> velocity);
     double distanceOther(const Planet& otherPlanet);
-    vec gravitationForce(const Planet& otherPlanet);
+    vector<double> gravitationForce(const Planet& otherPlanet);
     double kineticEnergy();
     double potentialEnergy();
 };
