@@ -23,7 +23,7 @@ class Planet{
   public:
     Planet(double m, vec position, vec velocity);
     double distanceOther(const Planet& otherPlanet);
-    vec gravitationForce(const Planet& otherPlanet);
+    vec gravitationForce(const Planet& otherPlanet, int index);
     double kineticEnergy();
     double potentialEnergy();
 };

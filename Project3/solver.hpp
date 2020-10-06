@@ -26,9 +26,9 @@ class Solver{
   public:
 
     //void addPlanet(Planet planet);
-    void verletSolve();
-    void EulerCromer(int N, double t_end, ve<Planet> planets);
-    double TotalForceOnPlanet(const Planet& planet);
+    void VerlocityVerlet(int N, double t_end, vec<Planet> planets);
+    void EulerCromer(int N, double t_end, vec<Planet> planets);
+    vec TotalAccelerationOnPlanet(vec<Planet> planets, const Planet& planet, int index );
 };
 
 #endif
