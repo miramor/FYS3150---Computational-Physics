@@ -2,7 +2,7 @@
 using namespace std;
 using namespace arma;
 
-vec Solver::TotalAccelerationOnPlanet(int N, const Planet& planet, int index){ //calculate total acceleration on planet
+vec Solver::TotalAccelerationOnPlanet(const Planet& planet, int index){ //calculate total acceleration on planet
   vec accel(3, 0.0); // acceleration vector [a_x, a_y, a_z] filled with zeros [0,0,0]
   for(int i =0; i < planets.size(); i++){ // find neighbour planets and calculate acceleration
     if(planets[i] != planet){
