@@ -32,7 +32,7 @@ class Solver{
     //void addPlanet(Planet planet);
     void VerlocityVerlet();
     void EulerCromer();
-    vec TotalAccelerationOnPlanet(int N_val, const Planet& planet, int index);
+    vec TotalAccelerationOnPlanet(const Planet& planet, int index);
 };
 
 #endif
