@@ -19,13 +19,20 @@ class Solver{
 
     int totalPlanets;
     vector<Planet> planets;
+    int N;
+    double t_end;
 
     double totalKE;
     double totalPE;
+    double pi = 2*acos(0.0);
+    double G_scale = 4*pi*pi;
+
   public:
 
     //void addPlanet(Planet planet);
-    void verletSolve();
+    void VerlocityVerlet();
+    void EulerCromer();
+    vec TotalAccelerationOnPlanet(int N_val, const Planet& planet, int index);
 };
 
 #endif

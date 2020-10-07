@@ -18,12 +18,14 @@ class Planet{
     double kE;
     double pE;
     double G = 6.67408e-11; //Gravitational constant
+    double pi = 2*acos(0.0);
+    double G_scale = 4*pi*pi;
 
 
   public:
-    Planet(string name, double m, vector<double> position, vector<double> velocity);
-    double distanceOther(const Planet& otherPlanet);
-    vector<double> gravitationForce(const Planet& otherPlanet);
+    Planet(double m, vec position, vec velocity);
+    double distanceOther(int N_val, const Planet& otherPlanet, int index);
+    vec gravitationForce(int N_val, const Planet& otherPlanet, int index);
     double kineticEnergy();
     double potentialEnergy();
 };
