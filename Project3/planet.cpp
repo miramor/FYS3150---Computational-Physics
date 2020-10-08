@@ -7,12 +7,13 @@ Planet::Planet(double m, vec position, vec velocity, string thisName) : mass{m},
 
   pos = zeros<vec>(N*3);
   vel = zeros<vec>(N*3);
-  /*
+
   for(int i = 0; i < 3; i++){
     pos[i] = position[i];
     vel[i] = velocity[i];
   }
-  */
+  cout << "xxxx " << endl;
+
 
 }
 
@@ -24,8 +25,8 @@ vec Planet::distanceOther(Planet& otherPlanet, int index, int N){
 
   //compute distance to other planet for all three directions at a given time (=index)
   double r_x = pos[index] - otherPlanet.pos[index];
-  double r_y = pos[index+N_val] - otherPlanet.pos[index+N_val];
-  double r_z = pos[index+2*N_val] - otherPlanet.pos[index+2*N_val];
+  double r_y = pos[index+N] - otherPlanet.pos[index+N];
+  double r_z = pos[index+2*N] - otherPlanet.pos[index+2*N];
   vec dis{r_x, r_y, r_z};
 
   //return  sqrt(r_x*r_x + r_y*r_y + r_z*r_z);

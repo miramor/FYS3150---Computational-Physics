@@ -13,7 +13,7 @@ int main(int argc, char const *argv[]) {
   planets.push_back(sun);
   planets.push_back(earth);
 
-  Solver solv(planets,3, 10);
+  Solver solv(planets,5, 10);
   solv.VelocityVerlet();
 
 

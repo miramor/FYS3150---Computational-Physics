@@ -14,7 +14,7 @@ class Planet{
     double G = 6.67408e-11; //Gravitational constant
     double pi = 2*acos(0.0);
     double G_scale = 4*pi*pi;
-    int N = 3;
+    int N = 5;
 
 
   public:
