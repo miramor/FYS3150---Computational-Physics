@@ -24,8 +24,8 @@ vec Planet::distanceOther(Planet& otherPlanet, int index, int N){
 
   //compute distance to other planet for all three directions at a given time (=index)
   double r_x = pos[index] - otherPlanet.pos[index];
-  double r_y = pos[index+N] - otherPlanet.pos[index+N];
-  double r_z = pos[index+2*N] - otherPlanet.pos[index+2*N];
+  double r_y = pos[index+N_val] - otherPlanet.pos[index+N_val];
+  double r_z = pos[index+2*N_val] - otherPlanet.pos[index+2*N_val];
   vec dis{r_x, r_y, r_z};
 
   //return  sqrt(r_x*r_x + r_y*r_y + r_z*r_z);

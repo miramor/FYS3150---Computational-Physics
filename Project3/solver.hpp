@@ -24,6 +24,7 @@ class Solver{
     double totalPE;
     double pi = 2*acos(0.0);
     double G_scale = 4*pi*pi;
+
   public:
     Solver(vector<Planet> sysPlanets, int N_val, double t_n_val);
     //void addPlanet(Planet planet);

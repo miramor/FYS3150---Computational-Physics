@@ -18,6 +18,7 @@ class Planet{
 
 
   public:
+<<<<<<< HEAD
     double mass;
     vec pos;
     vec vel;
@@ -26,6 +27,11 @@ class Planet{
     Planet(double m, vec position, vec velocity, std::string name);
     vec distanceOther(Planet& otherPlanet, int index, int N);
     vec gravitationalForce(Planet& otherPlanet, int index, int N);
+=======
+    Planet(double m, vec position, vec velocity);
+    double distanceOther(int N_val, const Planet& otherPlanet, int index);
+    vec gravitationForce(int N_val, const Planet& otherPlanet, int index);
+>>>>>>> 8a0933e8bf8354f8d506aa52ac3876d96840a69e
     double kineticEnergy();
     double potentialEnergy();
 };
