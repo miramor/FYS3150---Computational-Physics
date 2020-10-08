@@ -18,17 +18,18 @@ class Solver{
 
     int totalPlanets;
     vector<Planet> planets;
-
+    int N;
+    double t_n;
     double totalKE;
     double totalPE;
     double pi = 2*acos(0.0);
     double G_scale = 4*pi*pi;
   public:
-
+    Solver(vector<Planet> sysPlanets, int N_val, double t_n_val);
     //void addPlanet(Planet planet);
-    void VerlocityVerlet(int N, double t_end, vec<Planet> planets);
-    void EulerCromer(int N, double t_end, vec<Planet> planets);
-    vec TotalAccelerationOnPlanet(vec<Planet> planets, const Planet& planet, int index );
+    void VelocityVerlet();
+    void EulerCromer();
+    vec TotalAccelerationOnPlanet(Planet& planet, int index);
 };
 
 #endif
