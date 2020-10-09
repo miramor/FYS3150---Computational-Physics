@@ -25,13 +25,15 @@ class Solver{
     double totalPE;
     double pi = 2*acos(0.0);
     double G_scale = 4*pi*pi;
+    string sysName;
 
   public:
-    Solver(vector<Planet> sysPlanets, int N_val, double t_n_val);
+    Solver(vector<Planet> sysPlanets, int N_val, double t_n_val, string sys);
     //void addPlanet(Planet planet);
     void VelocityVerlet();
     void EulerCromer();
     vec TotalAccelerationOnPlanet(Planet& planet, int index);
+    void WriteResults();
 };
 
 #endif

@@ -15,7 +15,7 @@ class Planet{
     double G = 6.67408e-11; //Gravitational constant
     double pi = 2*acos(0.0);
     double G_scale = 4*pi*pi;
-    int N = 10000;
+    int N;
 
 
   public:
@@ -25,7 +25,7 @@ class Planet{
     vec vel;
     string name;
 
-    Planet(double m, double x, double y, double z, double vx, double vy, double vz, string thisName);
+    Planet(double m, double x, double y, double z, double vx, double vy, double vz, string thisName, int N_points);
     vec distanceOther(Planet& otherPlanet, int index, int N);
     vec gravitationalForce(Planet& otherPlanet, int index, int N);
 

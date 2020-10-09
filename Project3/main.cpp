@@ -8,16 +8,19 @@ vector<Planet> read_initial(int N_objects, int N_points, vector<string> object_n
 
 int main(int argc, char const *argv[]) {
 
-  Planet sun(1, 0., 0., 0., 0., 0., 0., "sun");
-  Planet earth(5.972e24/1.989e30, 1., 0., 0., 0., 2*3.141592, 0., "earth");
+  int N_points = 10000;
+  Planet sun(1, 0., 0., 0., 0., 0., 0., "sun", N_points);
+  Planet earth(5.972e24/1.989e30, 1., 0., 0., 0., 2*3.141592, 0., "earth", N_points);
 
   vector<Planet> planets;
+//  planets = read_initial(10, N_points)
   planets.push_back(sun);
   planets.push_back(earth);
 
-  Solver solv(planets,10000, 1);
-  solv.VelocityVerlet();
-
+  Solver solv(planets, N_points, 1, "systemA");
+  //solv.VelocityVerlet();
+  solv.EulerCromer();
+  solv.WriteResults();
 
   //Planet jupyter =planet(1.898E27 kg, vec p(3) = {2, 0, 0}, vec v(3) = {0, 1, 0});
 
@@ -27,7 +30,7 @@ int main(int argc, char const *argv[]) {
   return 0;
 }
 /*
-vec<Planet> read_initial(int N_objects, int N_points, vec<string> object_names){
+vector<Planet> read_initial(int N_objects, int N_points, vec<string> object_names){
   double *x, *y, *z, *vx, *vy, *vz; //To store initial conditions for each particle.
   double *mass; //Store mass of particles.
   string *names; //Store names of objects.
