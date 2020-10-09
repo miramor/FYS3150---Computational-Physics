@@ -2,10 +2,11 @@
 using namespace std;
 using namespace arma;
 
-Solver::Solver(vector<Planet> sysPlanets, int N_val, double t_n_val){
+Solver::Solver(vector<Planet> sysPlanets, int N_val, double t_n_val, string sysName_){
   planets = sysPlanets;
   N = N_val;
   t_n = t_n_val;
+  sysName = sysName_;
 }
 
 vec Solver::TotalAccelerationOnPlanet(Planet& planet, int index){ //calculate total acceleration on planet

@@ -20,7 +20,6 @@ Planet::Planet(double m, double x, double y, double z, double vx, double vy, dou
 }
 
 
-
 vec Planet::distanceOther(Planet& otherPlanet, int index, int N){
   //vec dr = pos - otherPlanet.pos;
   //return sqrt(dr(0)*dr(0) + dr(1)*dr(1) + dr(2)*dr(2));
