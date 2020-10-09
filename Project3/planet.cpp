@@ -15,9 +15,9 @@ Planet::Planet(double m, double x, double y, double z, double vx, double vy, dou
   vel[0] = vx;
   vel[N] = vy;
   vel[2*N] = vz;
+  cout << "n val" << N << endl;
 
 }
-
 
 
 vec Planet::distanceOther(Planet& otherPlanet, int index, int N){

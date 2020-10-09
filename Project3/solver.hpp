@@ -20,6 +20,7 @@ class Solver{
     int totalPlanets;
     vector<Planet> planets;
     int N;
+    int twoN;
     double t_n;
     double totalKE;
     double totalPE;
