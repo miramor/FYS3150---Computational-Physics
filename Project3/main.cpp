@@ -6,8 +6,10 @@ using namespace std;
 
 vector<Planet> read_initial(int N_objects, int N_points, vector<string> object_names);
 
-  Planet sun(1.989e30, {0, 0, 0}, {0, 0, 0}, "sun");
-  Planet earth(5.972e24, {1, 0, 0}, {0, 1, 0}, "earth");
+int main(int argc, char const *argv[]) {
+
+  Planet sun(1.989e30, 0., 0., 0., 0., 0., 0., "sun");
+  Planet earth(5.972e24, 1., 0., 0., 0., 1., 0., "earth");
 
   vector<Planet> planets;
   planets.push_back(sun);
@@ -22,7 +24,6 @@ vector<Planet> read_initial(int N_objects, int N_points, vector<string> object_n
   //Vector<Planet> planets;
   //Vector<string> object_names = {"Sun", "Earth"};
   //planets = read_initial(10, 100, object_names);
-  Planet earth("Earth", 1, {1, 0, 0}, {0, 1, 0});
   return 0;
 }
 /*

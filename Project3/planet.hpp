@@ -4,7 +4,7 @@
 #include <vector>
 #include <string.h>
 #include <armadillo>
-using arma::vec;
+using namespace arma;
 using namespace std;
 
 class Planet{
@@ -23,9 +23,9 @@ class Planet{
     double mass;
     vec pos;
     vec vel;
-    std::string name;
+    string name;
 
-    Planet(double m, vec position, vec velocity, std::string name);
+    Planet(double m, double x, double y, double z, double vx, double vy, double vz, string thisName);
     vec distanceOther(Planet& otherPlanet, int index, int N);
     vec gravitationalForce(Planet& otherPlanet, int index, int N);
 

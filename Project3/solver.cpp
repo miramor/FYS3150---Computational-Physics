@@ -9,9 +9,9 @@ Solver::Solver(vector<Planet> sysPlanets, int N_val, double t_n_val){
 }
 
 vec Solver::TotalAccelerationOnPlanet(Planet& planet, int index){ //calculate total acceleration on planet
-  vec accel(3, 0.0); // acceleration vector [a_x, a_y, a_z] filled with zeros [0,0,0]
+  vec accel(3, fill::zeros); // acceleration vector [a_x, a_y, a_z] filled with zeros [0,0,0]
   for(int i =0; i < planets.size(); i++){ // find neighbour planets and calculate acceleration
-    if(planets[i].name == planet.name){
+    if(planets[i].name != planet.name){
       accel += planet.gravitationalForce(planets[i], index, N); //fetch gravitationalForce on planet due to neighbour planet for a given time (=index)
     } else{
       cout << "Calculate forces on " << planets[i].name << endl;
