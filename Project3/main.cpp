@@ -8,14 +8,15 @@ vector<Planet> read_initial(int N_objects, int N_points, vector<string> object_n
 
 int main(int argc, char const *argv[]) {
 
-  Planet sun(1.989e30, 0., 0., 0., 0., 0., 0., "sun");
-  Planet earth(5.972e24, 1., 0., 0., 0., 1., 0., "earth");
+  int N_points = 10000;
+  Planet sun(1, 0., 0., 0., 0., 0., 0., "sun", N_points);
+  Planet earth(5.972e24/1.989e30, 1., 0., 0., 0., 2*3.141592, 0., "earth", N_points);
 
   vector<Planet> planets;
   planets.push_back(sun);
   planets.push_back(earth);
 
-  Solver solv(planets,5, 10, "sysA");
+  Solver solv(planets, N_points , 1, "sysA");
   solv.VelocityVerlet();
 
 

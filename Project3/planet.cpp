@@ -3,8 +3,9 @@
 using namespace std;
 using namespace arma;
 
-Planet::Planet(double m, double x, double y, double z, double vx, double vy, double vz, string thisName){
+Planet::Planet(double m, double x, double y, double z, double vx, double vy, double vz, string thisName, int N_){
 
+  N = N_;
   pos = vec(3*N); vel = vec(3*N);
 
   mass = m;
@@ -15,6 +16,7 @@ Planet::Planet(double m, double x, double y, double z, double vx, double vy, dou
   vel[0] = vx;
   vel[N] = vy;
   vel[2*N] = vz;
+  cout << "n val" << N << endl;
 
 
 }
@@ -38,6 +40,7 @@ vec Planet::gravitationalForce(Planet& otherPlanet, int index, int N){
   //double r = distanceOther(otherPlanet, index);
   //vec Fg = G_scale * mass * otherPlanet.mass / (r * r);
   //vec Fg =  otherPlanet.mass / (r * r); //use if TotalForceOnPlanet is used in solve
+
   vec r_vec =  distanceOther(otherPlanet, index, N);
   double r = sqrt(dot(r_vec,r_vec));
   vec Fg = otherPlanet.mass * r_vec / (r*r*r); // !!!!!!! Rename Acceleration since not dividing by planet.mass?????????
