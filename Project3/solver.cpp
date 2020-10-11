@@ -7,9 +7,8 @@ Solver::Solver(vector<Planet> sysPlanets, int N_val, double t_n_val, string sys)
   planets = sysPlanets;
   N = N_val;
   t_n = t_n_val;
-  sysName = sysName_;
 
-  cout << "solv N:" << N << endl;
+  cout << "solv N: " << N<< endl;
 }
 
 vec Solver::TotalAccelerationOnPlanet(Planet& planet, int index){ //calculate total acceleration on planet
