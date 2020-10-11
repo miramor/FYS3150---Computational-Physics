@@ -35,6 +35,8 @@ class Solver{
     void EulerCromer();
     vec TotalAccelerationOnPlanet(Planet& planet, int index);
     void WriteResults();
+    
+    double getTotalEnergy();
 };
 
 #endif

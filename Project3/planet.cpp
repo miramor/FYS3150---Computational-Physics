@@ -44,3 +44,11 @@ vec Planet::gravitationalForce(Planet& otherPlanet, int index, int N){
   vec Fg = otherPlanet.mass * r_vec / (r*r*r); // !!!!!!! Rename Acceleration since not dividing by planet.mass?????????
   return Fg;
 }
+
+double Planet::getKE(){
+  return kE;
+}
+
+double Planet::getKE(){
+  return pE;
+}

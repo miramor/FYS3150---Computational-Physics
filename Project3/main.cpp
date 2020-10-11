@@ -19,6 +19,7 @@ int main(int argc, char const *argv[]) {
 
   Solver solv(planets, N_points , 1, "systemA");
   solv.EulerCromer();
+  solv.WriteResults();
 
 
   //Planet jupyter =planet(1.898E27 kg, vec p(3) = {2, 0, 0}, vec v(3) = {0, 1, 0});
