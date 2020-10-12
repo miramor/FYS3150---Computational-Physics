@@ -81,3 +81,12 @@ void Solver::WriteResults(){
     ofile << endl;
   }
 }
+
+double Solver::getTotalEnergy(){
+  //Gets energy of the whole system
+  double totE = 0;
+  for(int k=0; k < planets.size(); k++){
+    totE += planets[k].getTotalEnergy();
+  }
+
+}

@@ -33,8 +33,8 @@ class Planet{
     double distanceOther(int N_val, const Planet& otherPlanet, int index);
     vec gravitationForce(int N_val, const Planet& otherPlanet, int index);
 
-    double kineticEnergy();
-    double potentialEnergy();
+    double getKE();
+    double getPE();
 };
 
 #endif
