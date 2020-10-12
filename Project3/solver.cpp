@@ -21,6 +21,7 @@ vec Solver::TotalAccelerationOnPlanet(Planet& planet, int index){ //calculate to
 }
 
 void Solver::Euler(){
+  method = "E";
   double h = t_n/N; //stepsize
     for (int j = 0; j < N-1; j++){
         for(int k=0; k < planets.size(); k++){ //for every planet compute position and velocity at specific time j
@@ -87,7 +88,7 @@ void Solver::VelocityVerlet(){
 
 void Solver::WriteResults(){
   ofstream ofile;
-  ofile.open("Results/" + sysName + ".csv");
+  ofile.open("Results/" + sysName + "_" + method + ".csv");
   ofile << method << endl;
   for (int j = 0; j < N; j ++){
     for (int k = 0; k < planets.size(); k ++){

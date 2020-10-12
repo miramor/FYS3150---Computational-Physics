@@ -10,7 +10,7 @@ print("Choose system:\n
 
 system = int(input("Input: "))
 """
-cla = sys.argv[1] + " " + sys.argv[2]
+cla = sys.argv[1] + " " + sys.argv[2] + " " + sys.argv[3]
 
 os.system("echo compiling...")
 os.system("make") #compile codes
