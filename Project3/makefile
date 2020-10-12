@@ -1,6 +1,5 @@
-
-LIB = -larmadillo -llapack -lblas
-CPPflags = c++ -std=c++17
+LIB = -larmadillo
+CPPflags = c++ -O0
 
 output: main.o planet.o solver.o
 	${CPPflags} main.o planet.o solver.o ${LIB} -o output.exe
