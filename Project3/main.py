@@ -11,6 +11,12 @@ print("Choose system:\n
 system = int(input("Input: "))
 """
 
+if not os.path.exists("Results"):
+    os.makedirs("Results")
+if not os.path.exists("Plots"):
+    os.makedirs("Plots")
+
+
 cla = sys.argv[1] + " " + sys.argv[2]
 
 os.system("echo compiling...")
