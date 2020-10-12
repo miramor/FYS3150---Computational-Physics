@@ -10,6 +10,7 @@ print("Choose system:\n
 
 system = int(input("Input: "))
 """
+
 cla = sys.argv[1] + " " + sys.argv[2]
 
 os.system("echo compiling...")

@@ -76,13 +76,17 @@ void Solver::VelocityVerlet(){
           planets[k].vel[j+1+2*N] =  planets[k].vel[j+2*N] + h_2*(accel[2]+accel_next[2]); // update z velocity
 
           //optimer med accel_next = accel
-
-
     }
-
   }
 
   return;
+}
+void Solver::VelocityVerlet2(){
+  method = "VV2";
+  double h = t_n/N;
+  double h_2 = h/2;
+
+
 }
 
 void Solver::WriteResults(){

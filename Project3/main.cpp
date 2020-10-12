@@ -23,8 +23,8 @@ int main(int argc, char const *argv[]) {
   vector<Planet> planets;
   planets = read_initial(systems[system], N_points);
   Solver solv(planets, N_points , t_end, system);
-  //solv.EulerCromer();
-  solv.VelocityVerlet();
+  solv.EulerCromer();
+  //solv.VelocityVerlet();
   solv.WriteResults();
 
   return 0;
