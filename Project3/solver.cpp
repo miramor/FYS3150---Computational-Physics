@@ -7,8 +7,6 @@ Solver::Solver(vector<Planet> sysPlanets, int N_val, double t_n_val, string sys)
   planets = sysPlanets;
   N = N_val;
   t_n = t_n_val;
-
-  cout << "solv N: " << N<< endl;
 }
 
 vec Solver::TotalAccelerationOnPlanet(Planet& planet, int index){ //calculate total acceleration on planet
@@ -88,9 +86,7 @@ void Solver::VelocityVerlet(){
 void Solver::WriteResults(){
   ofstream ofile;
   ofile.open("Results/" + sysName + ".csv");
-  cout << planets[0].pos[0] << endl;
-  cout << planets[0].pos[N] << endl;
-  cout << planets[0].pos[2*N] << endl;
+  
   for (int j = 0; j < N; j ++){
     for (int k = 0; k < planets.size(); k ++){
       ofile <<

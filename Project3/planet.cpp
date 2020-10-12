@@ -15,7 +15,7 @@ Planet::Planet(double m, double x, double y, double z, double vx, double vy, dou
   vel[0] = vx;
   vel[N] = vy;
   vel[2*N] = vz;
-  cout << "n val: " << N<< endl;
+  cout << "Initializing " << name << endl;
 
 }
 

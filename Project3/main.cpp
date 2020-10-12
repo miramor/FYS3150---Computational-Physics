@@ -1,39 +1,40 @@
 #include "solver.hpp"
 #include "planet.hpp"
-
+#include <map>
 using namespace arma;
 using namespace std;
 
-vector<Planet> read_initial(int N_objects, int N_points, vector<string> object_names);
+vector<Planet> read_initial(vector<string> object_names, int N_points);
 
 int main(int argc, char const *argv[]) {
-
-  int N_points = 10000;
-  Planet sun(1, 0., 0., 0., 0., 0., 0., "sun", N_points);
-  Planet earth(5.972e24/1.989e30, 1., 0., 0., 0., 2*3.141592, 0., "earth", N_points);
-
+  string system = "systemD";
+  map<string, vector<string>> systems;
+  systems["systemA"] = {"Sun", "Earth"};
+  systems["systemB"] = {"Sun", "Earth", "Jupiter"};
+  systems["systemC"] = {"Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"};
+  systems["systemD"] = {"Sun", "Mercury", "Earth"};
+  int N_points = 100000;
+  int t_end = 1;
   vector<Planet> planets;
-//  planets = read_initial(10, N_points)
-  planets.push_back(sun);
-  planets.push_back(earth);
 
-  Solver solv(planets, N_points , 1, "systemA");
+  //planets.push_back(Planet(1, 0., 0., 0., 0., 0., 0., "Sun", N_points));
+  //planets.push_back(Planet(5.97219e24/1988500e24, 1., 0., 0., 0., 2*3.141592, 0., "Earth", N_points));
+  //planets.push_back(Planet(1898.13e24/1988500e24, 5, 0., 0., 0., 2, 0., "Jupiter", N_points));
+  planets = read_initial(systems[system], N_points);
+  Solver solv(planets, N_points , t_end, system);
   solv.EulerCromer();
   solv.WriteResults();
   solv.VelocityVerlet();
 
-  //Planet jupyter =planet(1.898E27 kg, vec p(3) = {2, 0, 0}, vec v(3) = {0, 1, 0});
 
-  //Vector<Planet> planets;
-  //Vector<string> object_names = {"Sun", "Earth"};
-  //planets = read_initial(10, 100, object_names);
   return 0;
 }
-/*
-vector<Planet> read_initial(int N_objects, int N_points, vec<string> object_names){
+
+vector<Planet> read_initial(vector<string> sys_names, int N_points){
+  int N_objects = 10;
+  vector<string> object_names = {"Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"};
   double *x, *y, *z, *vx, *vy, *vz; //To store initial conditions for each particle.
   double *mass; //Store mass of particles.
-  string *names; //Store names of objects.
   x = new double[N_objects];
   y = new double[N_objects];
   z = new double[N_objects];
@@ -41,10 +42,9 @@ vector<Planet> read_initial(int N_objects, int N_points, vec<string> object_name
   vy = new double[N_objects];
   vz = new double[N_objects];
   mass = new double[N_objects];
-  names = new string[N_objects];
 
-  char* filename_pos_and_vel = "pos_vel_initial.txt";   //Each line of file gives initial condition for a particle on the form: x y z vx vy vz
-  char* filename_mass = "masses.txt"; //Each line of the file contains a mass for a given particle.
+  const char* filename_pos_and_vel = "pos_vel_initial.txt";   //Each line of file gives initial condition for a particle on the form: x y z vx vy vz
+  const char* filename_mass = "masses.txt"; //Each line of the file contains a mass for a given particle.
 
   //Open files
   FILE *fp_init = fopen(filename_pos_and_vel, "r"); //Open file to read, specified by "r".
@@ -52,22 +52,22 @@ vector<Planet> read_initial(int N_objects, int N_points, vec<string> object_name
 
   //Loop over each particle and extract its mass and initial conditions:
   for (int i = 0; i < N_objects; i++){
-  	fscanf(fp_init, "%s %lf %lf %lf %lf %lf %lf", &names[i], &x[i], &y[i], &z[i], &vx[i], &vy[i], &vz[i]); // One %lf (lf=long float or double) for each floating point number on each line of the file.
-  	fscanf(fp_mass, "%s %lf", &names[i], &mass[i]); //Extract mass for particle i.
+  	fscanf(fp_init, "%lf %lf %lf %lf %lf %lf", &x[i], &y[i], &z[i], &vx[i], &vy[i], &vz[i]); // One %lf (lf=long float or double) for each floating point number on each line of the file.
+  	fscanf(fp_mass, "%lf", &mass[i]); //Extract mass for particle i.
   }
 
   fclose(fp_init); //Close file with initial conditions
   fclose(fp_mass); //Close file with masses.
 
-  vec<Planet> planets[object_names.size()];
-  for (int i = 0; i < N_objects; i++){
-    for (int j = 0; j < object_names.size(); j++){
-      if (names[i] == object_names[j]){
-        planets[i] = Planet(names[i], mass[i], {x[i], y[i], z[i]}, {vx[i], vy[i], vz[i]});
-      }
+
+
+  vector<Planet> planets;
+  for (int i = 0; i < object_names.size(); i ++){
+    for (int j = 0; j < sys_names.size(); j ++){
+      if (object_names[i] == sys_names[j])
+        planets.push_back(Planet(mass[i]/mass[0], x[i], y[i], z[i], vx[i]*365, vy[i]*365, vz[i]*365, sys_names[j], N_points));
     }
   }
 
-  return planets;
+  return  planets;
 }
-*/
