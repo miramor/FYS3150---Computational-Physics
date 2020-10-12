@@ -22,6 +22,25 @@ vec Solver::TotalAccelerationOnPlanet(Planet& planet, int index){ //calculate to
   return accel*G_scale;
 }
 
+void Solver::Euler(){
+  double h = t_n/N; //stepsize
+    for (int j = 0; j < N-1; j++){
+        for(int k=0; k < planets.size(); k++){ //for every planet compute position and velocity at specific time j
+          vec h_accel = h*TotalAccelerationOnPlanet(planets[k], j); //fetch planet's acceleration vector [a_x, a_y, a_z] times h at a given time j
+          planets[k].vel[j+1] =  planets[k].vel[j] + h_accel[0]; // update x velocity
+          planets[k].vel[j+1+N] =  planets[k].vel[j+N] + h_accel[1]; // update y velocity
+          planets[k].vel[j+1+2*N] =  planets[k].vel[j+2*N] + h_accel[2]; // update z velocity
+
+          planets[k].pos[j+1] = planets[k].pos[j] + h*planets[k].vel[j]; // update x position
+          planets[k].pos[j+1+N] = planets[k].pos[j+N] + h*planets[k].vel[j+N]; // update y position
+          planets[k].pos[j+1+2*N] = planets[k].pos[j+2*N] + h*planets[k].vel[j+2*N]; // update z position
+    }
+  }
+  return;
+
+}
+
+
 void Solver::EulerCromer(){
   double h = t_n/N; //stepsize
     for (int j = 0; j < N-1; j++){
@@ -90,7 +109,8 @@ double Solver::getTotalEnergy(){
   //Gets energy of the whole system
   double totE = 0;
   for(int k=0; k < planets.size(); k++){
-    totE += planets[k].getTotalEnergy();
+    totE += planets[k].getPE();
+    totE += planets[k].getKE();
   }
-
+  return totE;
 }
