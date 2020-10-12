@@ -34,6 +34,7 @@ int main(int argc, char const *argv[]) {
       solv.VelocityVerlet();
   }
   solv.WriteResults();
+  //solv.VelocityVerlet();
 
   return 0;
 }

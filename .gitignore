@@ -37,3 +37,8 @@ Project2_copy*
 #Stuff
 Project2/test
 Project2/test_methods.cpp
+
+
+!Project3/Results/systemA_EC.csv
+!Project3/pos_vel_initial.txt
+!Project3/masses.txt

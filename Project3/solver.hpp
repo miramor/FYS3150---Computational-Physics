@@ -33,6 +33,7 @@ class Solver{
     Solver(vector<Planet> sysPlanets, int N_val, double t_n_val, string sys);
     //void addPlanet(Planet planet);
     void VelocityVerlet();
+    void VelocityVerlet2();
     void EulerCromer();
     void Euler();
     vec TotalAccelerationOnPlanet(Planet& planet, int index);
