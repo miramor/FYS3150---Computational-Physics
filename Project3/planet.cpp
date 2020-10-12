@@ -49,6 +49,6 @@ double Planet::getKE(){
   return kE;
 }
 
-double Planet::getKE(){
+double Planet::getPE(){
   return pE;
 }
