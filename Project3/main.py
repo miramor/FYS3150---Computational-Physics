@@ -1,24 +1,22 @@
 import sys
 import os
 import matplotlib.pyplot as plt
+"""
+print("Choose system:\n
+1. Sun, Earth \n
+2. Sun, Earth, Jupiter \n
+3. All planets + pluto \n
+4. Sun Earth Mercury")
 
-try:
-    if sys.argv[1] == "test":
-        os.system("echo compiling...")
-        os.system("c++ test.exe test.cpp") #compile codes
+system = int(input("Input: "))
+"""
+cla = sys.argv[1] + " " + sys.argv[2]
 
-        os.system("echo executing...")
-        os.system("./test.exe ")
-    else:
-        os.system("echo compiling...")
-        os.system("make") #compile codes
+os.system("echo compiling...")
+os.system("make") #compile codes
 
-        os.system("echo executing...")
-        os.system("./output.exe")
+os.system("echo executing...")
+os.system("./output.exe " + cla)
 
-except:
-    os.system("echo compiling...")
-    os.system("make") #compile codes
-
-    os.system("echo executing...")
-    os.system("./output.exe")
+os.system("echo making plots...")
+os.system("echo python3 plot_results.py " + cla)

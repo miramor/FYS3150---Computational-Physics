@@ -11,6 +11,12 @@ systems = {
 }
 parameters = ['x_','y_','z_','vx_','vy_','vz_']
 
+sys = sys.arg[1]
+
+with open("Results/" + system + ".csv", 'r') as f:
+    method = f.readline()
+print(method)
+
 def plot_sys(system):
     sys_names = [par + obj for obj in systems[system] for par in parameters]
     print(sys_names)
@@ -23,7 +29,7 @@ def plot_sys(system):
     plt.axis('equal')
     plt.legend()
     plt.title('%s' %(system))
-    plt.savefig("Plots/" + system + ".png", dpi=400)
+    plt.savefig("Plots/" + system + "_" + method + ".png", dpi=400)
     plt.show()
 
 
@@ -42,8 +48,8 @@ def plot3dPath(system):
         ax.plot(x,y,z, label = systems[system][i])
 
     ax.legend()
-    plt.savefig("Plots/" + system + "_3D.png", dpi=400)
+    plt.savefig("Plots/" + system + "_" + method + "_3D.png", dpi=400)
     plt.axis('equal')
     plt.show()
 
-plot3dPath("systemD")
+plot3dPath(sys)

@@ -7,25 +7,24 @@ using namespace std;
 vector<Planet> read_initial(vector<string> object_names, int N_points);
 
 int main(int argc, char const *argv[]) {
-  string system = "systemD";
+  string system = argv[1];
+  int t_end = atoi(argv[2]);
+  int N_points = 100000;
+
   map<string, vector<string>> systems;
   systems["systemA"] = {"Sun", "Earth"};
   systems["systemB"] = {"Sun", "Earth", "Jupiter"};
   systems["systemC"] = {"Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"};
   systems["systemD"] = {"Sun", "Mercury", "Earth"};
-  int N_points = 100000;
-  int t_end = 1;
-  vector<Planet> planets;
 
   //planets.push_back(Planet(1, 0., 0., 0., 0., 0., 0., "Sun", N_points));
   //planets.push_back(Planet(5.97219e24/1988500e24, 1., 0., 0., 0., 2*3.141592, 0., "Earth", N_points));
   //planets.push_back(Planet(1898.13e24/1988500e24, 5, 0., 0., 0., 2, 0., "Jupiter", N_points));
+  vector<Planet> planets;
   planets = read_initial(systems[system], N_points);
   Solver solv(planets, N_points , t_end, system);
   solv.EulerCromer();
   solv.WriteResults();
-
-
 
   return 0;
 }
