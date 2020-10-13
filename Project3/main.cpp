@@ -12,7 +12,7 @@ int main(int argc, char const *argv[]) {
   int t_end = atoi(argv[2]);
   int N_points = 100000;
 
-  map<string, vector<string>> systems;
+  map<string, vector<string> > systems;
   systems["systemA"] = {"Sun", "Earth"};
   systems["systemB"] = {"Sun", "Earth", "Jupiter"};
   systems["systemC"] = {"Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"};
