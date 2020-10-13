@@ -8,6 +8,7 @@ vector<Planet> read_initial(vector<string> object_names, int N_points);
 
 int main(int argc, char const *argv[]) {
   string system = argv[1];
+  string method = argv[3];
   int t_end = atoi(argv[2]);
   int N_points = 100000;
 
@@ -23,9 +24,17 @@ int main(int argc, char const *argv[]) {
   vector<Planet> planets;
   planets = read_initial(systems[system], N_points);
   Solver solv(planets, N_points , t_end, system);
-  //solv.EulerCromer();
-  solv.VelocityVerlet();
+  if(method=="E"){
+      solv.Euler();
+  }
+  if(method=="EC"){
+      solv.EulerCromer();
+  }
+  if(method=="VV"){
+      solv.VelocityVerlet();
+  }
   solv.WriteResults();
+  //solv.VelocityVerlet();
 
   return 0;
 }
