@@ -10,8 +10,6 @@ using namespace std;
 class Planet{
   private:
     vec acceleration;
-    double kE;
-    double pE;
     double G = 6.67408e-11; //Gravitational constant
     double pi = 2*acos(0.0);
     double G_scale = 4*pi*pi;
@@ -35,8 +33,6 @@ class Planet{
     double distanceOther(int N_val, const Planet& otherPlanet, int index);
     vec gravitationForce(int N_val, const Planet& otherPlanet, int index);
 
-    double getKE();
-    double getPE();
     vec getKEvec();
     vec getPEvec();
 };

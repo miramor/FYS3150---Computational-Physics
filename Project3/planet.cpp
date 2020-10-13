@@ -6,6 +6,8 @@ using namespace arma;
 Planet::Planet(double m, double x, double y, double z, double vx, double vy, double vz, string thisName, int N_points){
 
   N = N_points;
+  KEvec = vec(N);
+  PEvec = vec(N);
   pos = vec(3*N); vel = vec(3*N);
   mass = m;
   name = thisName;
@@ -46,9 +48,9 @@ vec Planet::gravitationalForce(Planet& otherPlanet, int index, int N){
 }
 
 double Planet::getKE(){
-  return kE;
+  return KEvec;
 }
 
 double Planet::getPE(){
-  return pE;
+  return PEvec;
 }
