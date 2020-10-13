@@ -23,6 +23,8 @@ class Planet{
     double mass;
     vec pos;
     vec vel;
+    vec KEvec;
+    vec PEvec;
     string name;
 
     Planet(double m, double x, double y, double z, double vx, double vy, double vz, string thisName, int N_points);
@@ -35,6 +37,8 @@ class Planet{
 
     double getKE();
     double getPE();
+    vec getKEvec();
+    vec getPEvec();
 };
 
 #endif

@@ -66,7 +66,7 @@ void Solver::VelocityVerlet(){
   double h_2 = h/2.0; //stepsize
     for (int j = 0; j < N-1; j++){
         for(int k=0; k < planets.size(); k++){ //for every planet compute position and velocity at specific time j
-          accel = TotalAccelerationOnPlanet(planets[k], j); //fetch planet's acceleration vector [a_x, a_y, a_z] times h at a given time j
+          vec accel = TotalAccelerationOnPlanet(planets[k], j); //fetch planet's acceleration vector [a_x, a_y, a_z] times h at a given time j
           planets[k].pos[j+1] = planets[k].pos[j] + h*planets[k].vel[j] + h*h_2*accel[0]; // update x position
           planets[k].pos[j+1+N] = planets[k].pos[j+N] + h*planets[k].vel[j+N]+ h*h_2*accel[1]; // update y position
           planets[k].pos[j+1+2*N] = planets[k].pos[j+2*N] + h*planets[k].vel[j+2*N]+ h*h_2*accel[2]; // update z position
@@ -94,8 +94,8 @@ void Solver::VelocityVerlet2(){
 
 void Solver::WriteResults(){
   ofstream ofile;
-  ofile.open("Results/" + sysName + "_" + method + ".csv");
-  ofile << method << endl;
+  ofile.open("Results/" + sysName + "_" + method +".csv");
+  ofile << method << ", " <<  t_n/N << ", " << t_n << endl;
   for (int j = 0; j < N; j ++){
     for (int k = 0; k < planets.size(); k ++){
       ofile <<
