@@ -94,8 +94,8 @@ void Solver::VelocityVerlet2(){
 
 void Solver::WriteResults(){
   ofstream ofile;
-  ofile.open("Results/" + sysName + "_" + method + ".csv");
-  ofile << method << endl;
+  ofile.open("Results/" + sysName + "_" + method +".csv");
+  ofile << method << ", " <<  t_n/N << ", " << t_n << endl;
   for (int j = 0; j < N; j ++){
     for (int k = 0; k < planets.size(); k ++){
       ofile <<

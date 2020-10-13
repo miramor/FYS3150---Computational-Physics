@@ -3,6 +3,11 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import pandas as pd
 import sys
+import csv
+import glob
+
+files = glob.glob('./Results/*.csv')
+print(files)
 
 systems = {
 "systemA": ["Sun", "Earth"],
@@ -27,6 +32,11 @@ print(method)
 
 
 def plot_sys(system):
+    with open("test.csv", "r") as f:
+        reader = csv.reader(f)
+        row = next(reader)
+        print(row)
+
     sys_names = [par + obj for obj in systems[system] for par in parameters]
     sys_data = pd.read_csv("Results/" + system + "_"+ method + ".csv", index_col=False, names=sys_names, skiprows=1)
     N = len(sys_data[sys_names[0]])
