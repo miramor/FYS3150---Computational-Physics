@@ -8,9 +8,10 @@ vector<Planet> read_initial(vector<string> object_names, int N_points);
 
 int main(int argc, char const *argv[]) {
   string system = argv[1];
-  string method = argv[3];
-  int t_end = atoi(argv[2]);
-  int N_points = 100000;
+  string method = argv[2];
+  int t_end = atoi(argv[3]);
+  int h = stof(argv[4]);
+  int N_points = (int) ((double) t_end/h);
 
   map<string, vector<string> > systems;
   systems["systemA"] = {"Sun", "Earth"};
@@ -18,11 +19,12 @@ int main(int argc, char const *argv[]) {
   systems["systemC"] = {"Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"};
   systems["systemD"] = {"Sun", "Mercury", "Earth"};
 
-  //planets.push_back(Planet(1, 0., 0., 0., 0., 0., 0., "Sun", N_points));
-  //planets.push_back(Planet(5.97219e24/1988500e24, 1., 0., 0., 0., 2*3.141592, 0., "Earth", N_points));
   //planets.push_back(Planet(1898.13e24/1988500e24, 5, 0., 0., 0., 2, 0., "Jupiter", N_points));
   vector<Planet> planets;
-  planets = read_initial(systems[system], N_points);
+  planets.push_back(Planet(1, 0., 0., 0., 0., 0., 0., "Sun", N_points));
+  planets.push_back(Planet(5.97219e24/1988500e24, 1., 0., 0., 0., 2*3.141592, 0., "Earth", N_points));
+
+  //planets = read_initial(systems[system], N_points);
   Solver solv(planets, N_points , t_end, system);
   if(method=="E"){
       solv.Euler();

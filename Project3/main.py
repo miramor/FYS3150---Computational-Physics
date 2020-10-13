@@ -1,16 +1,8 @@
 import sys
 import os
 import matplotlib.pyplot as plt
-"""
-print("Choose system:\n
-1. Sun, Earth \n
-2. Sun, Earth, Jupiter \n
-3. All planets + pluto \n
-4. Sun Earth Mercury")
 
-system = int(input("Input: "))
-"""
-cla = sys.argv[1] + " " + sys.argv[2] + " " + sys.argv[3]
+cla = sys.argv[1] + " " + sys.argv[2] + " " + sys.argv[3] + " " + sys.argv[4]
 
 os.system("echo compiling...")
 os.system("make") #compile codes
