@@ -94,7 +94,7 @@ void Solver::VelocityVerlet2(){
 
 void Solver::WriteResults(){
   ofstream ofile;
-  ofile.open("Results/" + sysName + "_" + method +".csv");
+  ofile.open("Results/" + sysName + "_" + method + ".csv");
   ofile << method << ", " <<  t_n/N << ", " << t_n << endl;
   for (int j = 0; j < N; j ++){
     for (int k = 0; k < planets.size(); k ++){
@@ -110,12 +110,12 @@ void Solver::WriteResults(){
   }
 }
 
-double Solver::getTotalEnergy(){
-  //Gets energy of the whole system
-  double totE = 0;
-  for(int k=0; k < planets.size(); k++){
-    totE += planets[k].getPE();
-    totE += planets[k].getKE();
-  }
-  return totE;
-}
+// double Solver::getTotalEnergy(){
+//   //Gets energy of the whole system
+//   double totE = 0;
+//   for(int k=0; k < planets.size(); k++){
+//     totE += planets[k].getPE();
+//     totE += planets[k].getKE();
+//   }
+//   return totE;
+// }

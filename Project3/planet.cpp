@@ -47,10 +47,10 @@ vec Planet::gravitationalForce(Planet& otherPlanet, int index, int N){
   return Fg;
 }
 
-double Planet::getKE(){
-  return KEvec;
-}
-
-double Planet::getPE(){
-  return PEvec;
-}
+// double Planet::getKE(){
+//   return KEvec;
+// }
+//
+// double Planet::getPE(){
+//   return PEvec;
+// }

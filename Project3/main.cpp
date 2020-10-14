@@ -10,8 +10,12 @@ int main(int argc, char const *argv[]) {
   string system = argv[1];
   string method = argv[2];
   int t_end = atoi(argv[3]);
-  int h = stof(argv[4]);
-  int N_points = (int) ((double) t_end/h);
+  double h = stof(argv[4]);
+  //cout << "Type " << typeid((double)t_end).name() << endl;
+  //cout << "Type " << typeid(t_end/h).name() << endl;
+  //double t_ = (double) t_end;
+  int N_points = (int) ( (double)t_end/h);
+  cout << N_points << endl;
 
   map<string, vector<string> > systems;
   systems["systemA"] = {"Sun", "Earth"};

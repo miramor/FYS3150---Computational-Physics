@@ -39,7 +39,7 @@ class Solver{
     vec TotalAccelerationOnPlanet(Planet& planet, int index);
     void WriteResults();
 
-    double getTotalEnergy();
+    //double getTotalEnergy();
 };
 
 #endif
