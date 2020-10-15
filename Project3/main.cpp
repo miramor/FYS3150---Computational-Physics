@@ -10,7 +10,7 @@ int main(int argc, char const *argv[]) {
   string system = argv[1];
   string method = argv[2];
   int t_end = atoi(argv[3]);
-  double h = stof(argv[4]);
+  double h = argv[4];
   int N_points = (int) ( (double)t_end/h);
   //cout << N_points << endl;
 

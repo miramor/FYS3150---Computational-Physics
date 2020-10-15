@@ -96,11 +96,8 @@ void Solver::testTotE(){
     endE += calcPE(k, N-1) + calcKE(k, N-1);
   }
   double error = abs(startE) - abs(endE);
-  if( error > eps){
-    cout << "Total energy in system is not sufficiently conserved, diff: " << error << endl;
-  }
-  cout << "StartE vs endE: " << error << ", " << startE << ", " << endE << endl;
-
+  cout << "Start vs end energy: "<< startE << ", " << endE << endl;
+  cout << "Error  = " << error << endl;
 }
 
 double Solver::calcKE(int k, int j){

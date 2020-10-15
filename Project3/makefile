@@ -1,5 +1,5 @@
 LIB = -larmadillo
-CPPflags = g++ -std=c++17 -O0
+CPPflags = g++ -std=c++17 -O3
 
 output: main.o planet.o solver.o
 	${CPPflags} main.o planet.o solver.o ${LIB} -o output.exe
