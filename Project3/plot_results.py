@@ -12,22 +12,28 @@ import glob
 systems = {
 "systemA": ["Sun", "Earth"],
 "systemB": ["Sun", "Earth", "Jupiter"],
-"systemC": ["Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"],
+"systemC": ["Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"],
 "systemD": ["Sun", "Mercury", "Earth"]
 }
 MethodDic = {"E":"Euler", "VV": "Velocity Verlet", "EC": "Euler-Cromer"}
 parameters = ['x_','y_','z_','vx_','vy_','vz_']
 
 system = sys.argv[1]
-print(system)
 method = sys.argv[2]
 t_end = int(sys.argv[3])
 h = float(sys.argv[4])
-print(method)
+f_masses = open("masses.txt", 'r')
+masses = [float(i) for i in f_masses.readlines()]
+massesDic = {i:j for i,j in zip(systems["systemC"], masses)}
 
-# f = open("Results/" + system + ".csv", "r")
-# method = f.readline().strip()
-# f.close()
+
+
+def plotEnergy(system):
+    sys_names = [par + obj for obj in systems[system] for par in parameters]
+    sys_data = pd.read_csv("Results/" + system + "_"+ method + ".csv", index_col=False, names=sys_names, skiprows=1)
+    N = len(sys_data[sys_names[0]])
+
+
 
 
 
@@ -38,7 +44,6 @@ def plot_sys(system):
 #         print(row)
 
     sys_names = [par + obj for obj in systems[system] for par in parameters]
-    print(sys_names)
     sys_data = pd.read_csv("Results/" + system + "_"+ method + ".csv", index_col=False, names=sys_names, skiprows=1)
     N = len(sys_data[sys_names[0]])
     for i in range(int(len(sys_names)/6)):

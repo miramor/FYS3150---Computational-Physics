@@ -42,8 +42,9 @@ vec Planet::gravitationalForce(Planet& otherPlanet, int index, int N){
   //vec Fg =  otherPlanet.mass / (r * r); //use if TotalForceOnPlanet is used in solve
 
   vec r_vec =  - distanceOther(otherPlanet, index, N);
+  double Beta = 2;
   double r = sqrt(dot(r_vec,r_vec));
-  vec Fg = otherPlanet.mass * r_vec / (r*r*r); // !!!!!!! Rename Acceleration since not dividing by planet.mass?????????
+  vec Fg = otherPlanet.mass * (r_vec/r) / (pow(r,Beta)); // !!!!!!! Rename Acceleration since not dividing by planet.mass?????????
   return Fg;
 }
 

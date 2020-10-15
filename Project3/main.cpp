@@ -20,7 +20,7 @@ int main(int argc, char const *argv[]) {
   map<string, vector<string> > systems;
   systems["systemA"] = {"Sun", "Earth"};
   systems["systemB"] = {"Sun", "Earth", "Jupiter"};
-  systems["systemC"] = {"Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"};
+  systems["systemC"] = {"Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"};
   systems["systemD"] = {"Sun", "Mercury", "Earth"};
 
   //planets.push_back(Planet(1898.13e24/1988500e24, 5, 0., 0., 0., 2, 0., "Jupiter", N_points));
