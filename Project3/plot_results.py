@@ -51,6 +51,7 @@ def plot_sys(system):
         y = sys_data[sys_names[i*6+1]]
         plt.plot(x,y, label = systems[system][i])
 
+    """
     li = sys_data["x_Earth"].tail(1).index.item()
     xe0 = sys_data["x_Earth"][0]
     ye0 = sys_data["y_Earth"][0]
@@ -62,18 +63,17 @@ def plot_sys(system):
     absxe = abs(xe0-xel)
     absye = abs(ye0-yel)
     absze = abs(ze0-zel)
-    print(sys_data["x_Earth"][li])
-    print("XXXXXXX")
+    #print(sys_data["x_Earth"][li])
     print(f"Check x position: {xe0}, {xel}, {absxe:.2e}")
     print(f"Check y position: {ye0}, {yel}, {absye:.2e}")
     print(f"Check z position: {ze0}, {zel}, {absze:.2e}")
+    """
 
     plt.axis('equal')
     plt.legend()
     plt.ylabel("AU")
     plt.xlabel("AU")
     plt.title('%s - %s, h = %s'%(system, MethodDic[method],h))
-    print("hei")
     plt.savefig("Plots/" + system + "_" + method + "_" + f"{t_end}" + ".png", dpi=400)
     plt.show()
 
@@ -99,5 +99,6 @@ def plot3dPath(system):
     ax.set_xlabel("AU")
     plt.savefig("Plots/" + system + "_" + method + "_" + f"{t_end}" + "_3D.png", dpi=400)
     plt.show()
+
 plot_sys(system)
 #plot3dPath(system)

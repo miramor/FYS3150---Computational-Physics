@@ -7,13 +7,14 @@ Solver::Solver(vector<Planet> sysPlanets, int N_val, double t_n_val, string sys)
   planets = sysPlanets;
   N = N_val;
   t_n = t_n_val;
+  //cout << "PRINT OUT PI:  " << pi << endl;
 }
 
 vec Solver::TotalAccelerationOnPlanet(Planet& planet, int index){ //calculate total acceleration on planet
   vec accel(3, fill::zeros); // acceleration vector [a_x, a_y, a_z] filled with zeros [0,0,0]
   for(int i =0; i < planets.size(); i++){ // find neighbour planets and calculate acceleration
     if(planets[i].name != planet.name){
-      accel += planet.gravitationalForce(planets[i], index, N); //fetch gravitationalForce on planet due to neighbour planet for a given time (=index)
+      accel += planet.gravitationalForce(planets[i], index); //fetch gravitationalForce on planet due to neighbour planet for a given time (=index)
 
     }
   }
@@ -84,6 +85,51 @@ void Solver::VelocityVerlet(){
 
   return;
 }
+
+void Solver::testTotE(){
+  double eps = 1e-7;
+  //calculate total energy last and first timestep, check if diff smaller than eps
+  double startE = 0;
+  double endE = 0;
+  for(int k = 0; k < planets.size() ; k++){
+    startE += calcPE(k, 0) + calcKE(k, 0);
+    endE += calcPE(k, N-1) + calcKE(k, N-1);
+  }
+  double error = abs(startE) - abs(endE);
+  if( error > eps){
+    cout << "Total energy in system is not sufficiently conserved, diff: " << error << endl;
+  }
+  cout << "StartE vs endE: " << error << ", " << startE << ", " << endE << endl;
+
+}
+
+double Solver::calcKE(int k, int j){
+  double K = 0;
+  Planet plan = planets[k];
+  double vx2 = pow(plan.vel[j], 2);
+  double vy2 = pow(plan.vel[j+N], 2);
+  double vz2 = pow(plan.vel[j+2*N], 2);
+  K += 0.5 * plan.mass *(vx2 + vy2 + vz2);
+  return K;
+}
+
+double Solver::calcPE(int k, int j){
+  // Calculates potential energy for ONE planet by ONE timepoint
+  double U = 0; //pot energy
+  double m1 = planets[k].mass; //this mass
+  double r; // distance between the 2 planets
+  double m2; //other planet mass
+
+  //Sum up potential energy for all the planets
+  for(int i = 0; i < planets.size() ;i++)
+    if( i != k){
+      m2 = planets[i].mass;
+      r = norm(planets[k].distanceOther(planets[i], j));
+      U -= m1*m2*G_scale/r;
+    }
+  return U;
+}
+
 void Solver::VelocityVerlet2(){
   method = "VV2";
   double h = t_n/N;

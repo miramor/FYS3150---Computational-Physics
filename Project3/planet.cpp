@@ -22,7 +22,7 @@ Planet::Planet(double m, double x, double y, double z, double vx, double vy, dou
 }
 
 
-vec Planet::distanceOther(Planet& otherPlanet, int index, int N){
+vec Planet::distanceOther(Planet& otherPlanet, int index){
   //vec dr = pos - otherPlanet.pos;
   //return sqrt(dr(0)*dr(0) + dr(1)*dr(1) + dr(2)*dr(2));
 
@@ -36,14 +36,14 @@ vec Planet::distanceOther(Planet& otherPlanet, int index, int N){
   return dis;
 }
 
-vec Planet::gravitationalForce(Planet& otherPlanet, int index, int N){
+vec Planet::gravitationalForce(Planet& otherPlanet, int index){
   //double r = distanceOther(otherPlanet, index);
   //vec Fg = G_scale * mass * otherPlanet.mass / (r * r);
   //vec Fg =  otherPlanet.mass / (r * r); //use if TotalForceOnPlanet is used in solve
 
   vec r_vec =  - distanceOther(otherPlanet, index, N);
   double Beta = 2;
-  double r = sqrt(dot(r_vec,r_vec));
+  double r = norm(v_vec);
   vec Fg = otherPlanet.mass * (r_vec/r) / (pow(r,Beta)); // !!!!!!! Rename Acceleration since not dividing by planet.mass?????????
   return Fg;
 }

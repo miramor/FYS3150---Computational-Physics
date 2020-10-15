@@ -26,12 +26,11 @@ class Planet{
     string name;
 
     Planet(double m, double x, double y, double z, double vx, double vy, double vz, string thisName, int N_points);
-    vec distanceOther(Planet& otherPlanet, int index, int N);
-    vec gravitationalForce(Planet& otherPlanet, int index, int N);
+    vec distanceOther(Planet& otherPlanet, int index);
+    double distanceOther(const Planet& otherPlanet, int index);
+    vec gravitationalForce(Planet& otherPlanet, int index);
 
     Planet(double m, vec position, vec velocity);
-    double distanceOther(int N_val, const Planet& otherPlanet, int index);
-    vec gravitationForce(int N_val, const Planet& otherPlanet, int index);
 
     vec getKEvec();
     vec getPEvec();
