@@ -7,6 +7,7 @@
 #include <fstream>
 #include <iomanip>
 #include <vector>
+#include <cmath>
 #include "planet.hpp"
 
 using std::vector;
@@ -26,6 +27,7 @@ class Solver{
     double totalPE;
     double pi = 2*acos(0.0);
     double G_scale = 4*pi*pi;
+    double G = 6.67408e-11; //Gravitational constant
     string sysName;
     string method;
 
@@ -38,6 +40,9 @@ class Solver{
     void Euler();
     vec TotalAccelerationOnPlanet(Planet& planet, int index);
     void WriteResults();
+    void testTotE();
+    double calcPE(int k, int j);
+    double calcKE(int k, int j);
 
     //double getTotalEnergy();
 };
