@@ -10,7 +10,8 @@ int main(int argc, char const *argv[]) {
   string system = argv[1];
   string method = argv[2];
   int t_end = atoi(argv[3]);
-  double h = argv[4];
+  double h = stod(argv[4]);
+  double pi = 2*acos(0.0);
   int N_points = (int) ( (double)t_end/h);
   //cout << N_points << endl;
 
@@ -18,15 +19,16 @@ int main(int argc, char const *argv[]) {
   systems["systemA"] = {"Sun", "Earth"};
   systems["systemB"] = {"Sun", "Earth", "Jupiter"};
   systems["systemC"] = {"Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"};
-  systems["systemD"] = {"Sun", "Mercury", "Earth"};
+  systems["systemD"] = {"Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter"};
 
   //planets.push_back(Planet(1898.13e24/1988500e24, 5, 0., 0., 0., 2, 0., "Jupiter", N_points));
   vector<Planet> planets;
-  planets.push_back(Planet(1, 0., 0., 0., 0., 0., 0., "Sun", N_points));
-  planets.push_back(Planet(5.97219e24/1988500e24, 1., 0., 0., 0., 2*3.141592, 0., "Earth", N_points));
+  planets = read_initial(systems[system], N_points);
 
-  //planets = read_initial(systems[system], N_points);
+  //planets.push_back(Planet(1, 0., 0., 0., 0., 0., 0., "Sun", N_points));
+  //planets.push_back(Planet(5.97219e24/1988500e24, 1., 0., 0., 0., 1.42*2*pi, 0., "Earth", N_points));
   Solver solv(planets, N_points , t_end, system);
+
   if(method=="E"){
       solv.Euler();
   }

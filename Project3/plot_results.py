@@ -13,7 +13,7 @@ systems = {
 "systemA": ["Sun", "Earth"],
 "systemB": ["Sun", "Earth", "Jupiter"],
 "systemC": ["Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"],
-"systemD": ["Sun", "Mercury", "Earth"]
+"systemD": ["Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter"]
 }
 MethodDic = {"E":"Euler", "VV": "Velocity Verlet", "EC": "Euler-Cromer"}
 parameters = ['x_','y_','z_','vx_','vy_','vz_']
@@ -74,7 +74,7 @@ def plot_sys(system):
     plt.ylabel("AU")
     plt.xlabel("AU")
     plt.title('%s - %s, h = %s'%(system, MethodDic[method],h))
-    plt.savefig("Plots/" + system + "_" + method + "_" + f"{t_end}" + ".png", dpi=400)
+    plt.savefig("Plots/" + system + "_" + method + "_" + f"{t_end}" + ".pdf", dpi=400)
     plt.show()
 
 
@@ -83,7 +83,8 @@ def plot3dPath(system):
     # eller flere i samme.
     sys_names = [par + obj for obj in systems[system] for par in parameters]
     sys_data = pd.read_csv("Results/" + system + "_"+ method + ".csv", index_col=False, names=sys_names, skiprows=1)
-    fig = plt.figure()
+    fig = plt.figure(figsize = (10,8))
+
     ax = fig.gca(projection='3d')
     N = len(sys_data[sys_names[0]])
     for i in range(int(len(sys_names)/6)):
@@ -91,14 +92,14 @@ def plot3dPath(system):
         y = sys_data[sys_names[i*6+1]]
         z = sys_data[sys_names[i*6+2]]
         ax.plot(x,y,z, label = systems[system][i])
+    ax.legend(loc="center left", ncol=1)
 
-    ax.legend()
     plt.title('%s - %s, h = %s' %(system, MethodDic[method],h))
     ax.set_zlabel("AU")
     ax.set_ylabel("AU")
     ax.set_xlabel("AU")
-    plt.savefig("Plots/" + system + "_" + method + "_" + f"{t_end}" + "_3D.png", dpi=400)
+    plt.savefig("Plots/" + system + "_" + method + "_" + f"{t_end}" + "_3D.pdf", dpi=400)
     plt.show()
 
-plot_sys(system)
-#plot3dPath(system)
+#plot_sys(system)
+plot3dPath(system)

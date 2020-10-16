@@ -87,7 +87,7 @@ void Solver::VelocityVerlet(){
 }
 
 void Solver::testTotE(){
-  double eps = 1e-7;
+  double eps = 1e-5;
   //calculate total energy last and first timestep, check if diff smaller than eps
   double startE = 0;
   double endE = 0;
@@ -96,8 +96,10 @@ void Solver::testTotE(){
     endE += calcPE(k, N-1) + calcKE(k, N-1);
   }
   double error = abs(startE) - abs(endE);
-  cout << "Start vs end energy: "<< startE << ", " << endE << endl;
-  cout << "Error  = " << error << endl;
+  if (abs(error) > eps)
+      cout << "The total energy is not conserved.\n Error: " << abs(error) << endl;
+
+  cout << "Error = " << error << endl;
 }
 
 double Solver::calcKE(int k, int j){
