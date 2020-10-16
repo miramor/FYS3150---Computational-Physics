@@ -12,7 +12,7 @@ import glob
 systems = {
 "systemA": ["Sun", "Earth"],
 "systemB": ["Sun", "Earth", "Jupiter"],
-"systemC": ["Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"],
+"systemC": ["Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"],
 "systemD": ["Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter"]
 }
 MethodDic = {"E":"Euler", "VV": "Velocity Verlet", "EC": "Euler-Cromer"}
