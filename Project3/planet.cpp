@@ -44,7 +44,18 @@ vec Planet::gravitationalForce(Planet& otherPlanet, int index){
   vec r_vec =  - distanceOther(otherPlanet, index);
   double Beta = 2;
   double r = norm(r_vec);
-  vec Fg = otherPlanet.mass * (r_vec/r) / (pow(r,Beta)); // !!!!!!! Rename Acceleration since not dividing by planet.mass?????????
+  vec Fg;
+  if (name == "Mercury" || otherPlanet.name == "Sun"){
+    vec v_vec(3);
+    v_vec[0] = vel[index]-otherPlanet.vel[index];
+    v_vec[1] = vel[index+N]-otherPlanet.vel[index+N];
+    v_vec[2] = vel[index+2*N]-otherPlanet.vel[index+2*N];
+    double l = norm(cross(r_vec,v_vec)); //Angular orbital momentum
+    Fg = otherPlanet.mass * (r_vec/r) * (1 + 3*l*l/(r*r*c_sq)) / (pow(r,Beta));
+  }
+  else{
+    Fg = otherPlanet.mass * (r_vec/r) / (pow(r,Beta));
+  }
   return Fg;
 }
 

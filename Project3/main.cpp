@@ -20,6 +20,7 @@ int main(int argc, char const *argv[]) {
   systems["systemB"] = {"Sun", "Earth", "Jupiter"};
   systems["systemC"] = {"Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"};
   systems["systemD"] = {"Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter"};
+  systems["systemE"] = {"Sun", "Mercury"};
 
   //planets.push_back(Planet(1898.13e24/1988500e24, 5, 0., 0., 0., 2, 0., "Jupiter", N_points));
   vector<Planet> planets;
@@ -30,6 +31,11 @@ int main(int argc, char const *argv[]) {
   planets.push_back(Planet(5.97219e24/1988500e24, 1., 0., 0., 0., 2*pi, 0., "Earth", N_points)); //v_circular
   //planets.push_back(Planet(5.97219e24/1988500e24, 1., 0., 0., 0., 5, 0., "Earth", N_points)); //v_elliptical
   planets.push_back(Planet(1.89813e27*1000/1988500e24, 5.1, 0., 0., 0., 2*pi*5.1/11.86, 0., "Jupiter", N_points)); //v_circular
+
+  planets.push_back(Planet(1, 0., 0., 0., 0., 0., 0., "Sun", N_points));
+  planets.push_back(Planet(3.285E23/1988500e24 , 0.3075, 0., 0., 0., 12.44, 0., "Mercury", N_points));
+
+  //planets.push_back(Planet(5.97219e24/1988500e24, 1., 0., 0., 0., 1.42*2*pi, 0., "Earth", N_points));
   Solver solv(planets, N_points , t_end, system);
 
   if(method=="E"){

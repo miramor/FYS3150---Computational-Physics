@@ -13,7 +13,8 @@ systems = {
 "systemA": ["Sun", "Earth"],
 "systemB": ["Sun", "Earth", "Jupiter"],
 "systemC": ["Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"],
-"systemD": ["Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter"]
+"systemD": ["Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter"],
+"systemE": ["Sun", "Mercury"]
 }
 MethodDic = {"E":"Euler", "VV": "Velocity Verlet", "EC": "Euler-Cromer"}
 parameters = ['x_','y_','z_','vx_','vy_','vz_']
