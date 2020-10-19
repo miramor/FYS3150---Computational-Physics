@@ -69,11 +69,18 @@ def plot_sys(system):
     print(f"Check z position: {ze0}, {zel}, {absze:.2e}")
     """
 
+
     plt.axis('equal')
     plt.legend()
     plt.ylabel("AU")
     plt.xlabel("AU")
     plt.title('%s - %s, h = %s'%(system, MethodDic[method],h))
+    plt.grid(axis='both', alpha=.22)
+    # Remove borders
+    plt.gca().spines["top"].set_alpha(0.0)
+    plt.gca().spines["bottom"].set_alpha(0.6)
+    plt.gca().spines["right"].set_alpha(0.0)
+    plt.gca().spines["left"].set_alpha(0.6)
     plt.savefig("Plots/" + system + "_" + method + "_" + f"{t_end}" + ".pdf", dpi=400)
     plt.show()
 
@@ -101,5 +108,54 @@ def plot3dPath(system):
     plt.savefig("Plots/" + system + "_" + method + "_" + f"{t_end}" + "_3D.pdf", dpi=400)
     plt.show()
 
-#plot_sys(system)
-plot3dPath(system)
+plot_sys(system)
+plt.clf()
+
+# plot3dPath(system)
+# plt.clf()
+
+def plotOrbitDifference(orbitform):
+    """
+    Plot distance to earth for system A and system B in order to see how Jupiter influences the Earth's orbit
+    Must have csv files with correct filname see definition of orbitA and orbitB below
+    """
+    sys_names_A = [par + obj for obj in systems["systemA"] for par in parameters]
+    sys_names_B = [par + obj for obj in systems["systemB"] for par in parameters]
+    print(sys_names_A)
+    if orbitform == "c":
+        orbitA = pd.read_csv("Results/CE/systemA_VV_c12.csv", index_col=False, names=sys_names_A, skiprows=1)
+        orbitB = pd.read_csv("Results/CE/systemB_VV_c.csv", index_col=False, names=sys_names_B, skiprows=1)
+
+    elif orbitform == "e":
+        orbitA= pd.read_csv("Results/CE/systemA_VV_e512.csv", index_col=False, names=sys_names_A, skiprows=1)
+        orbitB = pd.read_csv("Results/CE/systemB_VV_e5.csv", index_col=False, names=sys_names_B, skiprows=1)
+
+    x_A = orbitA["x_Earth"]
+    y_A = orbitA["y_Earth"]
+    x_B = orbitB["x_Earth"]
+    y_B = orbitB["y_Earth"]
+
+    r_A = np.sqrt(x_A**2+y_A**2)
+    r_B = np.sqrt(x_B**2+y_B**2)
+    t_steg = np.linspace(0,12,12000) # h = 0.001
+    plt.plot(t_steg, r_B, label = "system B")
+    plt.plot(t_steg, r_A, ":", label ="system A")
+    plt.title("Earth's distance to Sun")
+    plt.xlabel("time [year]")
+    plt.ylabel("distance [AU]")
+    plt.grid(axis='both', alpha=.22)
+    plt.legend()
+    # Remove borders
+    plt.gca().spines["top"].set_alpha(0.0)
+    plt.gca().spines["bottom"].set_alpha(0.6)
+    plt.gca().spines["right"].set_alpha(0.0)
+    plt.gca().spines["left"].set_alpha(0.6)
+
+    plt.savefig("Plots/OrbitDifference" + "_" + f"{orbitform}" +".pdf", dpi=400)
+    plt.show()
+
+
+# plotOrbitDifference("c")
+# plt.clf()
+# plotOrbitDifference("e")
+# plt.clf()
