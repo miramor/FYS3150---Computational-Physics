@@ -114,21 +114,21 @@ plt.clf()
 # plot3dPath(system)
 # plt.clf()
 
-def plotOrbitDifference(orbitform):
+def plotOrbitDifference(filenames, orbitform):
     """
     Plot distance to earth for system A and system B in order to see how Jupiter influences the Earth's orbit
-    Must have csv files with correct filname see definition of orbitA and orbitB below
+    Must have list with csv files as input see definition of orbitA and orbitB below
     """
     sys_names_A = [par + obj for obj in systems["systemA"] for par in parameters]
     sys_names_B = [par + obj for obj in systems["systemB"] for par in parameters]
     print(sys_names_A)
     if orbitform == "c":
-        orbitA = pd.read_csv("Results/CE/systemA_VV_c12.csv", index_col=False, names=sys_names_A, skiprows=1)
-        orbitB = pd.read_csv("Results/CE/systemB_VV_c.csv", index_col=False, names=sys_names_B, skiprows=1)
+        orbitA = pd.read_csv(filename[0], index_col=False, names=sys_names_A, skiprows=1)
+        orbitB = pd.read_csv(filename[1], index_col=False, names=sys_names_B, skiprows=1)
 
     elif orbitform == "e":
-        orbitA= pd.read_csv("Results/CE/systemA_VV_e512.csv", index_col=False, names=sys_names_A, skiprows=1)
-        orbitB = pd.read_csv("Results/CE/systemB_VV_e5.csv", index_col=False, names=sys_names_B, skiprows=1)
+        orbitA= pd.read_csv(filename[2], index_col=False, names=sys_names_A, skiprows=1)
+        orbitB = pd.read_csv(filename[3], index_col=False, names=sys_names_B, skiprows=1)
 
     x_A = orbitA["x_Earth"]
     y_A = orbitA["y_Earth"]
@@ -154,8 +154,8 @@ def plotOrbitDifference(orbitform):
     plt.savefig("Plots/OrbitDifference" + "_" + f"{orbitform}" +".pdf", dpi=400)
     plt.show()
 
-
-# plotOrbitDifference("c")
+#filnames = ["Results/CE/systemA_VV_c12.csv", "Results/CE/systemB_VV_c.csv", "Results/CE/systemA_VV_e512.csv","Results/CE/systemB_VV_e5.csv"]
+# plotOrbitDifference(filenames, "c")
 # plt.clf()
-# plotOrbitDifference("e")
+# plotOrbitDifference(filenames, "e")
 # plt.clf()
