@@ -14,7 +14,7 @@ class Planet{
     double pi = 2*acos(0.0);
     double G_scale = 4*pi*pi;
     int N;
-
+    double c_sq = pow(63239.7263,2); //Speed of light squared in AU per year
 
   public:
 

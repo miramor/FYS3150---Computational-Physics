@@ -13,7 +13,8 @@ systems = {
 "systemA": ["Sun", "Earth"],
 "systemB": ["Sun", "Earth", "Jupiter"],
 "systemC": ["Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"],
-"systemD": ["Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter"]
+"systemD": ["Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter"],
+"systemE": ["Sun", "Mercury"]
 }
 MethodDic = {"E":"Euler", "VV": "Velocity Verlet", "EC": "Euler-Cromer"}
 parameters = ['x_','y_','z_','vx_','vy_','vz_']
@@ -101,5 +102,5 @@ def plot3dPath(system):
     plt.savefig("Plots/" + system + "_" + method + "_" + f"{t_end}" + "_3D.pdf", dpi=400)
     plt.show()
 
-#plot_sys(system)
-plot3dPath(system)
+plot_sys(system)
+#plot3dPath(system)
