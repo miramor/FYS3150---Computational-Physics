@@ -70,7 +70,6 @@ def plot_sys(system):
     print(f"Check z position: {ze0}, {zel}, {absze:.2e}")
     """
 
-
     plt.axis('equal')
     plt.legend()
     plt.ylabel("AU")
@@ -82,7 +81,7 @@ def plot_sys(system):
     plt.gca().spines["bottom"].set_alpha(0.6)
     plt.gca().spines["right"].set_alpha(0.0)
     plt.gca().spines["left"].set_alpha(0.6)
-    plt.savefig("Plots/" + system + "_" + method + "_" + f"{t_end}" + ".pdf", dpi=400)
+    plt.savefig("Plots/" + system + "_" + method + "_" + f"{t_end}" + ".pdf", dpi=200)
     plt.show()
 
 
@@ -106,7 +105,7 @@ def plot3dPath(system):
     ax.set_zlabel("AU")
     ax.set_ylabel("AU")
     ax.set_xlabel("AU")
-    plt.savefig("Plots/" + system + "_" + method + "_" + f"{t_end}" + "_3D.pdf", dpi=400)
+    plt.savefig("Plots/" + system + "_" + method + "_" + f"{t_end}" + "_3D.pdf", dpi=200)
     plt.show()
 
 plot_sys(system)
@@ -163,8 +162,8 @@ def plotOrbitDifference(filename, orbitform):
     plt.ylabel('distance [AU]')
     plt.savefig("Plots/OrbitDifferenceChange" + "_" + f"{orbitform}" +".pdf", dpi=200)
 
-filenames = ["Results/CE/systemA_VV_c12.csv", "Results/CE/systemB_VV_c12.csv", "Results/CE/systemA_VV_e12.csv","Results/CE/systemB_VV_e12.csv"]
-plotOrbitDifference(filenames, "c")
-plt.clf()
-plotOrbitDifference(filenames, "e")
-plt.clf()
+##filenames = ["Results/CE/systemA_VV_c12.csv", "Results/CE/systemB_VV_c12.csv", "Results/CE/systemA_VV_e12.csv","Results/CE/systemB_VV_e12.csv"]
+#plotOrbitDifference(filenames, "c")
+#plt.clf()
+#plotOrbitDifference(filenames, "e")
+#plt.clf()

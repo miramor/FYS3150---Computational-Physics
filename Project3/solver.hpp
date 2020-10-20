@@ -41,8 +41,10 @@ class Solver{
     vec TotalAccelerationOnPlanet(Planet& planet, int index);
     void WriteResults();
     void testTotE();
+    void testAngMom();
     double calcPE(int k, int j);
     double calcKE(int k, int j);
+    double calcL(int index);
 
     //double getTotalEnergy();
 };

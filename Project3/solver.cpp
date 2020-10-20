@@ -86,6 +86,32 @@ void Solver::VelocityVerlet(){
   return;
 }
 
+
+void Solver::testAngMom(){
+  double eps = 1e-5;
+
+  double l1 = calcL(0);
+  double l2 = calcL(N-1);
+
+  double error = l1 - l2;
+
+  cout << "Error in Angular Momenutm: " << error << endl;
+}
+
+double Solver::calcL(int index){
+  vec r_vec = planets[0].distanceOther(planets[1], index);
+
+  vec v_vec(3);
+  v_vec[0] = planets[0].vel[index]-planets[1].vel[index];
+  v_vec[1] = planets[0].vel[index+N]-planets[1].vel[index+N];
+  v_vec[2] = planets[0].vel[index+2*N]-planets[1].vel[index+2*N];
+
+  double l = norm(cross(r_vec,v_vec));
+  return l;
+
+}
+
+
 void Solver::testTotE(){
   double eps = 1e-5;
   //calculate total energy last and first timestep, check if diff smaller than eps
@@ -99,7 +125,7 @@ void Solver::testTotE(){
   if (abs(error) > eps)
       cout << "The total energy is not conserved.\n Error: " << abs(error) << endl;
 
-  cout << "Error = " << error << endl;
+  cout << "Error in total energy: " << error << endl;
 }
 
 double Solver::calcKE(int k, int j){
@@ -141,7 +167,7 @@ void Solver::WriteResults(){
   ofstream ofile;
   ofile.open("Results/" + sysName + "_" + method + ".csv");
   ofile << method << ", " <<  t_n/N << ", " << t_n << endl;
-  for (int j = 0; j < N; j ++){
+  for (int j = 0; j < N; j += 10){
     for (int k = 0; k < planets.size(); k ++){
       ofile <<
       planets[k].pos[j] << ", " <<
