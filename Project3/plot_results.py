@@ -155,8 +155,8 @@ def plotOrbitDifference(filenames, orbitform):
     plt.savefig("Plots/OrbitDifference" + "_" + f"{orbitform}" +".pdf", dpi=400)
     plt.show()
 
-#filnames = ["Results/CE/systemA_VV_c12.csv", "Results/CE/systemB_VV_c.csv", "Results/CE/systemA_VV_e512.csv","Results/CE/systemB_VV_e5.csv"]
-# plotOrbitDifference(filenames, "c")
-# plt.clf()
-# plotOrbitDifference(filenames, "e")
-# plt.clf()
+filnames = ["Results/CE/systemA_VV_c12.csv", "Results/CE/systemB_VV_c.csv", "Results/CE/systemA_VV_e512.csv","Results/CE/systemB_VV_e5.csv"]
+plotOrbitDifference(filenames, "c")
+plt.clf()
+#plotOrbitDifference(filenames, "e")
+#plt.clf()
