@@ -115,14 +115,13 @@ plt.clf()
 # plot3dPath(system)
 # plt.clf()
 
-def plotOrbitDifference(filenames, orbitform):
+def plotOrbitDifference(filename, orbitform):
     """
     Plot distance to earth for system A and system B in order to see how Jupiter influences the Earth's orbit
     Must have list with csv files as input see definition of orbitA and orbitB below
     """
     sys_names_A = [par + obj for obj in systems["systemA"] for par in parameters]
     sys_names_B = [par + obj for obj in systems["systemB"] for par in parameters]
-    print(sys_names_A)
     if orbitform == "c":
         orbitA = pd.read_csv(filename[0], index_col=False, names=sys_names_A, skiprows=1)
         orbitB = pd.read_csv(filename[1], index_col=False, names=sys_names_B, skiprows=1)
@@ -138,7 +137,7 @@ def plotOrbitDifference(filenames, orbitform):
 
     r_A = np.sqrt(x_A**2+y_A**2)
     r_B = np.sqrt(x_B**2+y_B**2)
-    t_steg = np.linspace(0,12,12000) # h = 0.001
+    t_steg = np.linspace(0,12,120000) # h = 0.0001
     plt.plot(t_steg, r_B, label = "system B")
     plt.plot(t_steg, r_A, ":", label ="system A")
     plt.title("Earth's distance to Sun")
@@ -152,11 +151,20 @@ def plotOrbitDifference(filenames, orbitform):
     plt.gca().spines["right"].set_alpha(0.0)
     plt.gca().spines["left"].set_alpha(0.6)
 
-    plt.savefig("Plots/OrbitDifference" + "_" + f"{orbitform}" +".pdf", dpi=400)
+    plt.savefig("Plots/OrbitDifference" + "_" + f"{orbitform}" +".pdf", dpi=200)
     plt.show()
 
-filnames = ["Results/CE/systemA_VV_c12.csv", "Results/CE/systemB_VV_c.csv", "Results/CE/systemA_VV_e512.csv","Results/CE/systemB_VV_e5.csv"]
+    plt.clf()
+    plt.plot(t_steg, r_A-r_B)
+    plt.title("Difference in Earth's distance to Sun")
+    plt.grid()
+    plt.ylim(-0.04,0.04)
+    plt.xlabel('time [year]')
+    plt.ylabel('distance [AU]')
+    plt.savefig("Plots/OrbitDifferenceChange" + "_" + f"{orbitform}" +".pdf", dpi=200)
+
+filenames = ["Results/CE/systemA_VV_c12.csv", "Results/CE/systemB_VV_c12.csv", "Results/CE/systemA_VV_e12.csv","Results/CE/systemB_VV_e12.csv"]
 plotOrbitDifference(filenames, "c")
 plt.clf()
-#plotOrbitDifference(filenames, "e")
-#plt.clf()
+plotOrbitDifference(filenames, "e")
+plt.clf()
