@@ -7,16 +7,20 @@ Solver::Solver(vector<Planet> sysPlanets, int N_val, double t_n_val, string sys)
   planets = sysPlanets;
   N = N_val;
   t_n = t_n_val;
-  /*
 
-  if(sys = "systemA"){
-    vec r_vec =  - distanceOther(otherPlanet, index);
+  //Pre calculate ang momentum for Mercury, but need to find a way to use it in Planet
+  if(sys == "systemE"){
+    Planet sun = planets[0];
+    Planet merc = planets[1];
+    vec r_vec =  - merc.distanceOther(sun, 0);
     vec v_vec(3);
-    v_vec[0] = vel[index]-otherPlanet.vel[index];
-    v_vec[1] = vel[index+N]-otherPlanet.vel[index+N];
-    v_vec[2] = vel[index+2*N]-otherPlanet.vel[index+2*N];
-    double l = norm(cross(r_vec,v_vec)); //Angular orbital momentum, only calculate once
-  }*/
+    v_vec[0] = merc.vel[0]-sun.vel[0];
+    v_vec[1] = merc.vel[N]-sun.vel[N];
+    v_vec[2] = merc.vel[2*N]-sun.vel[2*N];
+    double l_merc = norm(cross(r_vec,v_vec)); //Angular orbital momentum, only calculate once
+    cout << "ang momemnt merc:  " << l_merc << endl;
+    merc.l_merc = l_merc; //give Mercury access to this to be used for the additional force
+  }
   //cout << "PRINT OUT PI:  " << pi << endl;
 }
 
@@ -188,6 +192,41 @@ void Solver::WriteResults(){
       planets[k].vel[j+2*N] << ", ";
     }
     ofile << endl;
+  }
+}
+
+void Solver::WritePeriResults(){
+  Planet sun = planets[0];
+  Planet merc = planets[1];
+  vec mpos = merc.pos;
+
+  ofstream ofile;
+  string fileLocation = "Results/perihelionDate.csv";
+  ofile.open(fileLocation);
+
+  cout << "initial pos Mercury: " << merc.pos[0] << ", " << merc.pos[N] << endl;
+  ofile << merc.pos[0]<< ", " <<  merc.pos[N] << ", " << sqrt(merc.pos[0]*merc.pos[0]+merc.pos[N]*merc.pos[N]) << endl;
+  double x_0, y_0, x_1, y_1, x_2, y_2, r0, r1, r2;
+
+  x_0 = mpos[0]; y_0 = mpos[N];
+  r0 = sqrt(x_0*x_0+y_0*y_0);
+  x_1 = mpos[1]; y_1 = mpos[N+1];
+  r1 = sqrt(x_1*x_1+y_1*y_1);
+
+  cout << "r0: " << r0 << endl;
+  cout << "r1: " << r1 << endl;
+
+  for(int i = 2; i < N; i++){
+    x_2 = mpos[i];   y_2 = mpos[i+N];
+    r2 = sqrt(x_2*x_2+y_2*y_2);
+
+    if( (r1<r2) && (r1<r0)){
+      ofile << x_1 << ", " <<  y_1 << ", " << r1 <<", " << i <<  endl;
+    }
+    r0 = r1;
+    r1 = r2;
+    x_0 = x_1; y_0 = y_1;
+    x_1 = x_2; y_1 = y_2;
   }
 }
 

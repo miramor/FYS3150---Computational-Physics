@@ -111,8 +111,8 @@ def plot3dPath(system):
 plot_sys(system)
 plt.clf()
 
-plot3dPath(system)
-plt.clf()
+#plot3dPath(system)
+#plt.clf()
 
 def plotOrbitDifference(filename, orbitform):
     """
@@ -168,6 +168,8 @@ def plotOrbitDifference(filename, orbitform):
 #plotOrbitDifference(filenames, "e")
 #plt.clf()
 
+"""
+#Started making function to plot first and last orbit for mercury
 def checkPerihelAngleMerc():
     sys_names = [par + obj for obj in systems["systemE"] for par in parameters]
     data = pd.read_csv(f"Results/systemE_VV.csv", index_col=False, names=sys_names, skiprows=1)
@@ -178,22 +180,20 @@ def checkPerihelAngleMerc():
     #x_min = data["x_Mercury"][ISLO]
     #y_min = data["y_Mercury"][ISLO]
     print(int(ISLO))
-    data2 = data.iloc[ISLO:N]
-    data.head()
-    print(data)
-    print(data2)
-    """
-    x_max = data["x_Mercury"].min()
-    y_max = data["y_Mercury"].min()
-    xi_max = data["x_Mercury"].idxmin()
-    yi_max = data["y_Mercury"].idxmin()
+    x_0 = data["x_Mercury"][0]
+    y_0 = data["y_Mercury"][0]
+    merc_x = data["x_Mercury"][ISLO:N]
+    merc_y = data["y_Mercury"][ISLO:N]
+
+    x_max = merc_x.max()
+    y_max = merc_y.max()
+    xi_max = merc_x.idxmin()
+    yi_max = merc_y.idxmin()
 
     print(f"Max x = {x_max} for index {xi_max}")
     print(f"Max x = {y_max} for index {yi_max}")
-    """
+"""
 
 
 
-
-
-checkPerihelAngleMerc()
+#checkPerihelAngleMerc()

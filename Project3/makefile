@@ -14,4 +14,4 @@ solver.o: solver.cpp solver.hpp
 	${CPPflags} -c solver.cpp
 
 clean:
-	rm *.o output.exe *.txt
+	rm *.o output.exe

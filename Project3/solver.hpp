@@ -40,6 +40,7 @@ class Solver{
     void Euler();
     vec TotalAccelerationOnPlanet(Planet& planet, int index);
     void WriteResults();
+    void WritePeriResults();
     void testTotE();
     void testAngMom();
     double calcPE(int k, int j);

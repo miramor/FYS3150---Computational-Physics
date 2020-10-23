@@ -4,7 +4,6 @@ using namespace std;
 using namespace arma;
 
 Planet::Planet(double m, double x, double y, double z, double vx, double vy, double vz, string thisName, int N_points){
-
   N = N_points;
   KEvec = vec(N);
   PEvec = vec(N);
@@ -45,19 +44,16 @@ vec Planet::gravitationalForce(Planet& otherPlanet, int index){
   double Beta = 2;
   double r = norm(r_vec);
   vec Fg;
-  if (name == "Mercury" || otherPlanet.name == "Sun"){
-    vec v_vec(3);
-    v_vec[0] = vel[index]-otherPlanet.vel[index];
-    v_vec[1] = vel[index+N]-otherPlanet.vel[index+N];
-    v_vec[2] = vel[index+2*N]-otherPlanet.vel[index+2*N];
-    double l = norm(cross(r_vec,v_vec)); //Angular orbital momentum, only calculate once
-    Fg = otherPlanet.mass * (r_vec/r) * (1 + 3*l*l/(r*r*c_sq)) / (pow(r,Beta));
+  //if ((name == "Mercury" && otherPlanet.name = "Sun") || (name == "Sun" &&  otherPlanet.name = "Mercury")){
+  if ( true == true){
+    Fg = otherPlanet.mass * (r_vec/r) * (1 + 3*l_merc*l_merc/(r*r*c_sq)) / (pow(r,Beta));
   }
   else{
     Fg = otherPlanet.mass * (r_vec/r) / (pow(r,Beta));
   }
   return Fg;
 }
+
 
 // double Planet::getKE(){
 //   return KEvec;

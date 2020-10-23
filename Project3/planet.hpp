@@ -17,7 +17,7 @@ class Planet{
     double c_sq = pow(63239.7263,2); //Speed of light squared in AU per year
 
   public:
-
+    double l_merc; // ang moment for Mercury
     double mass;
     vec pos;
     vec vel;
