@@ -50,7 +50,7 @@ vec Planet::gravitationalForce(Planet& otherPlanet, int index){
     v_vec[0] = vel[index]-otherPlanet.vel[index];
     v_vec[1] = vel[index+N]-otherPlanet.vel[index+N];
     v_vec[2] = vel[index+2*N]-otherPlanet.vel[index+2*N];
-    double l = norm(cross(r_vec,v_vec)); //Angular orbital momentum
+    double l = norm(cross(r_vec,v_vec)); //Angular orbital momentum, only calculate once
     Fg = otherPlanet.mass * (r_vec/r) * (1 + 3*l*l/(r*r*c_sq)) / (pow(r,Beta));
   }
   else{
