@@ -4,6 +4,10 @@ import matplotlib.pyplot as plt
 
 #Input:  system method t_end h
 # example:  systemA EC 1 0.0001
+
+# 1e-10
+# 
+
 print(sys.argv[0])
 print(sys.argv[1])
 print(sys.argv[2])
@@ -21,7 +25,7 @@ os.system("make") #compile codes
 os.system("echo executing...")
 os.system("./output.exe " + cla)
 
-#os.system("echo making plots...")
+os.system("echo making plots...")
 os.system("python3 plot_results.py " + cla)
 
 

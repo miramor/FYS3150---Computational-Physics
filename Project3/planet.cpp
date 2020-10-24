@@ -47,6 +47,7 @@ vec Planet::gravitationalForce(Planet& otherPlanet, int index){
   //if ((name == "Mercury" && otherPlanet.name = "Sun") || (name == "Sun" &&  otherPlanet.name = "Mercury")){
   if ( true == true){
     Fg = otherPlanet.mass * (r_vec/r) * (1 + 3*l_merc*l_merc/(r*r*c_sq)) / (pow(r,Beta));
+    //cout << "This planet: "<< name << ", f: " << Fg << endl;
   }
   else{
     Fg = otherPlanet.mass * (r_vec/r) / (pow(r,Beta));

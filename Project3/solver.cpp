@@ -1,4 +1,5 @@
 #include "solver.hpp"
+#include "time.h"
 using namespace std;
 using namespace arma;
 
@@ -79,7 +80,22 @@ void Solver::VelocityVerlet(){
   method = "VV";
   double h = t_n/N; //stepsize
   double h_2 = h/2.0; //stepsize
+
+  double progress = 0.1;
+  clock_t start, stop;
+  double totTime = 0;
+  start = clock();
     for (int j = 0; j < N-1; j++){
+
+      if(j >= progress*(N-2)){
+        stop = clock();
+        double timeInterval = ( (stop - start)/(double)CLOCKS_PER_SEC );
+        totTime += timeInterval;
+        cout << progress*100 << "% done. Interval time: " << timeInterval << endl;
+        progress = progress + 0.1;
+        start = clock();
+      }
+
         for(int k=0; k < planets.size(); k++){ //for every planet compute position and velocity at specific time j
           vec accel = TotalAccelerationOnPlanet(planets[k], j); //fetch planet's acceleration vector [a_x, a_y, a_z] times h at a given time j
           planets[k].pos[j+1] = planets[k].pos[j] + h*planets[k].vel[j] + h*h_2*accel[0]; // update x position
@@ -97,6 +113,7 @@ void Solver::VelocityVerlet(){
     }
   }
 
+  cout << "Total time(s)--time(m): " << totTime << " -- " << totTime/60 << endl;
   return;
 }
 
@@ -201,10 +218,11 @@ void Solver::WritePeriResults(){
   vec mpos = merc.pos;
 
   ofstream ofile;
-  string fileLocation = "Results/perihelionDate.csv";
+  string fileLocation = "Results/perihelioMerc.csv";
   ofile.open(fileLocation);
+  ofile << setprecision(30) << scientific;
 
-  cout << "initial pos Mercury: " << merc.pos[0] << ", " << merc.pos[N] << endl;
+  //cout << "initial pos Mercury: " << merc.pos[0] << ", " << merc.pos[N] << endl;
   ofile << merc.pos[0]<< ", " <<  merc.pos[N] << ", " << sqrt(merc.pos[0]*merc.pos[0]+merc.pos[N]*merc.pos[N]) << endl;
   double x_0, y_0, x_1, y_1, x_2, y_2, r0, r1, r2;
 
@@ -213,14 +231,17 @@ void Solver::WritePeriResults(){
   x_1 = mpos[1]; y_1 = mpos[N+1];
   r1 = sqrt(x_1*x_1+y_1*y_1);
 
-  cout << "r0: " << r0 << endl;
-  cout << "r1: " << r1 << endl;
+  cout.precision(20);
 
   for(int i = 2; i < N; i++){
+    //cout << i << endl;
     x_2 = mpos[i];   y_2 = mpos[i+N];
     r2 = sqrt(x_2*x_2+y_2*y_2);
 
+
     if( (r1<r2) && (r1<r0)){
+      //cout << "xxxx" << endl;
+      //cout << scientific << x_1 << "  (x val)" << endl;
       ofile << x_1 << ", " <<  y_1 << ", " << r1 <<", " << i <<  endl;
     }
     r0 = r1;

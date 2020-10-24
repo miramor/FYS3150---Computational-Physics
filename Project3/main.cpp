@@ -24,13 +24,13 @@ int main(int argc, char const *argv[]) {
 
   //planets.push_back(Planet(1898.13e24/1988500e24, 5, 0., 0., 0., 2, 0., "Jupiter", N_points));
   vector<Planet> planets;
-  planets = read_initial(systems[system], N_points);
-  //planets.push_back(Planet(1, 0., 0., 0., 0., 0., 0., "Sun", N_points));
+  //planets = read_initial(systems[system], N_points);
+  planets.push_back(Planet(1, 0., 0., 0., 0., 0., 0., "Sun", N_points));
   //planets.push_back(Planet(5.97219e24/1988500e24, 1., 0., 0., 0., 1.42*2*pi, 0., "Earth", N_points)); //testing excape velcotiy sqrt(2)*v_circular
   //planets.push_back(Planet(5.97219e24/1988500e24, 1, 0., 0., 0., 2*pi, 0., "Earth", N_points)); //v_circular
   //planets.push_back(Planet(5.97219e24/1988500e24, 1., 0., 0., 0., 5, 0., "Earth", N_points)); //v_elliptical
   //planets.push_back(Planet(1.89813e27/1988500e24, 5.1, 0., 0., 0., 2*pi/sqrt(5.1), 0., "Jupiter", N_points)); //v_circular
-  //planets.push_back(Planet(3.285E23/1988500e24 , 0.3075, 0., 0., 0., 12.44, 0., "Mercury", N_points));
+  planets.push_back(Planet(3.285E23/1988500e24 , 0.3075, 0., 0., 0., 12.44, 0., "Mercury", N_points));
   //planets.push_back(Planet(5.97219e24/1988500e24, 1., 0., 0., 0., 1.42*2*pi, 0., "Earth", N_points));
   //planets = adjustedOrigin(planets, N_points);
 
@@ -45,7 +45,7 @@ int main(int argc, char const *argv[]) {
   if(method=="VV"){
       solv.VelocityVerlet();
   }
-  solv.WriteResults();
+  //solv.WriteResults();
   //solv.VelocityVerlet();
   solv.testTotE();
   solv.testAngMom();
@@ -79,11 +79,10 @@ vector<Planet> adjustedOrigin(vector<Planet> planets, int N){
     planets[i].pos[N] -= CoM(1);
     planets[i].pos[2*N] -= CoM(2);
 
-    if (planets[i].name == "Sun"){
-      planets[i].vel[0] = -MomTot(0);
-      planets[i].vel[N] = -MomTot(1);
-      planets[i].vel[2*N] = -MomTot(2);
-    }
+    planets[i].vel[0] -= MomTot(0)/Mtot;
+    planets[i].vel[N] -= MomTot(1)/Mtot;
+    planets[i].vel[2*N] -= MomTot(2)/Mtot;
+
   }
   return planets;
 }
