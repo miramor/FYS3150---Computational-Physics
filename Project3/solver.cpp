@@ -272,8 +272,7 @@ void Solver::VertleNoStorage(){
   double h_2 = h/2.0; //stepsize
 
   ofstream ofile;
-  string fileLocation = "Results/test.csv";
-  ofile.open(fileLocation);
+  ofile.open("Results/" + sysName + "_" + method + ".csv");
   ofile << setprecision(30) << scientific;
   ofile << "testing" << endl;
 

@@ -23,8 +23,8 @@ os.system("make") #compile codes
 os.system("echo executing...")
 os.system("./output.exe " + cla)
 
-#os.system("echo making plots...")
-#os.system("python3 plot_results.py " + cla)
+os.system("echo making plots...")
+os.system("python3 plot_results.py " + cla)
 
 
 """

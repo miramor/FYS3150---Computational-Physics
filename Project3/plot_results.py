@@ -45,6 +45,8 @@ def plot_sys(system):
 #         print(row)
 
     sys_names = [par + obj for obj in systems[system] for par in parameters]
+    print("NAVN")
+    print(sys_names)
     sys_data = pd.read_csv("Results/" + system + "_"+ method + ".csv", index_col=False, names=sys_names, skiprows=1)
     N = len(sys_data[sys_names[0]])
     for i in range(int(len(sys_names)/6)):
