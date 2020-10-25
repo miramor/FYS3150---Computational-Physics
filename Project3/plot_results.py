@@ -173,23 +173,53 @@ def calcAnglePerihelMerc():
     #Convert to radians:
     radians = arcsecPerYr*math.pi/648000
 
-    data = pd.read_csv(f"Results/perihelioMerc.csv", index_col = False, names = ["x", "y", "r"])
-    #print(data["x"])
-    maxI =  data["x"].size-1 #max index
+    data = pd.read_csv(f"Results/perihelioMerc.csv", index_col = False, names = ["x", "y", "r", "i"])
 
-    #Start position with angle 0, so dont need to calculate this.
-    x_p = data["x"][maxI] # Position for perihelion in last orbit
-    y_p = data["y"][maxI]
+    names = [par + obj for obj in systems["systemE"] for par in parameters]
+    #print(names)
+    #planetData = pd.read_csv("Results/systemE_VV.csv", index_col = False, names = names,  usecols = ["x_Sun", "y_Sun"] ,skiprows=1) #, usecols = ["x_Sun", "y_Sun", "z_Sun"]
+
+
+    maxI =  data["x"].size-1 #max index
+    MIO = data["i"].size-1 #index 0 - N, corresponds to last orbit perihelion, maxIndexOrbit
+    print("x0 xn, y0 yn")
+    #print(planetData["x_Sun"][0])
+    #print(planetData["y_Sun"][0])
+    #print(planetData["x_Sun"][MIO])
+    #print(planetData["y_Sun"][MIO])
+    #print(planetData["z_Sun"][MIO])
+
+    #sunDrift_x = planetData["x_Sun"][MIO]
+    #sunDrift_y = planetData["y_Sun"][MIO]
+
+    #print(f"Drift Sun: {sunDrift_x} ,  {sunDrift_y}")
+
+
+
+    # Position for perihelion in first and last orbit
     x_0 = data["x"][0]
     y_0 = data["y"][0]
+    x_p = data["x"][maxI]
+    y_p = data["y"][maxI]
 
+    #Correct for movement of sun
+    #y_p += -sunDrift_x
+    #x_p += -sunDrift_y
     theta0 = math.atan(y_0/x_0)
     theta = math.atan(y_p/x_p)
     print(f"y_p/x_p --->   {y_p/x_p}")
     print(f"Angle: Numerical {theta:.4e} vs  Calculated {radians} after {t_end} years.  Theta0 {theta0}")
 
 
+plot_sys(system)
 calcAnglePerihelMerc()
+
+"""
+1 0.0000001
+Ingen kraft: Numerical -3.1531e-05 vs  Calculated 2.0846988287710047e-06 after 1 years.
+Med kraft:   Numerical -3.1531e-05 vs  Calculated 2.0846988287710047e-06 after 1 years.
+
+"""
 
 """
 #Started making function to plot first and last orbit for mercury

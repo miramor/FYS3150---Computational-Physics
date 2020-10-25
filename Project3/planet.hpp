@@ -29,6 +29,11 @@ class Planet{
     vec distanceOther(Planet& otherPlanet, int index);
     vec gravitationalForce(Planet& otherPlanet, int index);
 
+    // Methods for not storing data in planets
+    Planet(double m, double x, double y, double z, double vx, double vy, double vz, string thisName, int N_points, int uselessNr);
+    vec distanceOther_opt(Planet& otherPlanet, bool useCurr);
+    vec gravitationalForce_opt(Planet& otherPlanet, bool useCurr);
+
     Planet(double m, vec position, vec velocity);
 
     vec getKEvec();

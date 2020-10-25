@@ -25,12 +25,12 @@ int main(int argc, char const *argv[]) {
   //planets.push_back(Planet(1898.13e24/1988500e24, 5, 0., 0., 0., 2, 0., "Jupiter", N_points));
   vector<Planet> planets;
   //planets = read_initial(systems[system], N_points);
-  planets.push_back(Planet(1, 0., 0., 0., 0., 0., 0., "Sun", N_points));
+  planets.push_back(Planet(1, 0., 0., 0., 0., 0., 0., "Sun", N_points, 0));
   //planets.push_back(Planet(5.97219e24/1988500e24, 1., 0., 0., 0., 1.42*2*pi, 0., "Earth", N_points)); //testing excape velcotiy sqrt(2)*v_circular
   //planets.push_back(Planet(5.97219e24/1988500e24, 1, 0., 0., 0., 2*pi, 0., "Earth", N_points)); //v_circular
   //planets.push_back(Planet(5.97219e24/1988500e24, 1., 0., 0., 0., 5, 0., "Earth", N_points)); //v_elliptical
   //planets.push_back(Planet(1.89813e27/1988500e24, 5.1, 0., 0., 0., 2*pi/sqrt(5.1), 0., "Jupiter", N_points)); //v_circular
-  planets.push_back(Planet(3.285E23/1988500e24 , 0.3075, 0., 0., 0., 12.44, 0., "Mercury", N_points));
+  planets.push_back(Planet(3.285E23/1988500e24 , 0.3075, 0., 0., 0., 12.44, 0., "Mercury", N_points, 0));
   //planets.push_back(Planet(5.97219e24/1988500e24, 1., 0., 0., 0., 1.42*2*pi, 0., "Earth", N_points));
   //planets = adjustedOrigin(planets, N_points);
 
@@ -45,11 +45,16 @@ int main(int argc, char const *argv[]) {
   if(method=="VV"){
       solv.VelocityVerlet();
   }
+
+  if(method=="VV2"){
+      solv.VertleNoStorage();
+  }
+
   //solv.WriteResults();
   //solv.VelocityVerlet();
-  solv.testTotE();
-  solv.testAngMom();
-  solv.WritePeriResults();
+  //solv.testTotE();
+  //solv.testAngMom();
+  //solv.WritePeriResults();
 
   return 0;
 }

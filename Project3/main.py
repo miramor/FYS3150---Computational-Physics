@@ -6,17 +6,15 @@ import matplotlib.pyplot as plt
 # example:  systemA EC 1 0.0001
 
 # 1e-10
-# 
-
+#
+"""
 print(sys.argv[0])
 print(sys.argv[1])
 print(sys.argv[2])
 print(sys.argv[3])
 print(sys.argv[4])
-#list = list(sys.argv[1].split(" "))
-#print(list)
-#cla = list[0]
-#print(cla)
+"""
+
 cla = sys.argv[1] + " " + sys.argv[2] + " " + sys.argv[3] + " " + sys.argv[4]
 
 os.system("echo compiling...")
@@ -25,8 +23,8 @@ os.system("make") #compile codes
 os.system("echo executing...")
 os.system("./output.exe " + cla)
 
-os.system("echo making plots...")
-os.system("python3 plot_results.py " + cla)
+#os.system("echo making plots...")
+#os.system("python3 plot_results.py " + cla)
 
 
 """
