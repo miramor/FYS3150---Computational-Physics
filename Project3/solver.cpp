@@ -7,16 +7,6 @@ Solver::Solver(vector<Planet> sysPlanets, int N_val, double t_n_val, string sys)
   planets = sysPlanets;
   N = N_val;
   t_n = t_n_val;
-  /*
-
-  if(sys = "systemA"){
-    vec r_vec =  - distanceOther(otherPlanet, index);
-    vec v_vec(3);
-    v_vec[0] = vel[index]-otherPlanet.vel[index];
-    v_vec[1] = vel[index+N]-otherPlanet.vel[index+N];
-    v_vec[2] = vel[index+2*N]-otherPlanet.vel[index+2*N];
-    double l = norm(cross(r_vec,v_vec)); //Angular orbital momentum, only calculate once
-  }*/
   //cout << "PRINT OUT PI:  " << pi << endl;
 }
 
@@ -136,6 +126,7 @@ void Solver::testTotE(){
       cout << "The total energy is not conserved.\n Error: " << abs(error) << endl;
 
   cout << "Error in total energy: " << error << endl;
+  cout << "Relative change in total energy: " << error/endE << endl;
 }
 
 double Solver::calcKE(int k, int j){
