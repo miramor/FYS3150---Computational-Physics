@@ -40,11 +40,15 @@ class Solver{
     void Euler();
     vec TotalAccelerationOnPlanet(Planet& planet, int index);
     void WriteResults();
+    void WritePeriResults();
     void testTotE();
     void testAngMom();
     double calcPE(int k, int j);
     double calcKE(int k, int j);
     double calcL(int index);
+
+    void VertleNoStorage();
+    vec TotalAccelerationOnPlanet_opt(Planet& planet, bool useCurr);
 
     //double getTotalEnergy();
 };

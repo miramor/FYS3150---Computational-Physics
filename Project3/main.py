@@ -4,6 +4,17 @@ import matplotlib.pyplot as plt
 
 #Input:  system method t_end h
 # example:  systemA EC 1 0.0001
+
+# 1e-10
+#
+"""
+print(sys.argv[0])
+print(sys.argv[1])
+print(sys.argv[2])
+print(sys.argv[3])
+print(sys.argv[4])
+"""
+
 cla = sys.argv[1] + " " + sys.argv[2] + " " + sys.argv[3] + " " + sys.argv[4]
 
 os.system("echo compiling...")

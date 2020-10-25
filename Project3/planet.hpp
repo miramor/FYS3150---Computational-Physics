@@ -17,7 +17,7 @@ class Planet{
     double c_sq = pow(63239.7263,2); //Speed of light squared in AU per year
 
   public:
-
+    double l_merc; // ang moment for Mercury
     double mass;
     vec pos;
     vec vel;
@@ -28,6 +28,11 @@ class Planet{
     Planet(double m, double x, double y, double z, double vx, double vy, double vz, string thisName, int N_points);
     vec distanceOther(Planet& otherPlanet, int index);
     vec gravitationalForce(Planet& otherPlanet, int index);
+
+    // Methods for not storing data in planets
+    Planet(double m, double x, double y, double z, double vx, double vy, double vz, string thisName, int N_points, int uselessNr);
+    vec distanceOther_opt(Planet& otherPlanet, bool useCurr);
+    vec gravitationalForce_opt(Planet& otherPlanet, bool useCurr);
 
     Planet(double m, vec position, vec velocity);
 
