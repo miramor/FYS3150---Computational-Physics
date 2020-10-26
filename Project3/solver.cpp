@@ -163,6 +163,7 @@ void Solver::testTotE(){
       cout << "The total energy is not conserved.\n Error: " << abs(error) << endl;
 
   cout << "Error in total energy: " << error << endl;
+  cout << "Relative change in total energy: " << error/endE << endl;
 }
 
 double Solver::calcKE(int k, int j){
