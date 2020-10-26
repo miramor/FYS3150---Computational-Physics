@@ -211,7 +211,7 @@ def calcAnglePerihelMerc():
     print(f"Angle: Numerical {theta:.4e} vs  Calculated {radians} after {t_end} years.  Theta0 {theta0}")
 
 
-plot_sys(system)
+#plot_sys(system)
 calcAnglePerihelMerc()
 
 """

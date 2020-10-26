@@ -241,12 +241,12 @@ void Solver::VertleNoStorage(){
   //ofile << setprecision(8) << scientific;
   ofile << "testing" << endl;
 
-
+  /*
   for(int k=0; k < planets.size(); k++){
     Planet plan = planets[k];
     ofile << plan.pos[0] << " ,"  << plan.pos[1] << " ,"  << plan.pos[2] << ", ";
     ofile << plan.vel[0] << " ,"  << plan.vel[1] << " ,"  << plan.vel[2] << ", ";
-  }
+  }*/
 
   ofile << endl;
   double progress = 0.1;
@@ -261,8 +261,8 @@ void Solver::VertleNoStorage(){
   vec r0_vec(3), r1_vec(3), r2_vec(3);
   r0_vec = planets[1].distanceOther_opt(planets[0], false);
 
-  ofilePeri << setprecision(20);
-  ofilePeri << r0_vec[0] << " , "<< r0_vec[1] << " , " << r0_vec[2] << " , " << norm(r0_vec) << " , " << 0 << endl;
+  //ofilePeri << setprecision(20);
+  //ofilePeri << r0_vec[0] << " , "<< r0_vec[1] << " , " << r0_vec[2] << " , " << norm(r0_vec) << " , " << 0 << endl;
 
     //Start calculations for all timesteps
     for (int j = 0; j < N-1; j++){
@@ -328,13 +328,14 @@ void Solver::VertleNoStorage(){
 
 
       //Write out new results
+      /*
       for(int k=0; k < planets.size(); k++){
         Planet plan = planets[k];
         ofile << plan.pos[3] << " ,"  << plan.pos[4] << " ,"  << plan.pos[5] << ", ";
         ofile << plan.vel[3] << " ,"  << plan.vel[4] << " ,"  << plan.vel[5] << ", ";
 
       }
-      ofile << endl;
+      ofile << endl;*/
 
       for(int k=0; k < planets.size(); k++){
         planets[k].pos[0] = planets[k].pos[3];
