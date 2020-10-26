@@ -19,4 +19,6 @@ os.system("echo executing...")
 os.system("./output.exe " + cla)
 
 os.system("echo making plots...")
-#os.system("python3 plot_results.py " + cla)
+os.system("python3 plot_results.py " + cla)
+
+os.system("echo Full program finished.")

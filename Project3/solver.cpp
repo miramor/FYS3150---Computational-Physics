@@ -9,7 +9,7 @@ Solver::Solver(vector<Planet> sysPlanets, int N_val, double t_n_val, string sys)
   N = N_val;
   t_n = t_n_val;
 
-  cout << sys << " created, contains:" << endl;
+  cout << "\n" << sys << " created, contains:" << endl;
   for(int k = 0; k < planets.size(); k ++){
     cout << planets[k].name << endl;
   }
@@ -320,13 +320,16 @@ void Solver::VertleNoStorage(){
 
       //Write out new results
       /*
-      for(int k=0; k < planets.size(); k++){
-        Planet plan = planets[k];
-        ofile << plan.pos[3] << " ,"  << plan.pos[4] << " ,"  << plan.pos[5] << ", ";
-        ofile << plan.vel[3] << " ,"  << plan.vel[4] << " ,"  << plan.vel[5] << ", ";
+      if(j % 1000){
+        for(int k=0; k < planets.size(); k++){
+          Planet plan = planets[k];
+          ofile << plan.pos[3] << " ,"  << plan.pos[4] << " ,"  << plan.pos[5] << ", ";
+          ofile << plan.vel[3] << " ,"  << plan.vel[4] << " ,"  << plan.vel[5] << ", ";
 
+        }
+      ofile << endl;
       }
-      ofile << endl;*/
+      */
 
       for(int k=0; k < planets.size(); k++){
         planets[k].pos[0] = planets[k].pos[3];
@@ -342,13 +345,3 @@ void Solver::VertleNoStorage(){
     }
   return;
 }
-
-// double Solver::getTotalEnergy(){
-//   //Gets energy of the whole system
-//   double totE = 0;
-//   for(int k=0; k < planets.size(); k++){
-//     totE += planets[k].getPE();
-//     totE += planets[k].getKE();
-//   }
-//   return totE;
-// }

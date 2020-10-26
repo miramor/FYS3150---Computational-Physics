@@ -41,7 +41,6 @@ class Solver{
 
     vec TotalAccelerationOnPlanet(Planet& planet, int index);
     void WriteResults();
-    void WritePeriResults();
 
     void testTotE();
     void testAngMom();

@@ -154,4 +154,6 @@ plt.clf()
 #plot3dPath(system)
 #plt.clf()
 
-#calcAnglePerihelMerc()
+if system == "systemE":
+    print(f"Calculates perihelion for {t_end} with h: {h}")
+    calcAnglePerihelMerc()
