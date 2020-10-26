@@ -52,6 +52,7 @@ def plot_sys(system):
 def plot3dPath(system):
     # Kan gjøre om til enten å få flere plott av ulike baner
     # eller flere i samme.
+    print("XXXXX")
     sys_names = [par + obj for obj in systems[system] for par in parameters]
     sys_data = pd.read_csv("Results/" + system + "_"+ method + ".csv", index_col=False, names=sys_names, skiprows=1)
     fig = plt.figure(figsize = (10,8))
@@ -148,12 +149,19 @@ def calcAnglePerihelMerc():
 #plotOrbitDifference(filenames, "e")
 #plt.clf()
 
+#Always makes 2D plot:
 plot_sys(system)
 plt.clf()
 
-#plot3dPath(system)
-#plt.clf()
+choice = input("Do you wanna plot in 3D?: (1)yes, (2)no:\n")
+print(choice)
+if choice == 1:
+    print("in choice")
+    plot3dPath(system)
+    plt.clf()
 
 if system == "systemE":
-    print(f"Calculates perihelion for {t_end} with h: {h}")
-    calcAnglePerihelMerc()
+    choice = input("\nIf used NASA press 0, otherwise the calculated theta is printed out:\n")
+    if choice != 0:
+        print(f"Calculates perihelion for {t_end} with h: {h}")
+        calcAnglePerihelMerc()
