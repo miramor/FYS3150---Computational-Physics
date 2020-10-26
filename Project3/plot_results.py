@@ -149,19 +149,21 @@ def calcAnglePerihelMerc():
 #plotOrbitDifference(filenames, "e")
 #plt.clf()
 
-#Always makes 2D plot:
-plot_sys(system)
-plt.clf()
-
-choice = input("Do you wanna plot in 3D?: (1)yes, (2)no:\n")
-print(choice)
-if choice == 1:
-    print("in choice")
-    plot3dPath(system)
-    plt.clf()
 
 if system == "systemE":
     choice = input("\nIf used NASA press 0, otherwise the calculated theta is printed out:\n")
     if choice != 0:
         print(f"Calculates perihelion for {t_end} with h: {h}")
         calcAnglePerihelMerc()
+
+else:
+    #Always makes 2D plot:
+    plot_sys(system)
+    plt.clf()
+
+    choice = input("Do you wanna plot in 3D?: (1)yes, (2)no:\n")
+    print(choice)
+    if choice == 1:
+        print("in choice")
+        plot3dPath(system)
+        plt.clf()
