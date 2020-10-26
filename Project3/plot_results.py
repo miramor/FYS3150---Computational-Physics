@@ -209,6 +209,7 @@ def calcAnglePerihelMerc():
     theta = math.atan(y_p/x_p)
     print(f"y_p/x_p --->   {y_p/x_p}")
     print(f"Angle: Numerical {theta:.4e} vs  Calculated {radians:.4e} after {t_end} years.  Theta0 {theta0:.2e}")
+    print(f"Difference: {abs(theta-radians)}")
 
 
 #plot_sys(system)
