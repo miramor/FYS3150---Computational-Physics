@@ -155,8 +155,8 @@ void Solver::testTotE(){
   double startE = 0;
   double endE = 0;
   for(int k = 0; k < planets.size() ; k++){
-    startE += calcPE(k, 0) + calcKE(k, 0);
-    endE += calcPE(k, N-1) + calcKE(k, N-1);
+    startE += calcPE(k, 0)/2 + calcKE(k, 0);
+    endE += calcPE(k, N-1)/2 + calcKE(k, N-1);
   }
   double error = abs(startE) - abs(endE);
   if (abs(error) > eps)
@@ -189,6 +189,9 @@ double Solver::calcPE(int k, int j){
       m2 = planets[i].mass;
       r = norm(planets[k].distanceOther(planets[i], j));
       U -= m1*m2*G_scale/r;
+      //Use if central gravitational force is changed to not being inverse-square
+      // double beta = 2;
+      // U += m1*m2*G_scale/((beta-1)*pow(r,beta-1);
     }
   return U;
 }
