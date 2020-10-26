@@ -35,7 +35,7 @@ Planet::Planet(double m, double x, double y, double z, double vx, double vy, dou
   vel[0] = vx;
   vel[1] = vy;
   vel[2] = vz;
-  cout << "Init_opt" << name << endl;
+  cout << "Init_opt " << name << endl;
 }
 
 vec Planet::distanceOther_opt(Planet& otherPlanet, bool useCurr){ // if not curr, then distance previous
@@ -56,11 +56,14 @@ vec Planet::distanceOther_opt(Planet& otherPlanet, bool useCurr){ // if not curr
 
 vec Planet::gravitationalForce_opt(Planet& otherPlanet, bool useCurr){
 
-  vec r_vec =  - distanceOther(otherPlanet, useCurr);
+  //cout << useCurr << ", start" << endl;
+  vec r_vec =  - distanceOther_opt(otherPlanet, useCurr);
+  //cout << "end, " << r_vec << endl;
   double Beta = 2;
   double r = norm(r_vec);
   vec Fg;
-  if ( true == true){
+  double l_merc = 1.0;
+  if (true == false){
     //cout << "Extra force in use" << endl;
     //cout << "orgForce" << otherPlanet.mass * (r_vec/r) / (pow(r,Beta)) << endl;
     //cout << "extraForce" << otherPlanet.mass * (r_vec/r) * (3*l_merc*l_merc/(r*r*c_sq)) / (pow(r,Beta)) << endl;
@@ -71,7 +74,16 @@ vec Planet::gravitationalForce_opt(Planet& otherPlanet, bool useCurr){
     Fg = otherPlanet.mass * (r_vec/r) / (pow(r,Beta));
   }
   return Fg;
+}
 
+void Planet::update(){
+  pos[0] = pos[3];
+  pos[1] = pos[4];
+  pos[2] = pos[5];
+
+  vel[0] = vel[3];
+  vel[1] = vel[4];
+  vel[2] = vel[5];
 }
 
 vec Planet::distanceOther(Planet& otherPlanet, int i){

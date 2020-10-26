@@ -33,6 +33,7 @@ class Planet{
     Planet(double m, double x, double y, double z, double vx, double vy, double vz, string thisName, int N_points, int uselessNr);
     vec distanceOther_opt(Planet& otherPlanet, bool useCurr);
     vec gravitationalForce_opt(Planet& otherPlanet, bool useCurr);
+    void update();
 
     Planet(double m, vec position, vec velocity);
 
