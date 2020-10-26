@@ -173,7 +173,7 @@ def calcAnglePerihelMerc():
     #Convert to radians:
     radians = arcsecPerYr*math.pi/648000
 
-    data = pd.read_csv(f"Results/perihelioMerc.csv", index_col = False, names = ["x", "y", "r", "i"])
+    data = pd.read_csv(f"Results/Peri_Results.csv", index_col = False, names = ["x", "y", "z", "r", "i"])
 
     names = [par + obj for obj in systems["systemE"] for par in parameters]
     #print(names)
@@ -212,7 +212,7 @@ def calcAnglePerihelMerc():
 
 
 plot_sys(system)
-#calcAnglePerihelMerc()
+calcAnglePerihelMerc()
 
 """
 1 0.0000001

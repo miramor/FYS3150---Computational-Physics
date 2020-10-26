@@ -63,19 +63,18 @@ vec Planet::gravitationalForce_opt(Planet& otherPlanet, bool useCurr){
     //cout << otherPlanet.name << " pos:\n" << otherPlanet.pos << endl;
   }
   //cout << "end, " << r_vec << endl;
-  double Beta = 2;
   double r = norm(r_vec);
   vec Fg;
-  double l_merc = 1.0;
-  if (true == false){
+
+  if (true == true){
     //cout << "Extra force in use" << endl;
     //cout << "orgForce" << otherPlanet.mass * (r_vec/r) / (pow(r,Beta)) << endl;
     //cout << "extraForce" << otherPlanet.mass * (r_vec/r) * (3*l_merc*l_merc/(r*r*c_sq)) / (pow(r,Beta)) << endl;
-    Fg = otherPlanet.mass * (r_vec/r) * (1 + 3*l_merc*l_merc/(r*r*c_sq)) / (pow(r,Beta));
+    Fg = otherPlanet.mass * (r_vec/r) * (1 + 3*l_merc*l_merc/(r*r*c_sq)) / (r*r);
     //cout << "This planet: "<< name << ", f: " << Fg << endl;
   }
   else{
-    Fg = otherPlanet.mass * (r_vec/r) / (pow(r,Beta));
+    Fg = otherPlanet.mass * (r_vec/r) / (r*r);
   }
   return Fg;
 }
