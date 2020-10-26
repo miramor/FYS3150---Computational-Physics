@@ -257,8 +257,8 @@ void Solver::VertleNoStorage(){
   vec r0_vec(3), r1_vec(3), r2_vec(3);
   r0_vec = planets[1].distanceOther_opt(planets[0], false);
 
-  //ofilePeri << setprecision(20);
-  //ofilePeri << r0_vec[0] << " , "<< r0_vec[1] << " , " << r0_vec[2] << " , " << norm(r0_vec) << " , " << 0 << endl;
+  ofilePeri << setprecision(20);
+  ofilePeri << r0_vec[0] << " , "<< r0_vec[1] << " , " << r0_vec[2] << " , " << norm(r0_vec) << " , " << 0 << endl;
 
     //Start calculations for all timesteps
     for (int j = 0; j < N-1; j++){
