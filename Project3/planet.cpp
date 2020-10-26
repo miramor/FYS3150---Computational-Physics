@@ -77,6 +77,9 @@ vec Planet::gravitationalForce_opt(Planet& otherPlanet, bool useCurr){
 }
 
 void Planet::update(){
+  cout << "BEFORE" << endl;
+  cout << name << ": " << pos[0] << ", " << pos[1] << ", " << pos[2] << endl;
+  cout << name << ": " << pos[3] << ", " << pos[4] << ", " << pos[5] << endl;
   pos[0] = pos[3];
   pos[1] = pos[4];
   pos[2] = pos[5];
@@ -84,6 +87,11 @@ void Planet::update(){
   vel[0] = vel[3];
   vel[1] = vel[4];
   vel[2] = vel[5];
+
+  cout << "AFTER" << endl;
+  cout << name << ": " << pos[0] << ", " << pos[1] << ", " << pos[2] << endl;
+  cout << name << ": " << pos[3] << ", " << pos[4] << ", " << pos[5] << endl;
+
 }
 
 vec Planet::distanceOther(Planet& otherPlanet, int i){

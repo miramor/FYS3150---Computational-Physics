@@ -213,7 +213,7 @@ def calcAnglePerihelMerc():
 
 
 plot_sys(system)
-calcAnglePerihelMerc()
+#calcAnglePerihelMerc()
 
 """
 1 0.0000001

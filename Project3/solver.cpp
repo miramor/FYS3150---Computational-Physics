@@ -305,7 +305,7 @@ void Solver::VertleNoStorage(){
         stop = clock();
         double timeInterval = ( (stop - start)/(double)CLOCKS_PER_SEC );
         totTime += timeInterval;
-        cout << progress*100 << "% done. Interval time: " << timeInterval << endl;
+        //cout << progress*100 << "% done. Interval time: " << timeInterval << endl;
         progress = progress + 0.1;
         start = clock();
       }
@@ -316,6 +316,11 @@ void Solver::VertleNoStorage(){
         planets[k].pos[3] = planets[k].pos[0] + h*planets[k].vel[0] + h*h_2*accel[0]; // update x position
         planets[k].pos[4] = planets[k].pos[1] + h*planets[k].vel[1]+ h*h_2*accel[1]; // update y position
         planets[k].pos[5] = planets[k].pos[2] + h*planets[k].vel[2]+ h*h_2*accel[2]; // update z position
+
+        if(j == 0 || j==1){
+          //cout << planets[k].name <<" :  "<< planets[k].pos[0] << ", " << planets[k].pos[1] << ", " << planets[k].pos[2] << endl;
+        }
+        cout << planets[k].name <<" :  "<< planets[k].pos[3] << ", " << planets[k].pos[4] << ", " << planets[k].pos[5] << endl;
       }
 
 
@@ -334,15 +339,16 @@ void Solver::VertleNoStorage(){
       }
 
       //Write out new results
-      if(j%10){
-        for(int k=0; k < planets.size(); k++){
-          Planet plan = planets[k];
-          ofile << plan.pos[3] << " ,"  << plan.pos[4] << " ,"  << plan.pos[5] << ", ";
-          ofile << plan.vel[3] << " ,"  << plan.vel[4] << " ,"  << plan.vel[5] << ", ";
-          plan.update();
-        }
-        ofile << endl;
+
+      for(int k=0; k < planets.size(); k++){
+        Planet plan = planets[k];
+        ofile << plan.pos[3] << " ,"  << plan.pos[4] << " ,"  << plan.pos[5] << ", ";
+        ofile << plan.vel[3] << " ,"  << plan.vel[4] << " ,"  << plan.vel[5] << ", ";
+        //cout << "start update" << endl;
+        plan.update();
+        //cout << "end" << endl;
       }
+      ofile << endl;
       //Write to
 
 
