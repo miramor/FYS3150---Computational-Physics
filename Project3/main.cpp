@@ -13,8 +13,26 @@ int main(int argc, char const *argv[]) {
   double h = stod(argv[4]);
   double pi = 2*acos(0.0);
   int N_points = (int) ( (double)t_end/h);
-  cout << system << ",  " << method << endl;
 
+  //Make all relevant planets which is used and not pulled from NASA:
+  Planet sun = Planet(1, 0., 0., 0., 0., 0., 0., "Sun", N_points);
+  Planet earth_c = Planet(5.97219e24/1988500e24, 1, 0., 0., 0., 2*pi, 0., "Earth", N_points);
+  Planet earth_e = Planet(5.97219e24/1988500e24, 1, 0., 0., 0., 5, 0., "Earth", N_points);
+  Planet earth_escape = Planet(5.97219e24/1988500e24, 1., 0., 0., 0., 1.42*2*pi, 0., "Earth", N_points);
+  Planet mercury = Planet(3.285E23/1988500e24 , 0.3075, 0., 0., 0., 12.44, 0., "Mercury", N_points);
+  Planet jupiter = Planet(1.89813e27/1988500e24, 5.1, 0., 0., 0., 2*pi/sqrt(5.1), 0., "Jupiter", N_points);
+
+  //Used for systemE, with perihelion additional force. The parameter 0, means only that it uses a seperate constructor
+  Planet sun_opt = Planet(1, 0., 0., 0., 0., 0., 0., "Sun", N_points, 0);
+  Planet mercury_opt = Planet(3.285E23/1988500e24 , 0.3075, 0., 0., 0., 12.44, 0., "Mercury", N_points, 0);
+
+  if (sys == "systemA") {
+    vector<Planet> planets = [sun, earth_c, earth_e, earth_escape];
+    int choice;
+    cout << "Choose orbit for earth: circular(1), eliptical(2), near escape vel(3)" << endl;
+    cin << choice;
+
+  }
   map<string, vector<string> > systems;
   systems["systemA"] = {"Sun", "Earth"};
   systems["systemB"] = {"Sun", "Earth", "Jupiter"};
@@ -22,21 +40,11 @@ int main(int argc, char const *argv[]) {
   systems["systemD"] = {"Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter"};
   systems["systemE"] = {"Sun", "Mercury"};
 
-  //planets.push_back(Planet(1898.13e24/1988500e24, 5, 0., 0., 0., 2, 0., "Jupiter", N_points));
   vector<Planet> planets;
-  //planets = read_initial(systems[system], N_points);
-  planets.push_back(Planet(1, 0., 0., 0., 0., 0., 0., "Sun", N_points, 0));
-  //planets.push_back(Planet(5.97219e24/1988500e24, 1., 0., 0., 0., 1.42*2*pi, 0., "Earth", N_points)); //testing excape velcotiy sqrt(2)*v_circular
-  //planets.push_back(Planet(5.97219e24/1988500e24, 1, 0., 0., 0., 5, 0., "Earth", N_points)); //v_circular
-  //planets.push_back(Planet(5.97219e24/1988500e24, 1., 0., 0., 0., 5, 0., "Earth", N_points)); //v_elliptical
-  //planets.push_back(Planet(1.89813e27/1988500e24, 5.1, 0., 0., 0., 2*pi/sqrt(5.1), 0., "Jupiter", N_points)); //v_circular
-  planets.push_back(Planet(3.285E23/1988500e24 , 0.3075, 0., 0., 0., 12.44, 0., "Mercury", N_points, 0));
-  //planets.push_back(Planet(5.97219e24/1988500e24, 1., 0., 0., 0., 1.42*2*pi, 0., "Earth", N_points));
+  planets = read_initial(systems[system], N_points);
   //planets = adjustedOrigin(planets, N_points);
 
   Solver solv(planets, N_points , t_end, system);
-  cout << "xxxx" << endl;
-  cout << method << endl;
   if(method=="E"){
       solv.Euler();
   }
@@ -44,15 +52,18 @@ int main(int argc, char const *argv[]) {
       solv.EulerCromer();
   }
   if(method=="VV"){
-      solv.VelocityVerlet();
+    cout << "VV started" << endl;
+    solv.VelocityVerlet();
+    cout << "Finished VV" << endl;
   }
 
   if(method=="VV2"){
-    cout << "vv2 start" << endl;
+    cout << "VV2 started" << endl;
     solv.VertleNoStorage();
+    cout << "Finished VV2" << endl;
   }
 
-  //solv.WriteResults();
+  solv.WriteResults();
   //solv.VelocityVerlet();
   //solv.testTotE();
   //solv.testAngMom();
