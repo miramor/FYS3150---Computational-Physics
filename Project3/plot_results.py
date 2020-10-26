@@ -16,7 +16,7 @@ systems = {
 "systemD": ["Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter"],
 "systemE": ["Sun", "Mercury"]
 }
-MethodDic = {"E":"Euler", "VV": "Velocity Verlet", "EC": "Euler-Cromer"}
+MethodDic = {"E":"Euler", "VV": "Velocity Verlet", "EC": "Euler-Cromer", "VV2": "Velocity-Verlet"}
 parameters = ['x_','y_','z_','vx_','vy_','vz_']
 
 system = sys.argv[1]
@@ -45,7 +45,6 @@ def plot_sys(system):
 #         print(row)
 
     sys_names = [par + obj for obj in systems[system] for par in parameters]
-    print("NAVN")
     print(sys_names)
     sys_data = pd.read_csv("Results/" + system + "_"+ method + ".csv", index_col=False, names=sys_names, skiprows=1)
     N = len(sys_data[sys_names[0]])

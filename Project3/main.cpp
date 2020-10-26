@@ -14,6 +14,7 @@ int main(int argc, char const *argv[]) {
   double pi = 2*acos(0.0);
   int N_points = (int) ( (double)t_end/h);
   //cout << N_points << endl;
+  cout << system << ",  " << method << endl;
 
   map<string, vector<string> > systems;
   systems["systemA"] = {"Sun", "Earth"};
@@ -33,9 +34,10 @@ int main(int argc, char const *argv[]) {
   planets.push_back(Planet(3.285E23/1988500e24 , 0.3075, 0., 0., 0., 12.44, 0., "Mercury", N_points, 0));
   //planets.push_back(Planet(5.97219e24/1988500e24, 1., 0., 0., 0., 1.42*2*pi, 0., "Earth", N_points));
   //planets = adjustedOrigin(planets, N_points);
-
+  cout << "zzzz" << endl;
   Solver solv(planets, N_points , t_end, system);
-
+  cout << "xxxx" << endl;
+  cout << method << endl;
   if(method=="E"){
       solv.Euler();
   }
@@ -47,7 +49,8 @@ int main(int argc, char const *argv[]) {
   }
 
   if(method=="VV2"){
-      solv.VertleNoStorage();
+    cout << "vv2 start" << endl;
+    solv.VertleNoStorage();
   }
 
   //solv.WriteResults();
