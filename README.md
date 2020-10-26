@@ -30,6 +30,6 @@ The two main parts of this program is a planet class and a solver class. In the 
 
 The solver function also has a test function that calculates the angular momentum and total energy in the first and the last step of the in the simulation, to see if these quantities are conserved.
 
-We use *main.py* to compile all the .hpp and .cpp files into an executable, which then is executed automatically. main.py then runs *plot_results.py*.
+We use *main.py* to compile all the .hpp and .cpp files into an executable, which then is executed automatically. *main.py* then runs *plot_results.py*.
 
 **How to use:**
