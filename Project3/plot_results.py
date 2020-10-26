@@ -171,7 +171,7 @@ def calcAnglePerihelMerc():
     arcsecPerYr = 0.43 #arcseconds per year, 43'' per century
 
     #Convert to radians:
-    radians = arcsecPerYr*math.pi/648000
+    radians = t_end*arcsecPerYr*math.pi/648000
 
     data = pd.read_csv(f"Results/Peri_Results.csv", index_col = False, names = ["x", "y", "z", "r", "i"])
 
@@ -208,8 +208,7 @@ def calcAnglePerihelMerc():
     theta0 = math.atan(y_0/x_0)
     theta = math.atan(y_p/x_p)
     print(f"y_p/x_p --->   {y_p/x_p}")
-    print(f"Angle: Numerical {theta:.4e} vs  Calculated {radians} after {t_end} years.  Theta0 {theta0}")
-    print(f"deltaTheta: {theta-theta0}")
+    print(f"Angle: Numerical {theta:.4e} vs  Calculated {radians:.4e} after {t_end} years.  Theta0 {theta0:.2e}")
 
 
 #plot_sys(system)
