@@ -16,7 +16,7 @@ systems = {
 "systemD": ["Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter"],
 "systemE": ["Sun", "Mercury"]
 }
-MethodDic = {"E":"Euler", "VV": "Velocity Verlet", "EC": "Euler-Cromer"}
+MethodDic = {"E":"Euler", "VV": "Velocity Verlet", "EC": "Euler-Cromer", "VV2": "Velocity-Verlet"}
 parameters = ['x_','y_','z_','vx_','vy_','vz_']
 
 system = sys.argv[1]
@@ -107,9 +107,9 @@ def plot3dPath(system):
     ax.set_xlabel("AU")
     plt.savefig("Plots/" + system + "_" + method + "_" + f"{t_end}" + "_3D.pdf", dpi=200)
     plt.show()
-#
-plot_sys(system)
-plt.clf()
+
+#plot_sys(system)
+#plt.clf()
 
 #plot3dPath(system)
 #plt.clf()
@@ -134,23 +134,14 @@ def plotOrbitDifference(filename, orbitform):
     x_B = orbitB["x_Earth"]
     y_B = orbitB["y_Earth"]
 
-    # x_A = orbitA["x_Sun"]
-    # y_A = orbitA["y_Sun"]
-    # x_B = orbitB["x_Sun"]
-    # y_B = orbitB["y_Sun"]
-
     r_A = np.sqrt(x_A**2+y_A**2)
     r_B = np.sqrt(x_B**2+y_B**2)
-    t_steg = np.linspace(0,t_end,int(t_end/h/10)) # h = 0.0001
-
-    # plt.plot(t_steg, r_B, label = "system B")
-    # plt.plot(t_steg, r_A, ":", label ="system A")
+    t_steg = np.linspace(0,12,120000) # h = 0.0001
     plt.plot(t_steg, r_B, label = "system B")
-    plt.plot(t_steg, r_A, ":", label ="system C: NASA ")
-    plt.title("Earth's distance to Sun (B) / Centre of mass (C)")
-
+    plt.plot(t_steg, r_A, ":", label ="system A")
+    plt.title("Earth's distance to Sun")
     plt.xlabel("time [year]")
-    plt.ylabel("difference [AU]")
+    plt.ylabel("distance [AU]")
     plt.grid(axis='both', alpha=.22)
     plt.legend()
     # Remove borders
@@ -164,47 +155,71 @@ def plotOrbitDifference(filename, orbitform):
 
     plt.clf()
     plt.plot(t_steg, r_A-r_B)
-    #plt.title("Difference in Earth's distance to Sun")
-    plt.title("Difference in position")
+    plt.title("Difference in Earth's distance to Sun")
     plt.grid()
-    #plt.ylim(-0.04,0.04)
+    plt.ylim(-0.04,0.04)
     plt.xlabel('time [year]')
-    plt.ylabel('difference in distance [AU]')
+    plt.ylabel('distance [AU]')
     plt.savefig("Plots/OrbitDifferenceChange" + "_" + f"{orbitform}" +".pdf", dpi=200)
 
-# filenames = ["Results/CE/systemA_VV_c12.csv", "Results/CE/systemB_VV_c.csv", "Results/CE/systemA_VV_e512.csv","Results/CE/systemB_VV_e5.csv"]
-# plotOrbitDifference(filenames, "c")
-# plt.clf()
-# plotOrbitDifference(filenames, "e")
-# filenames = ["Results/systemC_VV_adj166.csv","Results/systemC_VV_notadj166.csv","",""]
-# plotOrbitDifference(filenames, "c")
-# plt.clf()
-
-
+##filenames = ["Results/CE/systemA_VV_c12.csv", "Results/CE/systemB_VV_c12.csv", "Results/CE/systemA_VV_e12.csv","Results/CE/systemB_VV_e12.csv"]
+#plotOrbitDifference(filenames, "c")
+#plt.clf()
+#plotOrbitDifference(filenames, "e")
+#plt.clf()
 def calcAnglePerihelMerc():
     arcsecPerYr = 0.43 #arcseconds per year, 43'' per century
 
     #Convert to radians:
     radians = arcsecPerYr*math.pi/648000
-    print("Radians", radians)
 
-    data = pd.read_csv(f"Results/perihelioMerc.csv", index_col = False, names = ["x", "y", "r"])
-    #print(data["x"])
+    data = pd.read_csv(f"Results/Peri_Results.csv", index_col = False, names = ["x", "y", "z", "r", "i"])
+
+    names = [par + obj for obj in systems["systemE"] for par in parameters]
+    #print(names)
+    #planetData = pd.read_csv("Results/systemE_VV.csv", index_col = False, names = names,  usecols = ["x_Sun", "y_Sun"] ,skiprows=1) #, usecols = ["x_Sun", "y_Sun", "z_Sun"]
+
+
     maxI =  data["x"].size-1 #max index
+    MIO = data["i"].size-1 #index 0 - N, corresponds to last orbit perihelion, maxIndexOrbit
+    print("x0 xn, y0 yn")
+    #print(planetData["x_Sun"][0])
+    #print(planetData["y_Sun"][0])
+    #print(planetData["x_Sun"][MIO])
+    #print(planetData["y_Sun"][MIO])
+    #print(planetData["z_Sun"][MIO])
 
-    #Start position with angle 0, so dont need to calculate this.
-    x_p = data["x"][maxI] # Position for perihelion in last orbit
-    y_p = data["y"][maxI]
+    #sunDrift_x = planetData["x_Sun"][MIO]
+    #sunDrift_y = planetData["y_Sun"][MIO]
+
+    #print(f"Drift Sun: {sunDrift_x} ,  {sunDrift_y}")
+
+
+
+    # Position for perihelion in first and last orbit
     x_0 = data["x"][0]
     y_0 = data["y"][0]
+    x_p = data["x"][maxI]
+    y_p = data["y"][maxI]
 
+    #Correct for movement of sun
+    #y_p += -sunDrift_x
+    #x_p += -sunDrift_y
     theta0 = math.atan(y_0/x_0)
     theta = math.atan(y_p/x_p)
     print(f"y_p/x_p --->   {y_p/x_p}")
     print(f"Angle: Numerical {theta:.4e} vs  Calculated {radians} after {t_end} years.  Theta0 {theta0}")
 
 
-#calcAnglePerihelMerc()
+plot_sys(system)
+calcAnglePerihelMerc()
+
+"""
+1 0.0000001
+Ingen kraft: Numerical -3.1531e-05 vs  Calculated 2.0846988287710047e-06 after 1 years.
+Med kraft:   Numerical -3.1531e-05 vs  Calculated 2.0846988287710047e-06 after 1 years.
+
+"""
 
 """
 #Started making function to plot first and last orbit for mercury

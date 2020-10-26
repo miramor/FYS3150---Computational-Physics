@@ -10,17 +10,23 @@ Solver::Solver(vector<Planet> sysPlanets, int N_val, double t_n_val, string sys)
   t_n = t_n_val;
 
   //Pre calculate ang momentum for Mercury, but need to find a way to use it in Planet
+
   if(sys == "systemE"){
     Planet sun = planets[0];
     Planet merc = planets[1];
-    vec r_vec =  - merc.distanceOther(sun, 0);
+    vec r_vec =  - planets[1].distanceOther_opt(planets[0], 0);
     vec v_vec(3);
+    v_vec[0] = merc.vel[0]-sun.vel[0];
+    v_vec[1] = merc.vel[1]-sun.vel[1];
+    v_vec[2] = merc.vel[2]-sun.vel[2];
+    /*
     v_vec[0] = merc.vel[0]-sun.vel[0];
     v_vec[1] = merc.vel[N]-sun.vel[N];
     v_vec[2] = merc.vel[2*N]-sun.vel[2*N];
+    */
     double l_merc = norm(cross(r_vec,v_vec)); //Angular orbital momentum, only calculate once
     cout << "ang momemnt merc:  " << l_merc << endl;
-    merc.l_merc = l_merc; //give Mercury access to this to be used for the additional force
+    planets[1].l_merc = l_merc; //give Mercury access to this to be used for the additional force
   }
   //cout << "PRINT OUT PI:  " << pi << endl;
 }
@@ -125,9 +131,8 @@ void Solver::testAngMom(){
   double l2 = calcL(N-1);
 
   double error = l1 - l2;
-  cout << "Angular Momentum " << l1 << endl;
+
   cout << "Error in Angular Momenutm: " << error << endl;
-  cout << "rel-Error in Angular Momenutm: " << error/l1 << endl;
 }
 
 double Solver::calcL(int index){
@@ -150,18 +155,15 @@ void Solver::testTotE(){
   double startE = 0;
   double endE = 0;
   for(int k = 0; k < planets.size() ; k++){
-    startE += calcPE(k, 0)/2 + calcKE(k, 0);
-    endE += calcPE(k, N-1)/2 + calcKE(k, N-1);
+    startE += calcPE(k, 0) + calcKE(k, 0);
+    endE += calcPE(k, N-1) + calcKE(k, N-1);
   }
   double error = abs(startE) - abs(endE);
-  double rel_error = error/abs(startE);
   if (abs(error) > eps)
       cout << "The total energy is not conserved.\n Error: " << abs(error) << endl;
 
   cout << "Error in total energy: " << error << endl;
-  cout << "Relative Error in total energy: " << rel_error << endl;
-  cout << "Start Energy " << startE << endl;
-  cout << "End Energy " << endE<< endl;
+  cout << "Relative change in total energy: " << error/endE << endl;
 }
 
 double Solver::calcKE(int k, int j){
@@ -186,10 +188,7 @@ double Solver::calcPE(int k, int j){
     if( i != k){
       m2 = planets[i].mass;
       r = norm(planets[k].distanceOther(planets[i], j));
-      //U -= m1*m2*G_scale/r;
-      double beta =2;
-      U -= m1*m2*G_scale/((beta-1)*pow(r,beta-1));
-
+      U -= m1*m2*G_scale/r;
     }
   return U;
 }
@@ -220,43 +219,138 @@ void Solver::WriteResults(){
   }
 }
 
-void Solver::WritePeriResults(){
-  Planet sun = planets[0];
-  Planet merc = planets[1];
-  vec mpos = merc.pos;
+vec Solver::TotalAccelerationOnPlanet_opt(Planet& planet, bool useCurr){ //calculate total acceleration on planet
+  vec accel(3, fill::zeros); // acceleration vector [a_x, a_y, a_z] filled with zeros [0,0,0]
 
-  ofstream ofile;
-  string fileLocation = "Results/perihelioMerc.csv";
-  ofile.open(fileLocation);
-  ofile << setprecision(30) << scientific;
+  for(int i =0; i < planets.size(); i++){ // find neighbour planets and calculate acceleration
+    if(planets[i].name != planet.name){
+      accel += planet.gravitationalForce_opt(planets[i], useCurr); //fetch gravitationalForce on planet due to neighbour planet for a given time (=index)
 
-  //cout << "initial pos Mercury: " << merc.pos[0] << ", " << merc.pos[N] << endl;
-  ofile << merc.pos[0]<< ", " <<  merc.pos[N] << ", " << sqrt(merc.pos[0]*merc.pos[0]+merc.pos[N]*merc.pos[N]) << endl;
-  double x_0, y_0, x_1, y_1, x_2, y_2, r0, r1, r2;
-
-  x_0 = mpos[0]; y_0 = mpos[N];
-  r0 = sqrt(x_0*x_0+y_0*y_0);
-  x_1 = mpos[1]; y_1 = mpos[N+1];
-  r1 = sqrt(x_1*x_1+y_1*y_1);
-
-  cout.precision(20);
-
-  for(int i = 2; i < N; i++){
-    //cout << i << endl;
-    x_2 = mpos[i];   y_2 = mpos[i+N];
-    r2 = sqrt(x_2*x_2+y_2*y_2);
-
-
-    if( (r1<r2) && (r1<r0)){
-      //cout << "xxxx" << endl;
-      //cout << scientific << x_1 << "  (x val)" << endl;
-      ofile << x_1 << ", " <<  y_1 << ", " << r1 <<", " << i <<  endl;
     }
-    r0 = r1;
-    r1 = r2;
-    x_0 = x_1; y_0 = y_1;
-    x_1 = x_2; y_1 = y_2;
   }
+  return accel*G_scale;
+}
+
+void Solver::VertleNoStorage(){
+  method = "VV2";
+  double h = t_n/N; //stepsize
+  double h_2 = h/2.0; //stepsize
+  cout << "Running vv2" << endl;
+  ofstream ofile;
+  ofile.open("Results/" + sysName + "_" + method + ".csv");
+  //ofile << setprecision(8) << scientific;
+  ofile << "testing" << endl;
+
+
+  for(int k=0; k < planets.size(); k++){
+    Planet plan = planets[k];
+    ofile << plan.pos[0] << " ,"  << plan.pos[1] << " ,"  << plan.pos[2] << ", ";
+    ofile << plan.vel[0] << " ,"  << plan.vel[1] << " ,"  << plan.vel[2] << ", ";
+  }
+
+  ofile << endl;
+  double progress = 0.1;
+  clock_t start, stop;
+  double totTime = 0;
+  start = clock();
+
+  ofstream ofilePeri;
+  ofilePeri.open("Results/Peri_Results.csv");
+
+  double r0,r1,r2;
+  vec r0_vec(3), r1_vec(3), r2_vec(3);
+  r0_vec = planets[1].distanceOther_opt(planets[0], false);
+
+  ofilePeri << setprecision(20);
+  ofilePeri << r0_vec[0] << " , "<< r0_vec[1] << " , " << r0_vec[2] << " , " << norm(r0_vec) << " , " << 0 << endl;
+
+    //Start calculations for all timesteps
+    for (int j = 0; j < N-1; j++){
+
+      if(j >= progress*(N-2)){
+        stop = clock();
+        double timeInterval = ( (stop - start)/(double)CLOCKS_PER_SEC );
+        totTime += timeInterval;
+        cout << progress*100 << "% done. Interval time: " << timeInterval << endl;
+        progress = progress + 0.1;
+        start = clock();
+      }
+
+      for(int k=0; k < planets.size(); k++){ //for every planet compute position and velocity at specific time j
+        vec accel = TotalAccelerationOnPlanet_opt(planets[k], false); //fetch planet's acceleration vector [a_x, a_y, a_z] times h at a given time j
+        planets[k].pos[3] = planets[k].pos[0] + h*planets[k].vel[0] + h*h_2*accel[0]; // update x position
+        planets[k].pos[4] = planets[k].pos[1] + h*planets[k].vel[1]+ h*h_2*accel[1]; // update y position
+        planets[k].pos[5] = planets[k].pos[2] + h*planets[k].vel[2]+ h*h_2*accel[2]; // update z position
+
+        if(j == 0 || j==1){
+        }
+      }
+
+
+      for(int k=0; k < planets.size(); k++){
+        vec accel = TotalAccelerationOnPlanet_opt(planets[k], false); //fetch planet's acceleration vector [a_x, a_y, a_z] times h at a given time j
+
+        //Skjer en feil her.
+        vec accel_next = TotalAccelerationOnPlanet_opt(planets[k], true); //fetch planet's acceleration vector [a_x, a_y, a_z] times h at a given time j+1
+
+        planets[k].vel[3] =  planets[k].vel[0] + h_2*(accel[0]+accel_next[0]); // update x velocity
+        planets[k].vel[4] =  planets[k].vel[1] + h_2*(accel[1]+accel_next[1]); // update y velocity
+        planets[k].vel[5] =  planets[k].vel[2] + h_2*(accel[2]+accel_next[2]); // update z velocity
+
+      }
+
+      if (j == 0){
+        r1_vec = planets[1].distanceOther_opt(planets[0], true);
+        r1 = norm(r1_vec);
+        cout << r1_vec << endl;
+
+
+      }
+      else{
+        r2_vec = planets[1].distanceOther_opt(planets[0],true);
+        r2 = norm(r2_vec);
+
+        if (r0 > r1 && r1 < r2){
+          ofilePeri << r1_vec[0] << " , "<< r1_vec[1] << " , " << r1_vec[2] << r1 << " , " << j << endl;
+        }
+
+        r0_vec = r1_vec;
+        r0 = norm(r0_vec);
+
+        r1_vec = r2_vec;
+        r1 = norm(r1_vec);
+
+
+
+
+
+      }
+
+
+      //Write out new results
+      for(int k=0; k < planets.size(); k++){
+        Planet plan = planets[k];
+        ofile << plan.pos[3] << " ,"  << plan.pos[4] << " ,"  << plan.pos[5] << ", ";
+        ofile << plan.vel[3] << " ,"  << plan.vel[4] << " ,"  << plan.vel[5] << ", ";
+
+      }
+      ofile << endl;
+
+      for(int k=0; k < planets.size(); k++){
+        planets[k].pos[0] = planets[k].pos[3];
+        planets[k].pos[1] = planets[k].pos[4];
+        planets[k].pos[2] = planets[k].pos[5];
+
+        planets[k].vel[0] = planets[k].vel[3];
+        planets[k].vel[1] = planets[k].vel[4];
+        planets[k].vel[2] = planets[k].vel[5];
+      }
+
+
+    }
+  cout << "Finished vv2" << endl;
+  //cout << "Total time(s)--time(m): " << totTime << " -- " << totTime/60 << endl;
+  return;
 }
 
 // double Solver::getTotalEnergy(){

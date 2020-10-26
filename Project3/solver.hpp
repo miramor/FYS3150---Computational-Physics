@@ -47,7 +47,9 @@ class Solver{
     double calcKE(int k, int j);
     double calcL(int index);
 
-    //double getTotalEnergy();
+    void VertleNoStorage();
+    vec TotalAccelerationOnPlanet_opt(Planet& planet, bool useCurr);
+
 };
 
 #endif
