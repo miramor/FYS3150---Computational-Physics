@@ -86,7 +86,7 @@ int main(int argc, char const *argv[]) {
     }
   }
 
-  /*
+
   if( system != "systemE"){
     int choiceRef;
     cout << "Enter 1 for adjusted frame of reference to Center of Mass, any other number to not." << endl;
@@ -95,7 +95,7 @@ int main(int argc, char const *argv[]) {
     if(choiceRef == 1){
       planets = adjustedOrigin(planets, N_points);
     }
-  }*/
+  }
 
   Solver solv(planets, N_points , t_end, system);
   if(method=="E"){
@@ -125,11 +125,10 @@ int main(int argc, char const *argv[]) {
 }
 
 vector<Planet> adjustedOrigin(vector<Planet> planets, int N){
-  vec CoM(3);
-  double Mtot;
-  vec Moms(3); //Sum r * m
-  vec MomTot(3); //Total momentum of system
+  double Mtot = 0;
+  vec CoM(3, fill::zeros), Vc(3, fill::zeros), Moms(3, fill::zeros), MomTot(3, fill::zeros);
 
+  //Calculating total momentum of system
   for (int i = 0; i < planets.size(); i++){
     Mtot += planets[i].mass;
     Moms(0) += planets[i].pos[0] * planets[i].mass;
@@ -141,19 +140,22 @@ vector<Planet> adjustedOrigin(vector<Planet> planets, int N){
     MomTot(2) += planets[i].vel[2*N] * planets[i].mass;
   }
 
-  CoM = Moms/Mtot;
-  vec vc = MomTot/Mtot;
+  CoM = Moms/Mtot; //Center of mass
+  Vc = MomTot/Mtot; //Center of mass velocity
 
+
+  //Adjusting position and velocity such that Center of Mass it at rest
   for (int i = 0; i < planets.size(); i++){
     planets[i].pos[0] -= CoM(0);
     planets[i].pos[N] -= CoM(1);
     planets[i].pos[2*N] -= CoM(2);
 
-    planets[i].vel[0] -= vc(0);
-    planets[i].vel[N] -= vc(1);
-    planets[i].vel[2*N] -= vc(2);
+    planets[i].vel[0] -= Vc(0);
+    planets[i].vel[N] -= Vc(1);
+    planets[i].vel[2*N] -= Vc(2);
 
   }
+
   return planets;
 }
 
