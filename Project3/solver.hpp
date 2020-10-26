@@ -50,7 +50,6 @@ class Solver{
     void VertleNoStorage();
     vec TotalAccelerationOnPlanet_opt(Planet& planet, bool useCurr);
 
-    //double getTotalEnergy();
 };
 
 #endif

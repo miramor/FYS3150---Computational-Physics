@@ -23,8 +23,6 @@ Planet::Planet(double m, double x, double y, double z, double vx, double vy, dou
 //Different Initializing to not store all values
 Planet::Planet(double m, double x, double y, double z, double vx, double vy, double vz, string thisName, int N_points, int uselessNr){
   N = N_points;
-  //KEvec = vec(N);
-  //PEvec = vec(N);
   int timpeptsNeeded = 2;
   pos = vec(timpeptsNeeded*3, fill::zeros); vel = vec(timpeptsNeeded*3, fill::zeros);
   mass = m;
@@ -55,23 +53,12 @@ vec Planet::distanceOther_opt(Planet& otherPlanet, bool useCurr){ // if not curr
 }
 
 vec Planet::gravitationalForce_opt(Planet& otherPlanet, bool useCurr){
-
-  //cout << useCurr << ", start" << endl;
   vec r_vec =  - distanceOther_opt(otherPlanet, useCurr);
-  if (useCurr == true){
-    //cout << name << " pos:\n" << pos << endl;
-    //cout << otherPlanet.name << " pos:\n" << otherPlanet.pos << endl;
-  }
-  //cout << "end, " << r_vec << endl;
   double r = norm(r_vec);
   vec Fg;
 
   if (true == true){
-    //cout << "Extra force in use" << endl;
-    //cout << "orgForce" << otherPlanet.mass * (r_vec/r) / (pow(r,Beta)) << endl;
-    //cout << "extraForce" << otherPlanet.mass * (r_vec/r) * (3*l_merc*l_merc/(r*r*c_sq)) / (pow(r,Beta)) << endl;
     Fg = otherPlanet.mass * (r_vec/r) * (1 + 3*l_merc*l_merc/(r*r*c_sq)) / (r*r);
-    //cout << "This planet: "<< name << ", f: " << Fg << endl;
   }
   else{
     Fg = otherPlanet.mass * (r_vec/r) / (r*r);
@@ -79,23 +66,6 @@ vec Planet::gravitationalForce_opt(Planet& otherPlanet, bool useCurr){
   return Fg;
 }
 
-void Planet::update(){
-  cout << "BEFORE" << endl;
-  cout << name << ": " << pos[0] << ", " << pos[1] << ", " << pos[2] << endl;
-  cout << name << ": " << pos[3] << ", " << pos[4] << ", " << pos[5] << endl;
-  pos[0] = pos[3];
-  pos[1] = pos[4];
-  pos[2] = pos[5];
-
-  vel[0] = vel[3];
-  vel[1] = vel[4];
-  vel[2] = vel[5];
-
-  cout << "AFTER" << endl;
-  cout << name << ": " << pos[0] << ", " << pos[1] << ", " << pos[2] << endl;
-  cout << name << ": " << pos[3] << ", " << pos[4] << ", " << pos[5] << endl;
-
-}
 
 vec Planet::distanceOther(Planet& otherPlanet, int i){
   //vec dr = pos - otherPlanet.pos;
@@ -113,9 +83,6 @@ vec Planet::distanceOther(Planet& otherPlanet, int i){
 
 
 vec Planet::gravitationalForce(Planet& otherPlanet, int i){
-  //double r = distanceOther(otherPlanet, i);
-  //vec Fg = G_scale * mass * otherPlanet.mass / (r * r);
-  //vec Fg =  otherPlanet.mass / (r * r); //use if TotalForceOnPlanet is used in solve
 
   vec r_vec =  - distanceOther(otherPlanet, i);
   double Beta = 2;
@@ -134,12 +101,3 @@ vec Planet::gravitationalForce(Planet& otherPlanet, int i){
   }
   return Fg;
 }
-
-
-// double Planet::getKE(){
-//   return KEvec;
-// }
-//
-// double Planet::getPE(){
-//   return PEvec;
-// }
