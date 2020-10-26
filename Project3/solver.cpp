@@ -19,11 +19,7 @@ Solver::Solver(vector<Planet> sysPlanets, int N_val, double t_n_val, string sys)
     v_vec[0] = merc.vel[0]-sun.vel[0];
     v_vec[1] = merc.vel[1]-sun.vel[1];
     v_vec[2] = merc.vel[2]-sun.vel[2];
-    /*
-    v_vec[0] = merc.vel[0]-sun.vel[0];
-    v_vec[1] = merc.vel[N]-sun.vel[N];
-    v_vec[2] = merc.vel[2*N]-sun.vel[2*N];
-    */
+
     double l_merc = norm(cross(r_vec,v_vec)); //Angular orbital momentum, only calculate once
     cout << "ang momemnt merc:  " << l_merc << endl;
     planets[1].l_merc = l_merc; //give Mercury access to this to be used for the additional force
@@ -326,13 +322,13 @@ void Solver::VertleNoStorage(){
 
       }
 
-
+      /*
       //Write out new results
       for(int k=0; k < planets.size(); k++){
         Planet plan = planets[k];
         ofile << plan.pos[3] << " ,"  << plan.pos[4] << " ,"  << plan.pos[5] << ", ";
         ofile << plan.vel[3] << " ,"  << plan.vel[4] << " ,"  << plan.vel[5] << ", ";
-
+      */
       }
       ofile << endl;
 
