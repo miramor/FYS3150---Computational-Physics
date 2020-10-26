@@ -82,7 +82,7 @@ def plot_sys(system):
     plt.gca().spines["right"].set_alpha(0.0)
     plt.gca().spines["left"].set_alpha(0.6)
     plt.savefig("Plots/" + system + "_" + method + "_" + f"{t_end}" + ".pdf", dpi=200)
-    plt.show()
+    #plt.show()
 
 
 def plot3dPath(system):
@@ -211,7 +211,7 @@ def calcAnglePerihelMerc():
     print(f"Angle: Numerical {theta:.4e} vs  Calculated {radians} after {t_end} years.  Theta0 {theta0}")
 
 
-plot_sys(system)
+#plot_sys(system)
 calcAnglePerihelMerc()
 
 """
