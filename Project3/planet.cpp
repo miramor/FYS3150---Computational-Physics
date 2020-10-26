@@ -26,7 +26,7 @@ Planet::Planet(double m, double x, double y, double z, double vx, double vy, dou
   //KEvec = vec(N);
   //PEvec = vec(N);
   int timpeptsNeeded = 2;
-  pos = vec(timpeptsNeeded*3); vel = vec(timpeptsNeeded*3);
+  pos = vec(timpeptsNeeded*3, fill::zeros); vel = vec(timpeptsNeeded*3, fill::zeros);
   mass = m;
   name = thisName;
   pos[0] = x;
@@ -58,6 +58,10 @@ vec Planet::gravitationalForce_opt(Planet& otherPlanet, bool useCurr){
 
   //cout << useCurr << ", start" << endl;
   vec r_vec =  - distanceOther_opt(otherPlanet, useCurr);
+  if (useCurr == true){
+    //cout << name << " pos:\n" << pos << endl;
+    //cout << otherPlanet.name << " pos:\n" << otherPlanet.pos << endl;
+  }
   //cout << "end, " << r_vec << endl;
   double Beta = 2;
   double r = norm(r_vec);

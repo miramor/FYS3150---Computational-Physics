@@ -314,6 +314,9 @@ void Solver::VertleNoStorage(){
       for(int k=0; k < planets.size(); k++){ //for every planet compute position and velocity at specific time j
         vec accel = TotalAccelerationOnPlanet_opt(planets[k], false); //fetch planet's acceleration vector [a_x, a_y, a_z] times h at a given time j
         //cout << accel << endl;
+        //cout << "BEFORE SOLVER" << endl;
+        //cout << planets[k].name << ": " << planets[k].pos[0] << ", " << planets[k].pos[1] << ", " << planets[k].pos[2] << endl;
+        //cout << planets[k].name << ": " << planets[k].pos[3] << ", " << planets[k].pos[4] << ", " << planets[k].pos[5] << endl;
         planets[k].pos[3] = planets[k].pos[0] + h*planets[k].vel[0] + h*h_2*accel[0]; // update x position
         planets[k].pos[4] = planets[k].pos[1] + h*planets[k].vel[1]+ h*h_2*accel[1]; // update y position
         planets[k].pos[5] = planets[k].pos[2] + h*planets[k].vel[2]+ h*h_2*accel[2]; // update z position
@@ -321,7 +324,7 @@ void Solver::VertleNoStorage(){
         if(j == 0 || j==1){
           //cout << planets[k].name <<" :  "<< planets[k].pos[0] << ", " << planets[k].pos[1] << ", " << planets[k].pos[2] << endl;
         }
-        cout << planets[k].name <<" :  "<< planets[k].pos[3] << ", " << planets[k].pos[4] << ", " << planets[k].pos[5] << endl;
+        //cout << planets[k].name <<" :  "<< planets[k].pos[3] << ", " << planets[k].pos[4] << ", " << planets[k].pos[5] << endl;
       }
 
 
@@ -331,7 +334,7 @@ void Solver::VertleNoStorage(){
 
         //Skjer en feil her.
         vec accel_next = TotalAccelerationOnPlanet_opt(planets[k], true); //fetch planet's acceleration vector [a_x, a_y, a_z] times h at a given time j+1
-        //cout << accel_next << endl;
+
         planets[k].vel[3] =  planets[k].vel[0] + h_2*(accel[0]+accel_next[0]); // update x velocity
         planets[k].vel[4] =  planets[k].vel[1] + h_2*(accel[1]+accel_next[1]); // update y velocity
         planets[k].vel[5] =  planets[k].vel[2] + h_2*(accel[2]+accel_next[2]); // update z velocity
@@ -346,11 +349,20 @@ void Solver::VertleNoStorage(){
         ofile << plan.pos[3] << " ,"  << plan.pos[4] << " ,"  << plan.pos[5] << ", ";
         ofile << plan.vel[3] << " ,"  << plan.vel[4] << " ,"  << plan.vel[5] << ", ";
         //cout << "start update" << endl;
-        plan.update();
+        //plan.update();
         //cout << "end" << endl;
       }
       ofile << endl;
-      //Write to
+
+      for(int k=0; k < planets.size(); k++){
+        planets[k].pos[0] = planets[k].pos[3];
+        planets[k].pos[1] = planets[k].pos[4];
+        planets[k].pos[2] = planets[k].pos[5];
+
+        planets[k].vel[0] = planets[k].vel[3];
+        planets[k].vel[1] = planets[k].vel[4];
+        planets[k].vel[2] = planets[k].vel[5];
+      }
 
 
     }
