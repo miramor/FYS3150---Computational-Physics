@@ -33,3 +33,5 @@ The solver function also has a test function that calculates the angular momentu
 We use *main.py* to compile all the .hpp and .cpp files into an executable, which then is executed automatically. *main.py* then runs *plot_results.py*.
 
 **How to use:**
+Run by writing *python3 main.py system method end_time time_step* in terminal.
+The possible systems are systemA, systemB, systemC, and system E. Possible methods are E(Euler), EC(Euler-Cromer), VV(Velocity Verlet), VV2(Velocity Verlet used for perihelion precision). *end_time* is an integer choosing numbers of years to simulate. *time_step* is also given in the unit years. We used *time_step*=0.0001 for most of the simulations.
