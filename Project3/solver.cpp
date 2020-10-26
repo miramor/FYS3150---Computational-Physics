@@ -131,7 +131,7 @@ void Solver::testAngMom(){
 
   double error = l1 - l2;
 
-  cout << "Error in Angular Momenutm: " << error << endl;
+  //cout << "Error in Angular Momenutm: " << error << endl;
   cout << "Relative error AngMom: " << error/l1 << endl;
 }
 
@@ -159,11 +159,12 @@ void Solver::testTotE(){
     endE += calcPE(k, N-1)/2 + calcKE(k, N-1);
   }
   double error = abs(startE) - abs(endE);
+  /*
   if (abs(error) > eps)
       cout << "The total energy is not conserved.\n Error: " << abs(error) << endl;
-
-  cout << "Error in total energy: " << error << endl;
-  cout << "Relative change in total energy: " << error/endE << endl;
+  */
+  //cout << "Error in total energy: " << error << endl;
+  cout << "Relative change in total energy: " << error/startE << endl;
 }
 
 double Solver::calcKE(int k, int j){

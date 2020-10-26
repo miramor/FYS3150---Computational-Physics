@@ -36,39 +36,31 @@ int main(int argc, char const *argv[]) {
   }
 
   else{
-    //Make all relevant planets which is used and not pulled from NASA:
-    Planet sun = Planet(1, 0., 0., 0., 0., 0., 0., "Sun", N_points);
-    Planet earth_c = Planet(5.97219e24/1988500e24, 1, 0., 0., 0., 2*pi, 0., "Earth", N_points);
-    Planet earth_e = Planet(5.97219e24/1988500e24, 1, 0., 0., 0., 5, 0., "Earth", N_points);
-    Planet earth_escape = Planet(5.97219e24/1988500e24, 1., 0., 0., 0., 1.42*2*pi, 0., "Earth", N_points);
-    Planet mercury = Planet(3.285E23/1988500e24 , 0.3075, 0., 0., 0., 12.44, 0., "Mercury", N_points);
-    Planet jupiter = Planet(1.89813e27/1988500e24, 5.1, 0., 0., 0., 2*pi/sqrt(5.1), 0., "Jupiter", N_points);
-    Planet jupiter_10 = Planet(1.89813e27*10/1988500e24, 5.1, 0., 0., 0., 2*pi/sqrt(5.1), 0., "Jupiter", N_points);
-    Planet jupiter_1000 = Planet(1.89813e27*1000/1988500e24, 5.1, 0., 0., 0., 2*pi/sqrt(5.1), 0., "Jupiter", N_points);
 
-    //Used for systemE, with perihelion additional force. The parameter 0, means only that it uses a seperate constructor
-    Planet sun_opt = Planet(1, 0., 0., 0., 0., 0., 0., "Sun", N_points, 0);
-    Planet mercury_opt = Planet(3.285E23/1988500e24 , 0.3075, 0., 0., 0., 12.44, 0., "Mercury", N_points, 0);
+    Planet sun = Planet(1, 0., 0., 0., 0., 0., 0., "Sun", N_points);
 
     if (system == "systemA") {
-      vector<Planet> plan = {sun, earth_c, earth_e, earth_escape};
+      vector<double> velocities = {2*pi, 5, 1.42*2*pi};
       int choice;
-      cout << "Choose orbit for earth: circular(1), eliptical(2), escape vel(3)" << endl;
+      cout << "Choose orbit for earth: circular(0), eliptical(1), escape vel(2)" << endl;
       cin >> choice;
 
-      planets.push_back(plan[0]);
-      planets.push_back(plan[choice]);
+      Planet earth = Planet(5.97219e24/1988500e24, 1, 0., 0., 0., velocities[choice], 0., "Earth", N_points);
+      planets.push_back(sun);
+      planets.push_back(earth);
     }
 
     if (system == "systemB") {
-      vector<Planet> plan = {sun, earth_c, jupiter, jupiter_10, jupiter_1000};
+      Planet earth = Planet(5.97219e24/1988500e24, 1, 0., 0., 0., 2*pi, 0., "Earth", N_points);
+      vector<double> massScale = {1, 10, 1000};
       int choice;
-      cout << "Choose weigthed Jupiter: regular(1), times10(2), times1000(3)" << endl;
+      cout << "Choose weigthed Jupiter: regular(0), times10(1), times1000(2)" << endl;
       cin >> choice;
 
-      planets.push_back(plan[0]);
-      planets.push_back(plan[1]); //earth circular
-      planets.push_back(plan[choice+1]);//adjusted for list
+      Planet jupiter = Planet(massScale[choice]*1.89813e27/1988500e24, 5.1, 0., 0., 0., 2*pi/sqrt(5.1), 0., "Jupiter", N_points);
+      planets.push_back(sun);
+      planets.push_back(earth); //earth circular
+      planets.push_back(jupiter);//adjusted for list
     }
 
     if (system == "systemC") {
@@ -77,9 +69,10 @@ int main(int argc, char const *argv[]) {
     }
 
     if (system == "systemE") {
-      vector<Planet> plan = {sun_opt, mercury_opt};
-      planets.push_back(plan[0]);
-      planets.push_back(plan[1]);
+      Planet sun = Planet(1, 0., 0., 0., 0., 0., 0., "Sun", N_points, 0);
+      Planet mercury_opt = Planet(3.285E23/1988500e24 , 0.3075, 0., 0., 0., 12.44, 0., "Mercury", N_points, 0);
+      planets.push_back(sun);
+      planets.push_back(mercury_opt);
 
       cout << "Can only use VV2, runs with method VV2" << endl;
       method = "VV2";
@@ -89,7 +82,7 @@ int main(int argc, char const *argv[]) {
 
   if( system != "systemE"){
     int choiceRef;
-    cout << "Enter 1 for adjusted frame of reference to Center of Mass, any other number to not." << endl;
+    cout << "\nEnter 1 for adjusted frame of reference to Center of Mass, any other number to not." << endl;
     cin >> choiceRef;
 
     if(choiceRef == 1){
@@ -122,8 +115,9 @@ int main(int argc, char const *argv[]) {
   }
 
   solv.WriteResults();
-  //solv.testTotE();
-  //solv.testAngMom();
+
+  solv.testTotE();
+  solv.testAngMom();
 
   return 0;
 }
