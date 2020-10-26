@@ -13,7 +13,6 @@ int main(int argc, char const *argv[]) {
   double h = stod(argv[4]);
   double pi = 2*acos(0.0);
   int N_points = (int) ( (double)t_end/h);
-  //cout << N_points << endl;
   cout << system << ",  " << method << endl;
 
   map<string, vector<string> > systems;

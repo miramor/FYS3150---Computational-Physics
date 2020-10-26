@@ -14,7 +14,7 @@ Solver::Solver(vector<Planet> sysPlanets, int N_val, double t_n_val, string sys)
   if(sys == "systemE"){
     Planet sun = planets[0];
     Planet merc = planets[1];
-    vec r_vec =  - merc.distanceOther_opt(sun, 0);
+    vec r_vec =  - planets[1].distanceOther_opt(planets[0], 0);
     vec v_vec(3);
     v_vec[0] = merc.vel[0]-sun.vel[0];
     v_vec[1] = merc.vel[1]-sun.vel[1];
@@ -26,7 +26,7 @@ Solver::Solver(vector<Planet> sysPlanets, int N_val, double t_n_val, string sys)
     */
     double l_merc = norm(cross(r_vec,v_vec)); //Angular orbital momentum, only calculate once
     cout << "ang momemnt merc:  " << l_merc << endl;
-    merc.l_merc = l_merc; //give Mercury access to this to be used for the additional force
+    planets[1].l_merc = l_merc; //give Mercury access to this to be used for the additional force
   }
   //cout << "PRINT OUT PI:  " << pi << endl;
 }
@@ -219,48 +219,6 @@ void Solver::WriteResults(){
   }
 }
 
-void Solver::WritePeriResults(){
-  Planet sun = planets[0];
-  Planet merc = planets[1];
-  vec mpos = merc.pos;
-
-  ofstream ofile;
-  string fileLocation = "Results/perihelioMerc.csv";
-  ofile.open(fileLocation);
-  ofile << setprecision(30) << scientific;
-
-  //cout << "initial pos Mercury: " << merc.pos[0] << ", " << merc.pos[N] << endl;
-  ofile << merc.pos[0]<< ", " <<  merc.pos[N] << ", " << sqrt(merc.pos[0]*merc.pos[0]+merc.pos[N]*merc.pos[N]) << ", " << 0 << endl;
-  double x_0, y_0, x_1, y_1, x_2, y_2, r0, r1, r2;
-
-  x_0 = mpos[0]; y_0 = mpos[N];
-  r0 = sqrt(x_0*x_0+y_0*y_0);
-  x_1 = mpos[1]; y_1 = mpos[N+1];
-  r1 = sqrt(x_1*x_1+y_1*y_1);
-
-  cout.precision(20);
-
-  for(int i = 2; i < N; i++){
-    //cout << i << endl;
-    x_2 = mpos[i];   y_2 = mpos[i+N];
-    r2 = sqrt(x_2*x_2+y_2*y_2);
-
-    // One point which is closest to the sun, each orbit.
-    if( (r1<r2) && (r1<r0)){
-      //cout << "xxxx" << endl;
-      //cout << scientific << x_1 << "  (x val)" << endl;
-      ofile << x_1 << ", " <<  y_1 << ", " << r1 <<", " << i <<  endl;
-    }
-    //Update variables
-    r0 = r1;
-    r1 = r2;
-    x_0 = x_1; y_0 = y_1;
-    x_1 = x_2; y_1 = y_2;
-  }
-}
-
-
-
 vec Solver::TotalAccelerationOnPlanet_opt(Planet& planet, bool useCurr){ //calculate total acceleration on planet
   vec accel(3, fill::zeros); // acceleration vector [a_x, a_y, a_z] filled with zeros [0,0,0]
 
@@ -283,11 +241,9 @@ void Solver::VertleNoStorage(){
   //ofile << setprecision(8) << scientific;
   ofile << "testing" << endl;
 
-  //Write for t=0
-  //cout << "\nInitial position:" << endl;
+
   for(int k=0; k < planets.size(); k++){
     Planet plan = planets[k];
-    //cout << plan.name << ", position: " << plan.pos[0] << ", "<<  plan.pos[1] << endl;
     ofile << plan.pos[0] << " ,"  << plan.pos[1] << " ,"  << plan.pos[2] << ", ";
     ofile << plan.vel[0] << " ,"  << plan.vel[1] << " ,"  << plan.vel[2] << ", ";
   }
@@ -298,24 +254,15 @@ void Solver::VertleNoStorage(){
   double totTime = 0;
   start = clock();
 
-  //Only for Sun and Mercury, perihelion calculations in 2D.
-  double x_0, y_0, x_1, y_1, x_2, y_2, r0, r1, r2;
-  vec r1_vec;
-  Planet sun = planets[0];
-  Planet merc = planets[1];
+  ofstream ofilePeri;
+  ofilePeri.open("Results/Peri_Results.csv");
 
-  vec r0_vec = merc.distanceOther_opt(sun, false);
-  //cout << r0_vec << endl;
-  r0 = norm(r0_vec);
+  double r0,r1,r2;
+  vec r0_vec(3), r1_vec(3), r2_vec(3);
+  r0_vec = planets[1].distanceOther_opt(planets[0], false);
 
-
-  ofstream fileP;
-  string fileLocation = "Results/perihelioMerc_opt.csv";
-  fileP.open(fileLocation);
-  fileP << setprecision(20) << scientific;
-
-  //cout << "initial pos Mercury: " << merc.pos[0] << ", " << merc.pos[N] << endl;
-  fileP << r0_vec[0] << ", " <<  r0_vec[1] << ", " << r0 << ", " << 0 << endl;
+  ofilePeri << setprecision(20);
+  ofilePeri << r0_vec[0] << " , "<< r0_vec[1] << " , " << r0_vec[2] << " , " << norm(r0_vec) << " , " << 0 << endl;
 
     //Start calculations for all timesteps
     for (int j = 0; j < N-1; j++){
@@ -324,7 +271,7 @@ void Solver::VertleNoStorage(){
         stop = clock();
         double timeInterval = ( (stop - start)/(double)CLOCKS_PER_SEC );
         totTime += timeInterval;
-        //cout << progress*100 << "% done. Interval time: " << timeInterval << endl;
+        cout << progress*100 << "% done. Interval time: " << timeInterval << endl;
         progress = progress + 0.1;
         start = clock();
       }
@@ -334,50 +281,58 @@ void Solver::VertleNoStorage(){
         planets[k].pos[3] = planets[k].pos[0] + h*planets[k].vel[0] + h*h_2*accel[0]; // update x position
         planets[k].pos[4] = planets[k].pos[1] + h*planets[k].vel[1]+ h*h_2*accel[1]; // update y position
         planets[k].pos[5] = planets[k].pos[2] + h*planets[k].vel[2]+ h*h_2*accel[2]; // update z position
-      }
 
-      if(j == 0){
-        //Calculate r1 once to start.
-        cout << merc.pos << endl;
-        r1_vec = merc.distanceOther_opt(sun, true);
-        cout << r1_vec << endl;
-        r1 = norm(r1_vec);
-        cout << "R1 VAL:" << r1 << endl;
-      }
-
-      if(j >= 1){
-        //Calculate r2 after r0 and r1 is made, then write r1 to file if its < than r0 && r2
-        vec r2_vec = merc.distanceOther_opt(sun, true);
-        r2 = norm(r2_vec);
-
-        cout << "Radii:\n" << "r0:" << r0 << " r1:" <<  r1 << " r2:" << r2 << endl;
-
-        if( r1 < r0 && r1 < r2){
-          cout << "Found peri, vector: " << r1_vec << ",  radius = " << r1 << endl;
-          fileP << r1_vec[0] << ", " <<r1_vec[1] << ", " << r1 << ", " << j << endl;
+        if(j == 0 || j==1){
         }
-
-        //update r and r_vecs
-        //r0_vec = r1_vec;
-        r1_vec = r2_vec;
-        r0 = r1;
-        r1 = r2;
       }
 
 
       for(int k=0; k < planets.size(); k++){
         vec accel = TotalAccelerationOnPlanet_opt(planets[k], false); //fetch planet's acceleration vector [a_x, a_y, a_z] times h at a given time j
+
+        //Skjer en feil her.
         vec accel_next = TotalAccelerationOnPlanet_opt(planets[k], true); //fetch planet's acceleration vector [a_x, a_y, a_z] times h at a given time j+1
 
         planets[k].vel[3] =  planets[k].vel[0] + h_2*(accel[0]+accel_next[0]); // update x velocity
         planets[k].vel[4] =  planets[k].vel[1] + h_2*(accel[1]+accel_next[1]); // update y velocity
         planets[k].vel[5] =  planets[k].vel[2] + h_2*(accel[2]+accel_next[2]); // update z velocity
+
       }
 
+      if (j == 0){
+        r1_vec = planets[1].distanceOther_opt(planets[0], true);
+        r1 = norm(r1_vec);
+        cout << r1_vec << endl;
+
+
+      }
+      else{
+        r2_vec = planets[1].distanceOther_opt(planets[0],true);
+        r2 = norm(r2_vec);
+
+        if (r0 > r1 && r1 < r2){
+          ofilePeri << r1_vec[0] << " , "<< r1_vec[1] << " , " << r1_vec[2] << r1 << " , " << j << endl;
+        }
+
+        r0_vec = r1_vec;
+        r0 = norm(r0_vec);
+
+        r1_vec = r2_vec;
+        r1 = norm(r1_vec);
+
+
+
+
+
+      }
+
+
+      //Write out new results
       for(int k=0; k < planets.size(); k++){
         Planet plan = planets[k];
         ofile << plan.pos[3] << " ,"  << plan.pos[4] << " ,"  << plan.pos[5] << ", ";
         ofile << plan.vel[3] << " ,"  << plan.vel[4] << " ,"  << plan.vel[5] << ", ";
+
       }
       ofile << endl;
 
@@ -390,6 +345,7 @@ void Solver::VertleNoStorage(){
         planets[k].vel[1] = planets[k].vel[4];
         planets[k].vel[2] = planets[k].vel[5];
       }
+
 
     }
   cout << "Finished vv2" << endl;
