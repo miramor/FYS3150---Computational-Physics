@@ -24,7 +24,7 @@ In order to run the tests, uncomment the test functions in main.cpp.
 
 
 ### Project 3:
-Simulating the solar system
+*Simulating the solar system*
 
 The two main parts of this program is a planet class and a solver class. In the planet class, we initialize planet objects. This object contains all the information about the planet, including name, mass, position and velocity. In the solver class, we have an Euler, Euler-Cromer and Velocity Verlet solver. The solver class also includes a function that writes position and velocity to a .csv file.
 
