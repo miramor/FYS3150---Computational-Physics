@@ -298,9 +298,27 @@ void Solver::VertleNoStorage(){
   double totTime = 0;
   start = clock();
 
+  //Only for Sun and Mercury, perihelion calculations in 2D.
+  double x_0, y_0, x_1, y_1, x_2, y_2, r0, r1, r2;
+  vec r1_vec;
+  Planet sun = planets[0];
+  Planet merc = planets[1];
+
+  vec r0_vec = merc.distanceOther_opt(sun, false);
+  //cout << r0_vec << endl;
+  r0 = norm(r0_vec);
+
+
+  ofstream fileP;
+  string fileLocation = "Results/perihelioMerc_opt.csv";
+  fileP.open(fileLocation);
+  fileP << setprecision(20) << scientific;
+
+  //cout << "initial pos Mercury: " << merc.pos[0] << ", " << merc.pos[N] << endl;
+  fileP << r0_vec[0] << ", " <<  r0_vec[1] << ", " << r0 << ", " << 0 << endl;
+
     //Start calculations for all timesteps
     for (int j = 0; j < N-1; j++){
-
 
       if(j >= progress*(N-2)){
         stop = clock();
@@ -313,44 +331,53 @@ void Solver::VertleNoStorage(){
 
       for(int k=0; k < planets.size(); k++){ //for every planet compute position and velocity at specific time j
         vec accel = TotalAccelerationOnPlanet_opt(planets[k], false); //fetch planet's acceleration vector [a_x, a_y, a_z] times h at a given time j
-        //cout << accel << endl;
-        //cout << "BEFORE SOLVER" << endl;
-        //cout << planets[k].name << ": " << planets[k].pos[0] << ", " << planets[k].pos[1] << ", " << planets[k].pos[2] << endl;
-        //cout << planets[k].name << ": " << planets[k].pos[3] << ", " << planets[k].pos[4] << ", " << planets[k].pos[5] << endl;
         planets[k].pos[3] = planets[k].pos[0] + h*planets[k].vel[0] + h*h_2*accel[0]; // update x position
         planets[k].pos[4] = planets[k].pos[1] + h*planets[k].vel[1]+ h*h_2*accel[1]; // update y position
         planets[k].pos[5] = planets[k].pos[2] + h*planets[k].vel[2]+ h*h_2*accel[2]; // update z position
+      }
 
-        if(j == 0 || j==1){
-          //cout << planets[k].name <<" :  "<< planets[k].pos[0] << ", " << planets[k].pos[1] << ", " << planets[k].pos[2] << endl;
+      if(j == 0){
+        //Calculate r1 once to start.
+        cout << merc.pos << endl;
+        r1_vec = merc.distanceOther_opt(sun, true);
+        cout << r1_vec << endl;
+        r1 = norm(r1_vec);
+        cout << "R1 VAL:" << r1 << endl;
+      }
+
+      if(j >= 1){
+        //Calculate r2 after r0 and r1 is made, then write r1 to file if its < than r0 && r2
+        vec r2_vec = merc.distanceOther_opt(sun, true);
+        r2 = norm(r2_vec);
+
+        cout << "Radii:\n" << "r0:" << r0 << " r1:" <<  r1 << " r2:" << r2 << endl;
+
+        if( r1 < r0 && r1 < r2){
+          cout << "Found peri, vector: " << r1_vec << ",  radius = " << r1 << endl;
+          fileP << r1_vec[0] << ", " <<r1_vec[1] << ", " << r1 << ", " << j << endl;
         }
-        //cout << planets[k].name <<" :  "<< planets[k].pos[3] << ", " << planets[k].pos[4] << ", " << planets[k].pos[5] << endl;
+
+        //update r and r_vecs
+        //r0_vec = r1_vec;
+        r1_vec = r2_vec;
+        r0 = r1;
+        r1 = r2;
       }
 
 
       for(int k=0; k < planets.size(); k++){
         vec accel = TotalAccelerationOnPlanet_opt(planets[k], false); //fetch planet's acceleration vector [a_x, a_y, a_z] times h at a given time j
-        //cout << planets[k].vel[3] << endl;
-
-        //Skjer en feil her.
         vec accel_next = TotalAccelerationOnPlanet_opt(planets[k], true); //fetch planet's acceleration vector [a_x, a_y, a_z] times h at a given time j+1
 
         planets[k].vel[3] =  planets[k].vel[0] + h_2*(accel[0]+accel_next[0]); // update x velocity
         planets[k].vel[4] =  planets[k].vel[1] + h_2*(accel[1]+accel_next[1]); // update y velocity
         planets[k].vel[5] =  planets[k].vel[2] + h_2*(accel[2]+accel_next[2]); // update z velocity
-
-        //optimer med accel_next = accel
       }
-
-      //Write out new results
 
       for(int k=0; k < planets.size(); k++){
         Planet plan = planets[k];
         ofile << plan.pos[3] << " ,"  << plan.pos[4] << " ,"  << plan.pos[5] << ", ";
         ofile << plan.vel[3] << " ,"  << plan.vel[4] << " ,"  << plan.vel[5] << ", ";
-        //cout << "start update" << endl;
-        //plan.update();
-        //cout << "end" << endl;
       }
       ofile << endl;
 
@@ -363,7 +390,6 @@ void Solver::VertleNoStorage(){
         planets[k].vel[1] = planets[k].vel[4];
         planets[k].vel[2] = planets[k].vel[5];
       }
-
 
     }
   cout << "Finished vv2" << endl;
