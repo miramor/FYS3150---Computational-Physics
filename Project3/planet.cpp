@@ -43,10 +43,15 @@ vec Planet::gravitationalForce(Planet& otherPlanet, int index){
   vec r_vec =  - distanceOther(otherPlanet, index);
   double Beta = 2;
   double r = norm(r_vec);
+  double r_sqr = r*r;
+
   vec Fg;
   //if ((name == "Mercury" && otherPlanet.name = "Sun") || (name == "Sun" &&  otherPlanet.name = "Mercury")){
-  if ( true == true){
-    Fg = otherPlanet.mass * (r_vec/r) * (1 + 3*l_merc*l_merc/(r*r*c_sq)) / (pow(r,Beta));
+  if ( false == true){
+    Fg = otherPlanet.mass * (r_vec/r) * (1 + 3*l_merc*l_merc/(r_sqr*c_sq)) / r_sqr;
+    cout << "Rel force" << Fg << endl;
+    cout << " force" << otherPlanet.mass * (r_vec/r) / (pow(r,Beta)) << endl;
+
     //cout << "This planet: "<< name << ", f: " << Fg << endl;
   }
   else{
