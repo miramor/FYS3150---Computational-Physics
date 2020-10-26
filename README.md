@@ -21,3 +21,15 @@ We defined the potentials V0, V1 and V2, respectively for the buckling beam, qua
 In order to use the function that records the CPU run time and number of iterations for the Buckling Beam problem, uncomment the function "writeTimeResults(omega)" in the main.cpp file, and the two functions at the bottom of "plot_results.py".
 
 In order to run the tests, uncomment the test functions in main.cpp.
+
+
+### Project 3:
+*Simulating the solar system*
+
+The two main parts of this program is a planet class and a solver class. In the planet class, we initialize planet objects. This object contains all the information about the planet, including name, mass, position and velocity. In the solver class, we have an Euler, Euler-Cromer and Velocity Verlet solver. The solver class also includes a function that writes position and velocity to a .csv file.
+
+The solver function also has a test function that calculates the angular momentum and total energy in the first and the last step of the in the simulation, to see if these quantities are conserved.
+
+We use main.py to compile all the .hpp and .cpp files into an executable, which then is executed automatically. main.py then runs plot_results.py.
+
+**How to use:**
