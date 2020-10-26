@@ -38,4 +38,4 @@ The possible *systems* are systemA, systemB, systemC, and system E. Possible *me
 
 There will be instructions asking for inputs, these are always numbers(integers).
 
-PS: We recommend plotting in 3D :) (Axis != equal, which makes it look cooler)
+PS: We recommend plotting in 3D :) (axis != equal, which makes it look cooler)
