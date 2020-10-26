@@ -81,7 +81,7 @@ int main(int argc, char const *argv[]) {
       planets.push_back(plan[0]);
       planets.push_back(plan[1]);
 
-      cout << "Can only use VV2, sets method to VV2" << endl;
+      cout << "Can only use VV2, runs with method VV2" << endl;
       method = "VV2";
     }
   }
@@ -99,21 +99,25 @@ int main(int argc, char const *argv[]) {
 
   Solver solv(planets, N_points , t_end, system);
   if(method=="E"){
-      solv.Euler();
+    cout << "Euler started" << endl;
+    solv.Euler();
+    cout << "Finished Euler\n" << endl;
   }
   if(method=="EC"){
-      solv.EulerCromer();
+    cout << "EulerCromer started" << endl;
+    solv.EulerCromer();
+    cout << "Finished EulerCromer\n" << endl;
   }
   if(method=="VV"){
     cout << "VV started" << endl;
     solv.VelocityVerlet();
-    cout << "Finished VV" << endl;
+    cout << "Finished VV\n" << endl;
   }
 
   if(method=="VV2"){
     cout << "VV2 started" << endl;
     solv.VertleNoStorage();
-    cout << "Finished VV2" << endl;
+    cout << "Finished VV2\n" << endl;
     return 0;
   }
 
