@@ -30,9 +30,13 @@ int main(int argc, char const *argv[]) {
   systems["systemC"] = {"Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"};
   systems["systemE"] = {"Sun", "Mercury"};
 
+  if(system == "systemE" && method == "VV2" && dataChoice == 2){
+    cout << "Cannot run VV2 for NASA data, changes to custom." << endl;
+    dataChoice = 1;
+  }
+
   if(dataChoice == 2){
     planets = read_initial(systems[system], N_points);
-
   }
 
   else{
@@ -92,25 +96,33 @@ int main(int argc, char const *argv[]) {
 
   Solver solv(planets, N_points , t_end, system);
   if(method=="E"){
+    cout << "****************************" << endl;
     cout << "Euler started" << endl;
     solv.Euler();
-    cout << "Finished Euler\n" << endl;
+    cout << "Finished Euler" << endl;
+    cout << "****************************\n" << endl;
   }
   if(method=="EC"){
+    cout << "****************************" << endl;
     cout << "EulerCromer started" << endl;
     solv.EulerCromer();
-    cout << "Finished EulerCromer\n" << endl;
+    cout << "Finished EulerCromer" << endl;
+    cout << "****************************\n" << endl;
   }
   if(method=="VV"){
+    cout << "****************************" << endl;
     cout << "VV started" << endl;
     solv.VelocityVerlet();
-    cout << "Finished VV\n" << endl;
+    cout << "Finished VV" << endl;
+    cout << "****************************\n" << endl;
   }
 
   if(method=="VV2"){
+    cout << "****************************" << endl;
     cout << "VV2 started" << endl;
     solv.VertleNoStorage();
-    cout << "Finished VV2\n" << endl;
+    cout << "Finished VV2" << endl;
+    cout << "****************************\n" << endl;
     return 0;
   }
 

@@ -92,7 +92,19 @@ void Solver::VelocityVerlet(){
   clock_t start, stop;
   double totTime = 0;
   start = clock();
+
+  clock_t startEstimated, stopEstimated;
+  startEstimated = clock();
+  double stopPrint = 0.02; //Calculates full time after 2%, avoid to long calculations
+
     for (int j = 0; j < N-1; j++){
+
+      if( j > stopPrint*N){
+        stopEstimated = clock();
+        double time = ( (stopEstimated - startEstimated)/(double)CLOCKS_PER_SEC );
+        cout << "Estimated time is " << time*1/stopPrint << "s" << endl;
+        stopPrint+= 100;
+      }
 
       if(j >= progress*(N-2)){
         stop = clock();
@@ -118,7 +130,7 @@ void Solver::VelocityVerlet(){
     }
   }
 
-  cout << "Total time(s)--time(m): " << totTime << " -- " << totTime/60 << endl;
+  cout << "Total time: " << totTime << "s" << endl;
   return;
 }
 
@@ -257,6 +269,10 @@ void Solver::VertleNoStorage(){
   double totTime = 0;
   start = clock();
 
+  clock_t startEstimated, stopEstimated;
+  startEstimated = clock();
+  double stopPrint = 0.02;
+
   ofstream ofilePeri;
   ofilePeri.open("Results/Peri_Results.csv");
 
@@ -270,6 +286,12 @@ void Solver::VertleNoStorage(){
     //Start calculations for all timesteps
     for (int j = 0; j < N-1; j++){
 
+      if( j > stopPrint*N){
+        stopEstimated = clock();
+        double time = ( (stopEstimated - startEstimated)/(double)CLOCKS_PER_SEC );
+        cout << "Estimated time is " << time*50 << "s" << endl;
+        stopPrint+= 100;
+      }
       // Prints out progress
       if(j >= progress*(N-2)){
         stop = clock();
@@ -344,5 +366,6 @@ void Solver::VertleNoStorage(){
 
 
     }
+  cout << "Total time" << totTime << "s" << endl;
   return;
 }
