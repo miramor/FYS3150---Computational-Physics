@@ -43,7 +43,8 @@ Make sure the message "*methodName* started" (VV started) is printed before leav
 
 PS: We recommend plotting in 3D :) (axis != equal, which makes it look cooler)
 
-**Run Example:**
+**Run Examples:**
+
 Plots all planets excluding Pluto in 3D. Calculations takes about 2 min.
 main.py systemC VV 100 0.00001
 *then use NASA data, adjust origin and plot 3D*
@@ -53,3 +54,6 @@ This *h* = 1e-8 takes about 50s.
 main.py systemE VV2 1 0.00000001
 *will then automatically choose the right method*
 *last input, dont press 0 when asked: If used NASA data press 0, otherwise the calculated theta is printed out*
+
+Basic example
+main.py systemA VV 2 0.00001
