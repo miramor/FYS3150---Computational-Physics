@@ -6,9 +6,6 @@ import sys
 import csv
 import math
 
-#files = glob.glob('./Results/*.csv') #contains list of all files ending with csv, can be used if we wanna plot all files at once
-
-
 systems = {
 "systemA": ["Sun", "Earth"],
 "systemB": ["Sun", "Earth", "Jupiter"],
@@ -28,22 +25,7 @@ masses = [float(i) for i in f_masses.readlines()]
 massesDic = {i:j for i,j in zip(systems["systemC"], masses)}
 
 
-
-def plotEnergy(system):
-    sys_names = [par + obj for obj in systems[system] for par in parameters]
-    sys_data = pd.read_csv("Results/" + system + "_"+ method + ".csv", index_col=False, names=sys_names, skiprows=1)
-    N = len(sys_data[sys_names[0]])
-
-
-
-
-
 def plot_sys(system):
-#     with open("test.csv", "r") as f:
-#         reader = csv.reader(f)
-#         row = next(reader)
-#         print(row)
-
     sys_names = [par + obj for obj in systems[system] for par in parameters]
     sys_data = pd.read_csv("Results/" + system + "_"+ method + ".csv", index_col=False, names=sys_names, skiprows=1)
     N = len(sys_data[sys_names[0]])
@@ -51,24 +33,6 @@ def plot_sys(system):
         x = sys_data[sys_names[i*6]]
         y = sys_data[sys_names[i*6+1]]
         plt.plot(x,y, label = systems[system][i])
-
-    """
-    li = sys_data["x_Earth"].tail(1).index.item()
-    xe0 = sys_data["x_Earth"][0]
-    ye0 = sys_data["y_Earth"][0]
-    ze0 = sys_data["z_Earth"][0]
-    xel = sys_data["x_Earth"][li]
-    yel = sys_data["y_Earth"][li]
-    zel = sys_data["z_Earth"][li]
-
-    absxe = abs(xe0-xel)
-    absye = abs(ye0-yel)
-    absze = abs(ze0-zel)
-    #print(sys_data["x_Earth"][li])
-    print(f"Check x position: {xe0}, {xel}, {absxe:.2e}")
-    print(f"Check y position: {ye0}, {yel}, {absye:.2e}")
-    print(f"Check z position: {ze0}, {zel}, {absze:.2e}")
-    """
 
     plt.axis('equal')
     plt.legend()
@@ -82,7 +46,7 @@ def plot_sys(system):
     plt.gca().spines["right"].set_alpha(0.0)
     plt.gca().spines["left"].set_alpha(0.6)
     plt.savefig("Plots/" + system + "_" + method + "_" + f"{t_end}" + ".pdf", dpi=200)
-    #plt.show()
+    plt.show()
 
 
 def plot3dPath(system):
@@ -107,12 +71,6 @@ def plot3dPath(system):
     ax.set_xlabel("AU")
     plt.savefig("Plots/" + system + "_" + method + "_" + f"{t_end}" + "_3D.pdf", dpi=200)
     plt.show()
-
-#plot_sys(system)
-#plt.clf()
-
-#plot3dPath(system)
-#plt.clf()
 
 def plotOrbitDifference(filename, orbitform):
     """
@@ -162,39 +120,16 @@ def plotOrbitDifference(filename, orbitform):
     plt.ylabel('distance [AU]')
     plt.savefig("Plots/OrbitDifferenceChange" + "_" + f"{orbitform}" +".pdf", dpi=200)
 
-##filenames = ["Results/CE/systemA_VV_c12.csv", "Results/CE/systemB_VV_c12.csv", "Results/CE/systemA_VV_e12.csv","Results/CE/systemB_VV_e12.csv"]
-#plotOrbitDifference(filenames, "c")
-#plt.clf()
-#plotOrbitDifference(filenames, "e")
-#plt.clf()
+
 def calcAnglePerihelMerc():
     arcsecPerYr = 0.43 #arcseconds per year, 43'' per century
-
     #Convert to radians:
-    radians = arcsecPerYr*math.pi/648000
+    radians = t_end*arcsecPerYr*math.pi/648000
 
     data = pd.read_csv(f"Results/Peri_Results.csv", index_col = False, names = ["x", "y", "z", "r", "i"])
-
     names = [par + obj for obj in systems["systemE"] for par in parameters]
-    #print(names)
-    #planetData = pd.read_csv("Results/systemE_VV.csv", index_col = False, names = names,  usecols = ["x_Sun", "y_Sun"] ,skiprows=1) #, usecols = ["x_Sun", "y_Sun", "z_Sun"]
-
-
     maxI =  data["x"].size-1 #max index
     MIO = data["i"].size-1 #index 0 - N, corresponds to last orbit perihelion, maxIndexOrbit
-    print("x0 xn, y0 yn")
-    #print(planetData["x_Sun"][0])
-    #print(planetData["y_Sun"][0])
-    #print(planetData["x_Sun"][MIO])
-    #print(planetData["y_Sun"][MIO])
-    #print(planetData["z_Sun"][MIO])
-
-    #sunDrift_x = planetData["x_Sun"][MIO]
-    #sunDrift_y = planetData["y_Sun"][MIO]
-
-    #print(f"Drift Sun: {sunDrift_x} ,  {sunDrift_y}")
-
-
 
     # Position for perihelion in first and last orbit
     x_0 = data["x"][0]
@@ -202,49 +137,29 @@ def calcAnglePerihelMerc():
     x_p = data["x"][maxI]
     y_p = data["y"][maxI]
 
-    #Correct for movement of sun
-    #y_p += -sunDrift_x
-    #x_p += -sunDrift_y
     theta0 = math.atan(y_0/x_0)
     theta = math.atan(y_p/x_p)
-    print(f"y_p/x_p --->   {y_p/x_p}")
-    print(f"Angle: Numerical {theta:.4e} vs  Calculated {radians} after {t_end} years.  Theta0 {theta0}")
-    print(f"deltaTheta: {theta-theta0}")
+    print(f"Angle: Numerical {theta:.4e} vs  Calculated {radians:.4e} after {t_end} years.  Theta0 {theta0:.2e}")
+    print(f"Difference: {abs(theta-radians)}")
+
+##filenames = ["Results/CE/systemA_VV_c12.csv", "Results/CE/systemB_VV_c12.csv", "Results/CE/systemA_VV_e12.csv","Results/CE/systemB_VV_e12.csv"]
+#plotOrbitDifference(filenames, "c")
+#plt.clf()
+#plotOrbitDifference(filenames, "e")
+#plt.clf()
 
 
-#plot_sys(system)
-calcAnglePerihelMerc()
+if system == "systemE":
+    choice = input("\nIf used NASA data press 0, otherwise the calculated theta is printed out:\n")
+    if choice != "0":
+        print(f"Calculates perihelion for {t_end} with h: {h}")
+        calcAnglePerihelMerc()
 
-"""
-1 0.0000001
-Ingen kraft: Numerical -3.1531e-05 vs  Calculated 2.0846988287710047e-06 after 1 years.
-Med kraft:   Numerical -3.1531e-05 vs  Calculated 2.0846988287710047e-06 after 1 years.
+else:
+    #Always makes 2D plot:
+    plot_sys(system)
+    plt.clf()
 
-"""
-
-"""
-#Started making function to plot first and last orbit for mercury
-def checkPerihelAngleMerc():
-    sys_names = [par + obj for obj in systems["systemE"] for par in parameters]
-    data = pd.read_csv(f"Results/systemE_VV.csv", index_col=False, names=sys_names, skiprows=1)
-    #print(data["x_Sun"])
-    N = int(t_end/h)
-    print(N)
-    ISLO = int(N - (95/(365*t_end))/h) #IndexStartLastOrbit, index to make sure we measure the right value
-    #x_min = data["x_Mercury"][ISLO]
-    #y_min = data["y_Mercury"][ISLO]
-    print(int(ISLO))
-    x_0 = data["x_Mercury"][0]
-    y_0 = data["y_Mercury"][0]
-    merc_x = data["x_Mercury"][ISLO:N]
-    merc_y = data["y_Mercury"][ISLO:N]
-
-    x_max = merc_x.max()
-    y_max = merc_y.max()
-    xi_max = merc_x.idxmin()
-    yi_max = merc_y.idxmin()
-
-    print(f"Max x = {x_max} for index {xi_max}")
-    print(f"Max x = {y_max} for index {yi_max}")
-"""
-#checkPerihelAngleMerc()
+    choice = input("Do you wanna plot in 3D?: (1)yes, (2)no:\n")
+    if choice == "1":
+        plot3dPath(system)

@@ -6,6 +6,7 @@ using namespace std;
 
 vector<Planet> read_initial(vector<string> object_names, int N_points);
 vector<Planet> adjustedOrigin(vector<Planet> planets, int N);
+
 int main(int argc, char const *argv[]) {
   string system = argv[1];
   string method = argv[2];
@@ -13,60 +14,131 @@ int main(int argc, char const *argv[]) {
   double h = stod(argv[4]);
   double pi = 2*acos(0.0);
   int N_points = (int) ( (double)t_end/h);
-  cout << system << ",  " << method << endl;
+
+
+  //Contains all planets used when solving
+  vector<Planet> planets;
+
+  int dataChoice;
+  cout << "Choose Custom or NASA data: (1)Custom, (2)NASA" << endl;
+  cin >>  dataChoice;
+
 
   map<string, vector<string> > systems;
   systems["systemA"] = {"Sun", "Earth"};
   systems["systemB"] = {"Sun", "Earth", "Jupiter"};
   systems["systemC"] = {"Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"};
-  systems["systemD"] = {"Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter"};
   systems["systemE"] = {"Sun", "Mercury"};
 
-  //planets.push_back(Planet(1898.13e24/1988500e24, 5, 0., 0., 0., 2, 0., "Jupiter", N_points));
-  vector<Planet> planets;
-  //planets = read_initial(systems[system], N_points);
-  planets.push_back(Planet(1, 0., 0., 0., 0., 0., 0., "Sun", N_points, 0));
-  //planets.push_back(Planet(5.97219e24/1988500e24, 1., 0., 0., 0., 1.42*2*pi, 0., "Earth", N_points)); //testing excape velcotiy sqrt(2)*v_circular
-  //planets.push_back(Planet(5.97219e24/1988500e24, 1, 0., 0., 0., 5, 0., "Earth", N_points)); //v_circular
-  //planets.push_back(Planet(5.97219e24/1988500e24, 1., 0., 0., 0., 5, 0., "Earth", N_points)); //v_elliptical
-  //planets.push_back(Planet(1.89813e27/1988500e24, 5.1, 0., 0., 0., 2*pi/sqrt(5.1), 0., "Jupiter", N_points)); //v_circular
-  planets.push_back(Planet(3.285E23/1988500e24 , 0.3075, 0., 0., 0., 12.44, 0., "Mercury", N_points, 0));
-  //planets.push_back(Planet(5.97219e24/1988500e24, 1., 0., 0., 0., 1.42*2*pi, 0., "Earth", N_points));
-  //planets = adjustedOrigin(planets, N_points);
+  if(system == "systemE" && method == "VV2" && dataChoice == 2){
+    cout << "Cannot run VV2 for NASA data, changes to custom." << endl;
+    dataChoice = 1;
+  }
+
+  if(dataChoice == 2){
+    planets = read_initial(systems[system], N_points);
+  }
+
+  else{
+
+    Planet sun = Planet(1, 0., 0., 0., 0., 0., 0., "Sun", N_points);
+
+    if (system == "systemA") {
+      vector<double> velocities = {2*pi, 5, 1.42*2*pi};
+      int choice;
+      cout << "Choose orbit for earth: circular(0), eliptical(1), escape vel(2)" << endl;
+      cin >> choice;
+
+      Planet earth = Planet(5.97219e24/1988500e24, 1, 0., 0., 0., velocities[choice], 0., "Earth", N_points);
+      planets.push_back(sun);
+      planets.push_back(earth);
+    }
+
+    if (system == "systemB") {
+      Planet earth = Planet(5.97219e24/1988500e24, 1, 0., 0., 0., 2*pi, 0., "Earth", N_points);
+      vector<double> massScale = {1, 10, 1000};
+      int choice;
+      cout << "Choose weigthed Jupiter: regular(0), times10(1), times1000(2)" << endl;
+      cin >> choice;
+
+      Planet jupiter = Planet(massScale[choice]*1.89813e27/1988500e24, 5.1, 0., 0., 0., 2*pi/sqrt(5.1), 0., "Jupiter", N_points);
+      planets.push_back(sun);
+      planets.push_back(earth); //earth circular
+      planets.push_back(jupiter);//adjusted for list
+    }
+
+    if (system == "systemC") {
+      cout << "Cant make custom for this system. Runs with NASA data instead" << endl;
+      planets = read_initial(systems[system], N_points);
+    }
+
+    if (system == "systemE") {
+      Planet sun = Planet(1, 0., 0., 0., 0., 0., 0., "Sun", N_points, 0);
+      Planet mercury_opt = Planet(3.285E23/1988500e24 , 0.3075, 0., 0., 0., 12.44, 0., "Mercury", N_points, 0);
+      planets.push_back(sun);
+      planets.push_back(mercury_opt);
+
+      cout << "Can only use VV2, runs with method VV2" << endl;
+      method = "VV2";
+    }
+  }
+
+
+  if( system != "systemE"){
+    int choiceRef;
+    cout << "\nEnter 1 for adjusted frame of reference to Center of Mass, any other number to not." << endl;
+    cin >> choiceRef;
+
+    if(choiceRef == 1){
+      planets = adjustedOrigin(planets, N_points);
+    }
+  }
 
   Solver solv(planets, N_points , t_end, system);
-  cout << "xxxx" << endl;
-  cout << method << endl;
   if(method=="E"){
-      solv.Euler();
+    cout << "****************************" << endl;
+    cout << "Euler started" << endl;
+    solv.Euler();
+    cout << "Finished Euler" << endl;
+    cout << "****************************\n" << endl;
   }
   if(method=="EC"){
-      solv.EulerCromer();
+    cout << "****************************" << endl;
+    cout << "EulerCromer started" << endl;
+    solv.EulerCromer();
+    cout << "Finished EulerCromer" << endl;
+    cout << "****************************\n" << endl;
   }
   if(method=="VV"){
-      solv.VelocityVerlet();
+    cout << "****************************" << endl;
+    cout << "VV started" << endl;
+    solv.VelocityVerlet();
+    cout << "Finished VV" << endl;
+    cout << "****************************\n" << endl;
   }
 
   if(method=="VV2"){
-    cout << "vv2 start" << endl;
+    cout << "****************************" << endl;
+    cout << "VV2 started" << endl;
     solv.VertleNoStorage();
+    cout << "Finished VV2" << endl;
+    cout << "****************************\n" << endl;
+    return 0;
   }
 
-  //solv.WriteResults();
-  //solv.VelocityVerlet();
-  //solv.testTotE();
-  //solv.testAngMom();
-  //solv.WritePeriResults();
+  solv.WriteResults();
+
+  solv.testTotE();
+  solv.testAngMom();
 
   return 0;
 }
 
 vector<Planet> adjustedOrigin(vector<Planet> planets, int N){
-  vec CoM(3);
-  double Mtot;
-  vec Moms(3); //Sum r * m
-  vec MomTot(3); //Total momentum of system
+  double Mtot = 0;
+  vec CoM(3, fill::zeros), Vc(3, fill::zeros), Moms(3, fill::zeros), MomTot(3, fill::zeros);
 
+  //Calculating total momentum of system
   for (int i = 0; i < planets.size(); i++){
     Mtot += planets[i].mass;
     Moms(0) += planets[i].pos[0] * planets[i].mass;
@@ -78,19 +150,22 @@ vector<Planet> adjustedOrigin(vector<Planet> planets, int N){
     MomTot(2) += planets[i].vel[2*N] * planets[i].mass;
   }
 
-  CoM = Moms/Mtot;
+  CoM = Moms/Mtot; //Center of mass
+  Vc = MomTot/Mtot; //Center of mass velocity
 
 
+  //Adjusting position and velocity such that Center of Mass it at rest
   for (int i = 0; i < planets.size(); i++){
     planets[i].pos[0] -= CoM(0);
     planets[i].pos[N] -= CoM(1);
     planets[i].pos[2*N] -= CoM(2);
 
-    planets[i].vel[0] -= MomTot(0)/Mtot;
-    planets[i].vel[N] -= MomTot(1)/Mtot;
-    planets[i].vel[2*N] -= MomTot(2)/Mtot;
+    planets[i].vel[0] -= Vc(0);
+    planets[i].vel[N] -= Vc(1);
+    planets[i].vel[2*N] -= Vc(2);
 
   }
+
   return planets;
 }
 

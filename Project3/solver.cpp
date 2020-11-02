@@ -9,22 +9,27 @@ Solver::Solver(vector<Planet> sysPlanets, int N_val, double t_n_val, string sys)
   N = N_val;
   t_n = t_n_val;
 
-  //Pre calculate ang momentum for Mercury, but need to find a way to use it in Planet
+  cout << "\n" << sys << " created, contains:" << endl;
+  for(int k = 0; k < planets.size(); k ++){
+    cout << planets[k].name << endl;
+  }
+  cout << "\n" << endl;
 
+  //Pre calculate ang momentum for Mercury, but need to find a way to use it in Planet
   if(sys == "systemE"){
     Planet sun = planets[0];
     Planet merc = planets[1];
     vec r_vec =  - planets[1].distanceOther_opt(planets[0], 0);
     vec v_vec(3);
+
     v_vec[0] = merc.vel[0]-sun.vel[0];
     v_vec[1] = merc.vel[1]-sun.vel[1];
     v_vec[2] = merc.vel[2]-sun.vel[2];
 
     double l_merc = norm(cross(r_vec,v_vec)); //Angular orbital momentum, only calculate once
-    cout << "ang momemnt merc:  " << l_merc << endl;
+    //cout << "ang momemnt merc:  " << l_merc << endl;
     planets[1].l_merc = l_merc; //give Mercury access to this to be used for the additional force
   }
-  //cout << "PRINT OUT PI:  " << pi << endl;
 }
 
 vec Solver::TotalAccelerationOnPlanet(Planet& planet, int index){ //calculate total acceleration on planet
@@ -87,7 +92,19 @@ void Solver::VelocityVerlet(){
   clock_t start, stop;
   double totTime = 0;
   start = clock();
+
+  clock_t startEstimated, stopEstimated;
+  startEstimated = clock();
+  double stopPrint = 0.02; //Calculates full time after 2%, avoid to long calculations
+
     for (int j = 0; j < N-1; j++){
+
+      if( j > stopPrint*N){
+        stopEstimated = clock();
+        double time = ( (stopEstimated - startEstimated)/(double)CLOCKS_PER_SEC );
+        cout << "Estimated time is " << time*1/stopPrint << "s" << endl;
+        stopPrint+= 100;
+      }
 
       if(j >= progress*(N-2)){
         stop = clock();
@@ -110,12 +127,10 @@ void Solver::VelocityVerlet(){
           planets[k].vel[j+1] =  planets[k].vel[j] + h_2*(accel[0]+accel_next[0]); // update x velocity
           planets[k].vel[j+1+N] =  planets[k].vel[j+N] + h_2*(accel[1]+accel_next[1]); // update y velocity
           planets[k].vel[j+1+2*N] =  planets[k].vel[j+2*N] + h_2*(accel[2]+accel_next[2]); // update z velocity
-
-          //optimer med accel_next = accel
     }
   }
 
-  cout << "Total time(s)--time(m): " << totTime << " -- " << totTime/60 << endl;
+  cout << "Total time: " << totTime << "s" << endl;
   return;
 }
 
@@ -128,7 +143,8 @@ void Solver::testAngMom(){
 
   double error = l1 - l2;
 
-  cout << "Error in Angular Momenutm: " << error << endl;
+  //cout << "Error in Angular Momenutm: " << error << endl;
+  cout << "Relative error AngMom: " << error/l1 << endl;
 }
 
 double Solver::calcL(int index){
@@ -151,15 +167,16 @@ void Solver::testTotE(){
   double startE = 0;
   double endE = 0;
   for(int k = 0; k < planets.size() ; k++){
-    startE += calcPE(k, 0) + calcKE(k, 0);
-    endE += calcPE(k, N-1) + calcKE(k, N-1);
+    startE += calcPE(k, 0)/2 + calcKE(k, 0);
+    endE += calcPE(k, N-1)/2 + calcKE(k, N-1);
   }
   double error = abs(startE) - abs(endE);
+  /*
   if (abs(error) > eps)
       cout << "The total energy is not conserved.\n Error: " << abs(error) << endl;
-
-  cout << "Error in total energy: " << error << endl;
-  cout << "Relative change in total energy: " << error/endE << endl;
+  */
+  //cout << "Error in total energy: " << error << endl;
+  cout << "Relative change in total energy: " << error/startE << endl;
 }
 
 double Solver::calcKE(int k, int j){
@@ -185,17 +202,13 @@ double Solver::calcPE(int k, int j){
       m2 = planets[i].mass;
       r = norm(planets[k].distanceOther(planets[i], j));
       U -= m1*m2*G_scale/r;
+      //Use if central gravitational force is changed to not being inverse-square
+      // double beta = 2;
+      // U += m1*m2*G_scale/((beta-1)*pow(r,beta-1);
     }
   return U;
 }
 
-void Solver::VelocityVerlet2(){
-  method = "VV2";
-  double h = t_n/N;
-  double h_2 = h/2;
-
-
-}
 
 void Solver::WriteResults(){
   ofstream ofile;
@@ -228,14 +241,20 @@ vec Solver::TotalAccelerationOnPlanet_opt(Planet& planet, bool useCurr){ //calcu
 }
 
 void Solver::VertleNoStorage(){
+  /*
+    Metod for solving VelocityVerlet, but without storing all the data inside the planet
+    object and a full csv file. Writes the relevant data to "Results/Peri_Results.csv".
+    Format [x, y, r, index(j)].
+
+    Only used for systemE, containing Mercury & Sun. Uses alternate methods in class
+    indicated by the name of the method ending with "_opt".
+  */
   method = "VV2";
   double h = t_n/N; //stepsize
   double h_2 = h/2.0; //stepsize
-  cout << "Running vv2" << endl;
-  ofstream ofile;
-  ofile.open("Results/" + sysName + "_" + method + ".csv");
-  //ofile << setprecision(8) << scientific;
-  ofile << "testing" << endl;
+  //ofstream ofile;
+  //ofile.open("Results/" + sysName + "_" + method + ".csv");
+  //ofile << "relevant data for perihelion, mercury & sun:" << endl;
 
   /*
   for(int k=0; k < planets.size(); k++){
@@ -244,11 +263,15 @@ void Solver::VertleNoStorage(){
     ofile << plan.vel[0] << " ,"  << plan.vel[1] << " ,"  << plan.vel[2] << ", ";
   }*/
 
-  ofile << endl;
+  //ofile << endl;
   double progress = 0.1;
   clock_t start, stop;
   double totTime = 0;
   start = clock();
+
+  clock_t startEstimated, stopEstimated;
+  startEstimated = clock();
+  double stopPrint = 0.02;
 
   ofstream ofilePeri;
   ofilePeri.open("Results/Peri_Results.csv");
@@ -263,6 +286,13 @@ void Solver::VertleNoStorage(){
     //Start calculations for all timesteps
     for (int j = 0; j < N-1; j++){
 
+      if( j > stopPrint*N){
+        stopEstimated = clock();
+        double time = ( (stopEstimated - startEstimated)/(double)CLOCKS_PER_SEC );
+        cout << "Estimated time is " << time*50 << "s" << endl;
+        stopPrint+= 100;
+      }
+      // Prints out progress
       if(j >= progress*(N-2)){
         stop = clock();
         double timeInterval = ( (stop - start)/(double)CLOCKS_PER_SEC );
@@ -277,16 +307,11 @@ void Solver::VertleNoStorage(){
         planets[k].pos[3] = planets[k].pos[0] + h*planets[k].vel[0] + h*h_2*accel[0]; // update x position
         planets[k].pos[4] = planets[k].pos[1] + h*planets[k].vel[1]+ h*h_2*accel[1]; // update y position
         planets[k].pos[5] = planets[k].pos[2] + h*planets[k].vel[2]+ h*h_2*accel[2]; // update z position
-
-        if(j == 0 || j==1){
-        }
       }
 
 
       for(int k=0; k < planets.size(); k++){
         vec accel = TotalAccelerationOnPlanet_opt(planets[k], false); //fetch planet's acceleration vector [a_x, a_y, a_z] times h at a given time j
-
-        //Skjer en feil her.
         vec accel_next = TotalAccelerationOnPlanet_opt(planets[k], true); //fetch planet's acceleration vector [a_x, a_y, a_z] times h at a given time j+1
 
         planets[k].vel[3] =  planets[k].vel[0] + h_2*(accel[0]+accel_next[0]); // update x velocity
@@ -298,40 +323,36 @@ void Solver::VertleNoStorage(){
       if (j == 0){
         r1_vec = planets[1].distanceOther_opt(planets[0], true);
         r1 = norm(r1_vec);
-        cout << r1_vec << endl;
-
 
       }
       else{
         r2_vec = planets[1].distanceOther_opt(planets[0],true);
         r2 = norm(r2_vec);
 
+        //Finds the point where planet is closest to the sun and writes to file.
         if (r0 > r1 && r1 < r2){
           ofilePeri << r1_vec[0] << " , "<< r1_vec[1] << " , " << r1_vec[2] << r1 << " , " << j << endl;
         }
-
+        //Update for new timestep
         r0_vec = r1_vec;
         r0 = norm(r0_vec);
-
         r1_vec = r2_vec;
         r1 = norm(r1_vec);
-
-
-
-
-
       }
 
-      /*
+
       //Write out new results
       /*
-      for(int k=0; k < planets.size(); k++){
-        Planet plan = planets[k];
-        ofile << plan.pos[3] << " ,"  << plan.pos[4] << " ,"  << plan.pos[5] << ", ";
-        ofile << plan.vel[3] << " ,"  << plan.vel[4] << " ,"  << plan.vel[5] << ", ";
-      */
+      if(j % 1000){
+        for(int k=0; k < planets.size(); k++){
+          Planet plan = planets[k];
+          ofile << plan.pos[3] << " ,"  << plan.pos[4] << " ,"  << plan.pos[5] << ", ";
+          ofile << plan.vel[3] << " ,"  << plan.vel[4] << " ,"  << plan.vel[5] << ", ";
+
+        }
+      ofile << endl;
       }
-      ofile << endl;*/
+      */
 
       for(int k=0; k < planets.size(); k++){
         planets[k].pos[0] = planets[k].pos[3];
@@ -345,17 +366,6 @@ void Solver::VertleNoStorage(){
 
 
     }
-  cout << "Finished vv2" << endl;
-  //cout << "Total time(s)--time(m): " << totTime << " -- " << totTime/60 << endl;
+  cout << "Total time" << totTime << "s" << endl;
   return;
 }
-
-// double Solver::getTotalEnergy(){
-//   //Gets energy of the whole system
-//   double totE = 0;
-//   for(int k=0; k < planets.size(); k++){
-//     totE += planets[k].getPE();
-//     totE += planets[k].getKE();
-//   }
-//   return totE;
-// }
