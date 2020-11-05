@@ -1,7 +1,9 @@
 all: compile execute
 
+#compile:
+#	g++ -fopenmp -o main.exe test.cpp
 compile:
-	g++ -fopenmp -o main.exe test.cpp
+	g++ -o main.exe main.cpp
 
 execute:
 	./main.exe
