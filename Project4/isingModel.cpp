@@ -12,6 +12,7 @@ void IsingModel::findTotalEnergy(){
 
   for (int i =0; i < N; i++){
     for (int j = 0; j < N; j++){
+      // this is not right
       double E_ij = spin_matrix[i][j]+spin_matrix[plus1[i]][j]+spin_matrix[i][plus1[i]];
       cout << E_ij << endl;
       E -= E_ij; //energy for one point
