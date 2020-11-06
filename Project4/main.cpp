@@ -3,27 +3,14 @@
 //#include <omp.h>
 #include <cmath>
 #include <iostream>
+#include "isingModel.hpp"
 
 using namespace std;
 
-int * make_spinMatrix(int N){
-  int matrix[N*N];
-
-  for (int i = 0; i < N*N; i ++){
-    if (rand() % 2 == 1)
-      matrix[i] = 1;
-    else matrix[i] = -1;
-  }
-
-  cout << matrix[1] << matrix[2]<< endl;
-  return matrix;
-}
-
 
 int main(int argc, char const *argv[]) {
-  int *a;
-  a = make_spinMatrix(2);
-  cout << *a << endl;
+  IsingModel is = IsingModel(2, 1, 0); // n, temp, initmethod: (0)up, (1)down or (2)random
+  is.findTotalEnergy();
   /*
   int n_spins, *spin_matrix, mcs;
   long idum;

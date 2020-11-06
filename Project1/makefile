@@ -5,3 +5,6 @@ compile:
 
 execute:
 	./main.exe
+
+clean:
+	rm *.o main.exe
