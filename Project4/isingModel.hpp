@@ -33,6 +33,7 @@ class IsingModel{
     void swapSpinOnce();
     void findTotalEnergy();
     void solve();
+    double calcE_ij(int i, int j);
     ~IsingModel(); //deletes array when object is "dead"
 };
 

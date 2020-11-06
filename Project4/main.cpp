@@ -9,8 +9,8 @@ using namespace std;
 
 
 int main(int argc, char const *argv[]) {
-  IsingModel is = IsingModel(2, 1, 0); // n, temp, initmethod: (0)up, (1)down or (2)random
-  is.findTotalEnergy();
+  IsingModel is = IsingModel(3, 1, 2); // n, temp, initmethod: (0)up, (1)down or (2)random
+  is.solve();
   /*
   int n_spins, *spin_matrix, mcs;
   long idum;

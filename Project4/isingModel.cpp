@@ -27,14 +27,14 @@ void IsingModel::findTotalEnergy(){
       E -= E_ij; //energy for one point
     }
   }
-  cout << "Energy in end: " << E << endl;
+  //cout << "Energy in end: " << E << endl;
 }
 
 IsingModel::IsingModel(int n, double temp, int initMethod){
   N = n;
   T0 = temp; //er du her?
 
-  //Set up spin_matrix NxN matrix, with spin up or down each element
+  //Set up spin_matrix NxN matrix, with spin up or down each element
   spin_matrix = new int*[N];
   for (int i = 0; i < N; i++)
       spin_matrix[i] = new int[N];
@@ -57,7 +57,8 @@ IsingModel::IsingModel(int n, double temp, int initMethod){
   plus1[N-1] = 0;
   min1[0] = N-1;
 
-  srand (time(NULL));
+  srand (time(NULL)); // Set seed for random gen numbers
+
   //Fill initial matrix
   for (int i = 0; i < N; i ++){ // row
     for (int j = 0; j< N; j++ ){ //column
@@ -81,6 +82,16 @@ IsingModel::IsingModel(int n, double temp, int initMethod){
     }
   }
 
+  //Print out matrix for visual tests:
+  findTotalEnergy(); // writes energy to E, class variable
+  cout << "Matrix: " << "E: " << E << " , M: " << M << endl;
+  for(int i = 0; i<N ; i++){
+    for(int j = 0; j<N ; j++){
+      cout << spin_matrix[i][j] << "  ";
+    }
+    cout << endl;
+  }
+
   //Quick check if matrix set up right
   /*for (int i = 0; i < N; i ++){ // row
     for (int j = 0; j< N; j++ ){
@@ -88,23 +99,57 @@ IsingModel::IsingModel(int n, double temp, int initMethod){
     }
   }*/
 
-  //double energy = findTotalEnergy();
   return;
 }
 
 void IsingModel::solve(){
-  //Choose random i and j and try flip it.
-  // Calculate deltaE, if the random number r is <= exp(E/kT) then it happens
+  srand (time(NULL)); // Set seed for random gen numbers
+  //Choose random i and j and calculate the shift in E.
+  // Calculate deltaE, if the random number r is <= exp(E/kT) then it happens
   // Confirm the flip and update spin matrix.
   int rint = rand() % 101;
+
+
+  int i_ = rand() % N;
+  int j_ = rand() % N;
+  cout << "Random i and j:" << endl;
+  cout << i_ << " " << j_ << endl;
+
+  double deltaE = calcE_ij(i_, j_);
+
   double r = (double) rint/100;// between 0 and 1, 100 possible pts
 
-
-  //double E_result = deltaE_vals[f.eks 8 eller -8]
-  double E_result = 0.5;
-  if(r < E_result){
-    //Flip and update
+  double e_exp = exp(deltaE/T0);
+  if(r < e_exp){
+    spin_matrix[i][j] *= -1;
   }
+}
+
+double IsingModel::calcE_ij(int i, int j){
+  double E_now = 0;
+  double E_after = 0;
+  int s_ij = spin_matrix[i][j];
+  int s_iplus = spin_matrix[plus1[i]][j];
+  int s_jplus = spin_matrix[i][plus1[j]];
+  int s_imin = spin_matrix[min1[i]][j];
+  int s_jmin = spin_matrix[i][min1[j]];
+
+  E_now -= s_ij*(s_iplus+s_jplus+s_imin+s_jmin);
+  E_after = -E_now; //tilsvarer å gange s_ij med -1
+
+  double deltaE = E_after-E_now; // -8,-4,0,4,8 possible values
+  cout << "E0: " << E_now << endl;
+  cout << "E_after: " << E_after << endl;
+  cout << "deltaE: " << deltaE << endl;
+
+  // nå enten hent den boltzmann verdien fra map eller array
+
+  //temp sol
+
+
+
+
+  return deltaE;
 }
 
 IsingModel::~IsingModel(){
