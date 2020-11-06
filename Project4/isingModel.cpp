@@ -1,20 +1,29 @@
 #include "isingModel.hpp"
 #include <iostream>
 #include <math.h>
+#include <stdlib.h>
+#include <time.h>
 using namespace std;
 
 void IsingModel::findTotalEnergy(){
   //int**& sp = spin_matrix;
   E = 0;
+  /*
   cout << "Matrix: (2x2)" << endl;
   cout << spin_matrix[0][0] << " " << spin_matrix[0][1] <<  endl;
   cout << spin_matrix[1][0] << " " << spin_matrix[1][1] <<  endl;
+  */
 
   for (int i =0; i < N; i++){
     for (int j = 0; j < N; j++){
       // this is not right
-      double E_ij = spin_matrix[i][j]+spin_matrix[plus1[i]][j]+spin_matrix[i][plus1[i]];
-      cout << E_ij << endl;
+
+      double E_ij = spin_matrix[i][j]*spin_matrix[plus1[i]][j]+spin_matrix[i][j]*spin_matrix[i][plus1[j]];
+      /* Print test for the 2x2 example
+      cout << "Row +1: " <<  spin_matrix[plus1[i]][j] << endl;
+      cout << "Col + 1: " << spin_matrix[i][plus1[j]] << endl;
+      cout << "Energy for: i, j: " << i << ", " << j << "  . E: " << E_ij << "\n" << endl;
+      */
       E -= E_ij; //energy for one point
     }
   }
@@ -23,7 +32,7 @@ void IsingModel::findTotalEnergy(){
 
 IsingModel::IsingModel(int n, double temp, int initMethod){
   N = n;
-  T0 = temp;
+  T0 = temp; //er du her?
 
   //Set up spin_matrix NxN matrix, with spin up or down each element
   spin_matrix = new int*[N];
@@ -48,7 +57,7 @@ IsingModel::IsingModel(int n, double temp, int initMethod){
   plus1[N-1] = 0;
   min1[0] = N-1;
 
-
+  srand (time(NULL));
   //Fill initial matrix
   for (int i = 0; i < N; i ++){ // row
     for (int j = 0; j< N; j++ ){ //column
@@ -60,7 +69,12 @@ IsingModel::IsingModel(int n, double temp, int initMethod){
       }
 
       if(initMethod == 2){
-        spin_matrix[i][j] = rand() % 2;
+        int choice = rand() % 2;
+        //cout << choice << endl;
+        if(choice == 0){
+          choice = -1;
+        }
+        spin_matrix[i][j] = choice;
       }
 
       M += spin_matrix[i][j];
@@ -79,7 +93,18 @@ IsingModel::IsingModel(int n, double temp, int initMethod){
 }
 
 void IsingModel::solve(){
+  //Choose random i and j and try flip it.
+  // Calculate deltaE, if the random number r is <= exp(E/kT) then it happens
+  // Confirm the flip and update spin matrix.
+  int rint = rand() % 101;
+  double r = (double) rint/100;// between 0 and 1, 100 possible pts
 
+
+  //double E_result = deltaE_vals[f.eks 8 eller -8]
+  double E_result = 0.5;
+  if(r < E_result){
+    //Flip and update
+  }
 }
 
 IsingModel::~IsingModel(){
