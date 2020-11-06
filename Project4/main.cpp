@@ -1,25 +1,29 @@
+
 #include <cstdio>
-#include <omp.h>
+//#include <omp.h>
 #include <cmath>
 #include <iostream>
 
 using namespace std;
 
-int*[] make_matrix(matrix, N){
+int * make_spinMatrix(int N){
+  int matrix[N*N];
+
   for (int i = 0; i < N*N; i ++){
     if (rand() % 2 == 1)
       matrix[i] = 1;
     else matrix[i] = -1;
   }
+
+  cout << matrix[1] << matrix[2]<< endl;
+  return matrix;
 }
 
 
 int main(int argc, char const *argv[]) {
-
-  int* matrix[] = make_matrix(N);
-  int *matrix2 = make_matrix(N_2);
-
-
+  int *a;
+  a = make_spinMatrix(2);
+  cout << *a << endl;
   /*
   int n_spins, *spin_matrix, mcs;
   long idum;
@@ -31,7 +35,6 @@ int main(int argc, char const *argv[]) {
       Delta_E[i] = exp(Beta * 4*(i-2));
   */
 
-  initialize_matrix(spin_matrix);
 
   return 0;
 }
