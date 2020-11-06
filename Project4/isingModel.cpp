@@ -18,7 +18,9 @@ int * make_spinMatrix(int N){
       M += matrix[i][j];
     }
   }
-  for (int k = 1; k < N_2-2, k++){
+
+
+  for (int k = 1; k < N_2-2; k++){
     matrix[0][k] = matrix[N_2-2][k];
     matrix[N_2-1][k] = matrix[1][k];
     matrix[k][N_2-1] = matrix[k][1];
@@ -43,7 +45,7 @@ IsingModel::IsingModel(int n, double temp, int initMethod){
   N = n;
   T0 = temp;
 
-  spin_matrix =
+  spin_matrix = 
 }
 
 IsingModel::FindNeighbour(int i, int j){
