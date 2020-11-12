@@ -104,47 +104,43 @@ void IsingModel::solve(){
   monteCycles = 0;
   double r;
   int N_sq = N*N;
-  int numCycles = 1000000;  // num of monte carco cycles
+  int numMC_cycles = 1000;  // num of monte carco cycles
 
   //N_sq = 2;
 
   ofstream ofile;
   ofile.open("e_hist.csv");
   double cutoff = 0.1;
-  ofile << cutoff << ", " << numCycles << ", " << T0 << ", " << N << endl;
+  ofile << cutoff << ", " << numMC_cycles << ", " << T0 << ", " << N << endl;
 
-  for(int i = 0; i < numCycles; i++){
-    for(int j=0; j< N_sq; j++){
-      int rint = rand() % 100001;
-      double r = (double) rint/100000;// between 0 and 1, 100 possible pts
-      int i_ = rand() % N; //error when defined i_ outside loop
-      int j_ = rand() % N;
+  for(int i = 1; i <= N_sq * numMC_cycles+1; i++){
+    int rint = rand() % 100001;
+    double r = (double) rint/100000;// between 0 and 1, 100000 possible pts
+    int i_ = rand() % N; //error when defined i_ outside loop
+    int j_ = rand() % N;
 
-      //cout << "Random i and j:" << endl;
-      //cout << i_ << " " << j_ << endl;
-      double deltaE = calcE_ij(i_, j_);
+    double deltaE = calcE_ij(i_, j_);
 
-      double e_exp = expVals[(int)deltaE+8];
-      //cout << "r: " << r << "  , exp: " << e_exp << " E: " << deltaE << endl;
-      if(r <= e_exp){
-        //cout << "Flip success!" << endl;
-        spin_matrix[i_][j_] *= -1;
-        M = M + 2*spin_matrix[i_][j_];
-        E = E + deltaE;
-        numFlips += 1;
-      }
+    double e_exp = expVals[(int)deltaE+8];
+    //cout << "r: " << r << "  , exp: " << e_exp << " E: " << deltaE << endl;
+    if(r <= e_exp){
+      //cout << "Flip success!" << endl;
+      spin_matrix[i_][j_] *= -1;
+      M = M + 2*spin_matrix[i_][j_];
+      E = E + deltaE;
+      numFlips += 1;
     }
-    //Writes and update data for each MC cycle
 
-    if(i > cutoff*numCycles){
-      monteCycles += 1;
+    //Writes and update data for each attempt to flip
+    if(i > cutoff*numMC_cycles){
+      double div = N_sq * i;
       average[0] += E; average[1] += E*E;
       average[2] += M; average[3] += M*M; average[4] += fabs(M);
-      ofile << average[0]/(monteCycles)/N_sq << ", " << average[4]/(monteCycles)/N_sq << ", " << numFlips << ", " << E << endl;
+      ofile << average[0]/div << ", " << average[4]/div << ", " << numFlips << ", " << E << endl;
     }
   }
   for(int i = 0; i < 5; i++){
-    average[i] /= (double)numCycles;
+    average[i] /= (double)numMC_cycles;
   }
 
   Cv = (average[1] - average[0] * average[0]) / T0;
@@ -170,11 +166,6 @@ double IsingModel::calcE_ij(int i, int j){
 
   double deltaE = E_after-E_now; // -8,-4,0,4,8 possible values
 
-  /*
-  cout << "E0: " << E_now << endl;
-  cout << "E_after: " << E_after << endl;
-  cout << "deltaE: " << deltaE << endl;
-  */
   return deltaE;
 }
 
