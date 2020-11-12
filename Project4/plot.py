@@ -38,9 +38,9 @@ def plot_d():
 
     #y-labels
     axs[2].set_xlabel("MonteCarlo cycles")
-    axs[0].set_ylabel('Energy[eV]')
-    axs[1].set_ylabel('Magnetization[]')
-    axs[2].set_ylabel('Flips')
+    axs[0].set_ylabel('Energy')
+    axs[1].set_ylabel('Magnetization')
+    axs[2].set_ylabel('Total Flips')
 
     axs[0].legend()
     for i in range(3):

@@ -110,7 +110,7 @@ void IsingModel::solve(){
 
   ofstream ofile;
   ofile.open("e_hist.csv");
-  double cutoff = 0.0;
+  double cutoff = 0.1;
   ofile << cutoff << ", " << numCycles << ", " << T0 << ", " << N << endl;
 
   for(int i = 0; i < numCycles; i++){
@@ -140,7 +140,7 @@ void IsingModel::solve(){
       monteCycles += 1;
       average[0] += E; average[1] += E*E;
       average[2] += M; average[3] += M*M; average[4] += fabs(M);
-      ofile << average[0]/(monteCycles) << ", " << average[4]/(monteCycles) << ", " << numFlips << ", " << E << endl;
+      ofile << average[0]/(monteCycles)/N_sq << ", " << average[4]/(monteCycles)/N_sq << ", " << numFlips << ", " << E << endl;
     }
   }
   for(int i = 0; i < 5; i++){
