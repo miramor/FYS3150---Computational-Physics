@@ -1,5 +1,5 @@
 LIB = -larmadillo
-CPPflags = g++ -std=c++17 -O3 -fopenmp
+CPPflags = g++ -std=c++17 -O3 #-fopenmp
 
 output: main.o isingModel.o
 	${CPPflags} main.o isingModel.o ${LIB} -o output.exe
@@ -13,7 +13,9 @@ isingModel.o: isingModel.cpp isingModel.hpp
 clean:
 	rm *.o output.exe
 
+execute:
+	./output.exe
 
-#all: compile execute
+all: output execute
 #compile:
 #	g++ -fopenmp -o main.exe test.cpp

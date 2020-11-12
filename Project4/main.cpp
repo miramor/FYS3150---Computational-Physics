@@ -9,19 +9,24 @@ using namespace std;
 
 
 int main(int argc, char const *argv[]) {
-  IsingModel is = IsingModel(3, 1, 2); // n, temp, initmethod: (0)up, (1)down or (2)random
+  IsingModel is = IsingModel(20,2.4, 2); // n, temp, initmethod: (0)up, (1)down or (2)random
+  //is.printMatrix();
   is.solve();
+
+
+
+
+
+
   /*
-  int n_spins, *spin_matrix, mcs;
-  long idum;
-  double w[17], average[5], initial_temp, final_temp, E, M, temp_step;
-  double Delta_E[5];
-  double Beta =
-  // Calculates all exp(Beta * Delta_E)
-  for (int i = 0; i < 5; i ++)
-      Delta_E[i] = exp(Beta * 4*(i-2));
+  TO DO:
+  Run for L = 2, compare to analytical results.
+  How does the number of accepted configurations behave as function of temperature T?
+  Temp = 1 and 2.4 for L = 20 only
+
+  Run simulation for multiple values of T
+  Write Cv and chi to file for every T value.
+
   */
-
-
   return 0;
 }

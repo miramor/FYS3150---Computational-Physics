@@ -10,9 +10,12 @@ class IsingModel{
   private:
     int** spin_matrix;//spin_matrix[i][j]
     int monteCycles; // nr of cycles the system has been through, N**2
+    int numFlips;
 
     double* E_array; //history of all energies
     double* deltaE_vals;
+    double* average;
+    double* expVals;
 
     int* plus1;
     int* min1;
@@ -22,6 +25,7 @@ class IsingModel{
     double E_sq_exp;
     double M; // magnetization
     double Cv; //heat capacity
+    double chi; //Susceptibility
 
     double T0; //temperatur, also equals T*k_b since k = 1
     double T_end;
@@ -33,6 +37,8 @@ class IsingModel{
     void swapSpinOnce();
     void findTotalEnergy();
     void solve();
+    void printMatrix();
+    double* getAverage(); //contains <E>, <M>, <E**2> used for plotting
     double calcE_ij(int i, int j);
     ~IsingModel(); //deletes array when object is "dead"
 };
