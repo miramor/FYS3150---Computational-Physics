@@ -10,39 +10,53 @@ using namespace std;
 
 
 int main(int argc, char const *argv[]) {
-  int L = atoi(argv[1]);
-  int Ti = (int)stod(argv[2])*100;
-  int Tf = (int)stod(argv[3])*100;
-  int dT = (int)(stod(argv[4])*100);
+  //int L = atoi(argv[1]);
+  //double Ti = stod(argv[2]);
+  //double Tf = stod(argv[3]);
+  //double dT = stod(argv[4]);
 
-  ofstream Lfile;
-  Lfile.open("Observables_" + to_string(L) + ".csv");
-  Lfile <<  "T, <E>, <M>, Cv, chi" << endl;
+  double Ti = 2;
+  double Tf = 2.3;
+  double dT = 0.05;
+  int T_length = 7;
+  double T_array [T_length];
 
-  double start;
-  double end;
+  for (int i = 0; i < T_length; i++){
+    T_array[i] = Ti + dT*i;
+  }
 
-  #pragma omp parallel
+
+  for(int j = 40; j <=100; j+=20){
+    ofstream Lfile;
+    Lfile.open("Observables_" + to_string(j) + ".csv");
+    Lfile <<  "T, <E>, <M>, Cv, chi" << endl;
+
+    double start;
+    double end;
+    // 283 sek - 40*40
+    #pragma omp parallel
     {
       double start;
       double end;
       #pragma omp single
-        cout << "Number of threads in use: " << omp_get_num_threads() << endl;
+      cout << "Number of threads in use: " << omp_get_num_threads() << endl;
 
       #pragma omp for
-      for (int i = Ti; i <= Tf; i+= dT){
+      for (int i = 0; i < T_length; i++){
         start = omp_get_wtime();
-        IsingModel is = IsingModel(L, (double)i/100, 2); // n, temp, initmethod: (0)up, (1)down or (2)random
+        IsingModel is = IsingModel(j, T_array[i], 2); // n, temp, initmethod: (0)up, (1)down or (2)random
         //is.printMatrix();
         is.solve();
         end = omp_get_wtime();
         #pragma omp critical
-          cout << "Thread " << omp_get_thread_num() << " finished with: " <<  "T: " << (double)i/100 << ". Time: " << end-start << "s" << endl;
-          is.writeFile();
+        cout << "L: " << j << ".  Thread " << omp_get_thread_num() << " finished with: " <<  "T: " << T_array[i] << ". Time: " << end-start << "s" << endl;
+        is.writeFile();
 
         //cout << "\n" << "----------------------------------------------" << endl;
       }
     }
+  }
+
 
 
   /*

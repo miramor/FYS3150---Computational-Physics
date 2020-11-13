@@ -9,7 +9,6 @@ using namespace std;
 class IsingModel{
   private:
     int** spin_matrix;//spin_matrix[i][j]
-    int monteCycles; // nr of cycles the system has been through, N**2
     int numFlips;
 
     double* E_array; //history of all energies
@@ -39,6 +38,7 @@ class IsingModel{
     void writeFile();
     void solve();
     void printMatrix();
+    void Metropolis();
     double* getAverage(); //contains <E>, <M>, <E**2> used for plotting
     double calcE_ij(int i, int j);
     ~IsingModel(); //deletes array when object is "dead"

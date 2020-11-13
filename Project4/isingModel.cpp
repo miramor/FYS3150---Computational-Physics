@@ -29,7 +29,6 @@ IsingModel::IsingModel(int n, double temp, int initMethod){
   T0 = temp;
   M = 0;
   E = 0;
-  monteCycles = 0;
   numFlips = 0;
 
   //Set up spin_matrix NxN matrix, with spin up or down each element
@@ -41,12 +40,12 @@ IsingModel::IsingModel(int n, double temp, int initMethod){
   for(int i=-8; i<=8; i+=4 ){
     expVals[i+8] = exp(-i/(T0));
   }
-
   //Initialze
   average = new double[5];
   for(int i = 0; i < 5; i++){
     average[i] = 0;
   }
+
 
 
 
@@ -60,7 +59,6 @@ IsingModel::IsingModel(int n, double temp, int initMethod){
   }
   plus1[N-1] = 0;
   min1[0] = N-1;
-
   srand (time(NULL)); // Set seed for random gen numbers
 
   //Fill initial matrix
@@ -74,32 +72,51 @@ IsingModel::IsingModel(int n, double temp, int initMethod){
       }
 
       if(initMethod == 2){
-        int choice = rand() % 2;
+        double choice = drand48();
+
         //cout << choice << endl;
-        if(choice == 0){
-          choice = -1;
+        if(choice < 0.5){
+          spin_matrix[i][j] = -1;
         }
-        spin_matrix[i][j] = choice;
+        else{
+          spin_matrix[i][j] = 1;
+        }
       }
 
       M += spin_matrix[i][j];
     }
   }
-
-  //Print out matrix for visual tests:
   findTotalEnergy(); // writes energy to E, class variable
-  //cout << "Matrix: " << "E: " << E << " , M: " << M << endl;
-
-  //Quick check if matrix set up right
-  /*
-  for (int i = 0; i < N; i ++){ // row
-    for (int j = 0; j< N; j++ ){
-      cout << i << ", " << j << "  Value: " << spin_matrix[i][j] << endl;
-    }
-  }
-  */
-
   return;
+}
+
+void IsingModel::Metropolis(){
+  double a =  drand48();
+  double b = drand48();
+  int i_ = (int)(a*N);
+  int j_ = (int)(b*N);
+
+  //int i_ = rand() % N; //error when defined i_ outside loop
+  //int j_ = rand() % N;
+  double r = drand48();
+  double deltaE = calcE_ij(i_, j_);
+  double e_exp = expVals[(int)deltaE+8];
+
+  if(deltaE < 0){
+    //cout << "Flip success!" << endl;
+    spin_matrix[i_][j_] *= -1;
+    M = M + 2*spin_matrix[i_][j_];
+    E = E + deltaE;
+    numFlips += 1;
+  }
+  //cout << "r: " << r << "  , exp: " << e_exp << " E: " << deltaE << endl;
+  else if(r <= e_exp){
+    //cout << "Flip success!" << endl;
+    spin_matrix[i_][j_] *= -1;
+    M = M + 2*spin_matrix[i_][j_];
+    E = E + deltaE;
+    numFlips += 1;
+  }
 }
 
 void IsingModel::solve(){
@@ -107,7 +124,6 @@ void IsingModel::solve(){
   //Choose random i and j and calculate the shift in E.
   // Calculate deltaE, if the random number r is <= exp(E/kT) then it happens
   // Confirm the flip and update spin matrix.
-  monteCycles = 0;
   double r;
   int N_sq = N*N;
   int numMC_cycles = 1000000;  // num of monte carco cycles
@@ -120,36 +136,18 @@ void IsingModel::solve(){
   double loopCutoff = N_sq*cutoff*numMC_cycles;
   ofile << cutoff << ", " << numMC_cycles << ", " << T0 << ", " << N << endl;
 
-  for(int i = 1; i <= N_sq * numMC_cycles+1; i++){
-    int rint = rand() % 100001;
-    double r = (double) rint/100000;// between 0 and 1, 100000 possible pts
-    int i_ = rand() % N; //error when defined i_ outside loop
-    int j_ = rand() % N;
-
-    double deltaE = calcE_ij(i_, j_);
-
-    double e_exp = expVals[(int)deltaE+8];
-    //cout << "r: " << r << "  , exp: " << e_exp << " E: " << deltaE << endl;
-    if(r <= e_exp){
-      //cout << "Flip success!" << endl;
-      spin_matrix[i_][j_] *= -1;
-      M = M + 2*spin_matrix[i_][j_];
-      E = E + deltaE;
-      if(E > 100000){
-        cout << "E: " << E << " ." << endl;
-      }
-      numFlips += 1;
-    }
-
-    //Writes and update data for each attempt to flip
-    if(i > loopCutoff){
-      sampleCount ++;
-      average[0] += E; average[1] += E*E;
-      average[2] += M; average[3] += M*M; average[4] += fabs(M);
-      //ofile << average[0]/sampleCount << ", " << average[4]/sampleCount << ", " << numFlips << ", " << E/N_sq << endl;
-    }
+  for(int i = 1; i <= loopCutoff; i++){
+    Metropolis();
   }
 
+  for(int i = loopCutoff; i <= (long int) N_sq*numMC_cycles ; i++){
+    Metropolis();
+    sampleCount ++;
+    average[0] += E; average[1] += E*E;
+    average[2] += M; average[3] += M*M; average[4] += fabs(M);
+    //ofile << average[0]/sampleCount << ", " << average[4]/sampleCount << ", " << numFlips << ", " << E/N_sq << endl;
+
+  }
   for(int i = 0; i < 5; i++){
     average[i] /= (sampleCount);
   }
@@ -160,8 +158,6 @@ void IsingModel::solve(){
   for(int i = 0; i < 5; i++){
     average[i] /= N_sq;
   }
-
-
 
   //cout << "<E> " << average[0]<< "  <M> " << average[4] << endl;
   //cout << "CV: " << Cv << "  chi: " << chi << endl;
