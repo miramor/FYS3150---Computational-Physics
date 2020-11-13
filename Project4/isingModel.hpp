@@ -36,6 +36,7 @@ class IsingModel{
     void findNeighbour();
     void swapSpinOnce();
     void findTotalEnergy();
+    void writeFile();
     void solve();
     void printMatrix();
     double* getAverage(); //contains <E>, <M>, <E**2> used for plotting

@@ -1,13 +1,13 @@
 all: compile
 
 compile:
-	g++ -std=c++17 main.cpp isingModel.cpp -o output.exe -O3 -fopenmp
+	g++-10 main.cpp isingModel.cpp -o output.exe -fopenmp
 
 execute:
 	./output.exe
 
 clean:
-	rm *.o main.exe
+	rm *.o output.exe
 
 
 #LIB = -larmadillo

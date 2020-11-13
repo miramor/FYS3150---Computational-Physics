@@ -1,7 +1,9 @@
 import matplotlib.pyplot as plt
+import seaborn as sb
 import pandas as pd
 import numpy as np
 from matplotlib.widgets import MultiCursor
+from scipy.stats import norm
 
 
 
@@ -31,7 +33,7 @@ def plot_d():
     MC = np.linspace(cutoff*numCycles,numCycles, E.size)
 
     axs[0].plot(MC, E_mean, label = "<E>")
-    #axs[0].plot(MC, E, label = "E", lw=0.2)
+    #axs[0].plot(MC, E, label = "E", lw=0.7)
     axs[1].plot(MC, M_mean)
     axs[2].plot(MC, numFlips) #nr of flips
     fig.suptitle(f'2D Isingmodel stabilization at T = {T}', fontsize=14)
@@ -49,14 +51,22 @@ def plot_d():
     #plt.tight_layout()
     plt.savefig(f"stabi_4d_{T}.pdf", dpi = 150)
 
-plot_d()
+#plot_d()
 
-df = pd.read_csv("./e_hist.csv", index_col=False, names=["E_mean", "M_mean", "numFlips", "E"], skiprows = 1)
-a = df.groupby(df["E"],as_index=False).size()
+def plot_hist():
+    plt.clf()
+    df = pd.read_csv("./e_hist.csv", index_col=False, names=["E_mean", "M_mean", "numFlips", "E"], skiprows = 1)
+    energyGrouped = df.groupby(df["E"],as_index=False).size()
+    sb.distplot(df["E"], kde = False)
+    plt.ylabel("P(E)")
+    plt.xlabel("Energy")
+    plt.savefig("prob_E_hist.pdf")
+    print(energyGrouped)
 
+#plot_hist()
 
-print(a)
-
+def plot_obs():
+    return
 
 
 

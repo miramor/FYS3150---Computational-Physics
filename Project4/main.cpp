@@ -1,28 +1,54 @@
 
 #include <cstdio>
-//#include <omp.h>
+#include <omp.h>
 #include <cmath>
 #include <iostream>
+#include <fstream>
 #include "isingModel.hpp"
 
 using namespace std;
 
 
 int main(int argc, char const *argv[]) {
-  double L = atoi(argv[1]);
-  double Ti = stod(argv[2]);
-  double Tf = stod(argv[3]);
-  double dT = stod(argv[4]);
-  IsingModel is = IsingModel(L, Ti, 2); // n, temp, initmethod: (0)up, (1)down or (2)random
-  is.solve();
+  int L = atoi(argv[1]);
+  int Ti = (int)stod(argv[2])*100;
+  int Tf = (int)stod(argv[3])*100;
+  int dT = (int)(stod(argv[4])*100);
+
+  ofstream Lfile;
+  Lfile.open("Observables_" + to_string(L) + ".csv");
+  Lfile <<  "T, <E>, <M>, Cv, chi" << endl;
+
+  double start;
+  double end;
+
+  #pragma omp parallel
+    {
+      double start;
+      double end;
+      #pragma omp single
+        cout << "Number of threads in use: " << omp_get_num_threads() << endl;
+
+      #pragma omp for
+      for (int i = Ti; i <= Tf; i+= dT){
+        start = omp_get_wtime();
+        IsingModel is = IsingModel(L, (double)i/100, 2); // n, temp, initmethod: (0)up, (1)down or (2)random
+        //is.printMatrix();
+        is.solve();
+        end = omp_get_wtime();
+        #pragma omp critical
+          cout << "Thread " << omp_get_thread_num() << " finished with: " <<  "T: " << (double)i/100 << ". Time: " << end << "s" << endl;
+          is.writeFile();
+
+        //cout << "\n" << "----------------------------------------------" << endl;
+      }
+    }
 
 
   /*
-  for {double i = Ti; i <= Tf; i+=dT}{
-    IsingModel is = IsingModel(L,i,2); // n, temp, initmethod: (0)up, (1)down or (2)random
-    //is.printMatrix();
-    is.solve();
-  }
+  IsingModel is = IsingModel(L, Ti, 2); // n, temp, initmethod: (0)up, (1)down or (2)random
+  is.solve();
+  is.printMatrix();
   TO DO:
   Run for L = 2, compare to analytical results.
   How does the number of accepted configurations behave as function of temperature T?

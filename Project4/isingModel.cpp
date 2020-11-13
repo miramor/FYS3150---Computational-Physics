@@ -4,11 +4,10 @@
 #include <stdlib.h>
 #include <time.h>
 #include <fstream>
+#include <string>
 using namespace std;
 
 void IsingModel::findTotalEnergy(){
-  E = 0;
-
   for (int i =0; i < N; i++){
     for (int j = 0; j < N; j++){
       // this is not right
@@ -28,6 +27,8 @@ void IsingModel::findTotalEnergy(){
 IsingModel::IsingModel(int n, double temp, int initMethod){
   N = n;
   T0 = temp;
+  M = 0;
+  E = 0;
   monteCycles = 0;
   numFlips = 0;
 
@@ -43,6 +44,11 @@ IsingModel::IsingModel(int n, double temp, int initMethod){
 
   //Initialze
   average = new double[5];
+  for(int i = 0; i < 5; i++){
+    average[i] = 0;
+  }
+
+
 
   //Set up plus1 and min1 when using periodic boundary conditions
   plus1 = new int[N];
@@ -82,7 +88,7 @@ IsingModel::IsingModel(int n, double temp, int initMethod){
 
   //Print out matrix for visual tests:
   findTotalEnergy(); // writes energy to E, class variable
-  cout << "Matrix: " << "E: " << E << " , M: " << M << endl;
+  //cout << "Matrix: " << "E: " << E << " , M: " << M << endl;
 
   //Quick check if matrix set up right
   /*
@@ -104,13 +110,14 @@ void IsingModel::solve(){
   monteCycles = 0;
   double r;
   int N_sq = N*N;
-  int numMC_cycles = 1000;  // num of monte carco cycles
-
+  int numMC_cycles = 1000000;  // num of monte carco cycles
+  int sampleCount = 0;
   //N_sq = 2;
 
   ofstream ofile;
   ofile.open("e_hist.csv");
   double cutoff = 0.1;
+  double loopCutoff = N_sq*cutoff*numMC_cycles;
   ofile << cutoff << ", " << numMC_cycles << ", " << T0 << ", " << N << endl;
 
   for(int i = 1; i <= N_sq * numMC_cycles+1; i++){
@@ -128,27 +135,45 @@ void IsingModel::solve(){
       spin_matrix[i_][j_] *= -1;
       M = M + 2*spin_matrix[i_][j_];
       E = E + deltaE;
+      if(E > 100000){
+        cout << "E: " << E << " ." << endl;
+      }
       numFlips += 1;
     }
 
     //Writes and update data for each attempt to flip
-    if(i > cutoff*numMC_cycles){
-      double div = N_sq * i;
+    if(i > loopCutoff){
+      sampleCount ++;
       average[0] += E; average[1] += E*E;
       average[2] += M; average[3] += M*M; average[4] += fabs(M);
-      ofile << average[0]/div << ", " << average[4]/div << ", " << numFlips << ", " << E << endl;
+      //ofile << average[0]/sampleCount << ", " << average[4]/sampleCount << ", " << numFlips << ", " << E/N_sq << endl;
     }
   }
+
   for(int i = 0; i < 5; i++){
-    average[i] /= (double)numMC_cycles;
+    average[i] /= (sampleCount);
   }
 
-  Cv = (average[1] - average[0] * average[0]) / T0;
-  chi = (average[3] - average[4]*average[4]) / (T0*T0);
+  Cv = (average[1] - average[0] * average[0]) / T0 / N_sq;
+  chi = (average[3] - average[4] * average[4]) / (T0*T0) / N_sq;
 
-  cout << "<E> " << average[0]<< "  <M> " << average[4] << endl;
-  cout << "CV: " << Cv << "  chi: " << chi << endl;
+  for(int i = 0; i < 5; i++){
+    average[i] /= N_sq;
+  }
+
+
+
+  //cout << "<E> " << average[0]<< "  <M> " << average[4] << endl;
+  //cout << "CV: " << Cv << "  chi: " << chi << endl;
 }
+
+void IsingModel::writeFile(){
+  ofstream Lfile;
+  Lfile.open("Observables_" + to_string(N) + ".csv", ios_base::app);
+  // T, <E>, <M>, Cv, chi
+  Lfile << T0 << ", " << average[0] << ", " << average[4] << ", " << Cv << ", " << chi << endl;
+}
+
 
 
 double IsingModel::calcE_ij(int i, int j){
@@ -165,7 +190,6 @@ double IsingModel::calcE_ij(int i, int j){
   E_after = -E_now; //tilsvarer å gange s_ij med -1
 
   double deltaE = E_after-E_now; // -8,-4,0,4,8 possible values
-
   return deltaE;
 }
 
@@ -175,7 +199,7 @@ IsingModel::~IsingModel(){
     delete [] spin_matrix[i];
   }
   delete [] spin_matrix;
-  cout << "Freed up space" << endl;
+  //cout << "Freed up space" << endl;
 }
 
 double* IsingModel::getAverage(){
