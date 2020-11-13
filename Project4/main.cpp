@@ -37,7 +37,7 @@ int main(int argc, char const *argv[]) {
         is.solve();
         end = omp_get_wtime();
         #pragma omp critical
-          cout << "Thread " << omp_get_thread_num() << " finished with: " <<  "T: " << (double)i/100 << ". Time: " << end << "s" << endl;
+          cout << "Thread " << omp_get_thread_num() << " finished with: " <<  "T: " << (double)i/100 << ". Time: " << end-start << "s" << endl;
           is.writeFile();
 
         //cout << "\n" << "----------------------------------------------" << endl;
