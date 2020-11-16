@@ -15,6 +15,8 @@ int main(int argc, char const *argv[]) {
   //double Tf = stod(argv[3]);
   //double dT = stod(argv[4]);
 
+
+
   double Ti = 2;
   double Tf = 2.3;
   double dT = 0.05;
@@ -26,7 +28,7 @@ int main(int argc, char const *argv[]) {
   }
 
 
-  for(int j = 40; j <=100; j+=20){
+  for(int j = 80; j <=120; j+=20){
     ofstream Lfile;
     Lfile.open("Observables_" + to_string(j) + ".csv");
     Lfile <<  "T, <E>, <M>, Cv, chi" << endl;

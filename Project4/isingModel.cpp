@@ -127,7 +127,7 @@ void IsingModel::solve(){
   double r;
   int N_sq = N*N;
   int numMC_cycles = 1000000;  // num of monte carco cycles
-  int sampleCount = 0;
+  long int sampleCount = 0;
   //N_sq = 2;
 
   ofstream ofile;
@@ -136,18 +136,28 @@ void IsingModel::solve(){
   double loopCutoff = N_sq*cutoff*numMC_cycles;
   ofile << cutoff << ", " << numMC_cycles << ", " << T0 << ", " << N << endl;
 
-  for(int i = 1; i <= loopCutoff; i++){
+  //long double k = 0.01;
+
+  for(long int i = 1; i <= loopCutoff; i++){
+    /*if(i > k*numMC_cycles*N_sq){
+      cout << "Finish " << k*100 << " %, precutoff" << endl;
+      k += 0.01;
+    }*/
     Metropolis();
   }
-
-  for(int i = loopCutoff; i <= (long int) N_sq*numMC_cycles ; i++){
+  
+  for(long int i = loopCutoff; i <= (long int) N_sq*numMC_cycles ; i++){
+    /*if(i > k*numMC_cycles*N_sq){
+      cout << "Finish " << k*100 << " %" << endl;
+      k += 0.01;
+    }*/
     Metropolis();
     sampleCount ++;
     average[0] += E; average[1] += E*E;
     average[2] += M; average[3] += M*M; average[4] += fabs(M);
     //ofile << average[0]/sampleCount << ", " << average[4]/sampleCount << ", " << numFlips << ", " << E/N_sq << endl;
-
   }
+
   for(int i = 0; i < 5; i++){
     average[i] /= (sampleCount);
   }
