@@ -124,8 +124,7 @@ void IsingModel::solve(){
   double r;
   int N_sq = N*N;
   cout << "Started " << endl;
-  //long int numMC_cycles = 10000000;  // num of monte carco cycles
-  long int numMC_cycles = 2000000;  // num of monte carco cycles
+  long int numMC_cycles = 20000000;  // num of monte carco cycles
   long int sampleCount = 0;
   //N_sq = 2;
 
@@ -161,8 +160,8 @@ void IsingModel::solve(){
     average[i] /= (sampleCount);
   }
 
-  Cv = (average[1] - average[0] * average[0]) / T0 / N_sq;
-  chi = (average[3] - average[4] * average[4]) / (T0*T0) / N_sq;
+  Cv = (average[1] - average[0] * average[0]) / (T0*T0) / N_sq;
+  chi = (average[3] - average[4] * average[4]) / T0 / N_sq;
 
   for(int i = 0; i < 5; i++){
     average[i] /= N_sq;

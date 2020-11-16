@@ -71,9 +71,20 @@ def plot_obs(L):
     savepath = "./Plots/"
     filename = "Observables_" + L + ".csv"
     df = pd.read_csv(path + filename, index_col=False, names=["T", "E", "M", "Cv", "chi"], skiprows = 1)
+    #print(df)
+
+    plt.clf()
+    plt.plot(df["T"], df["E"], 'ro')
+    #plt.plot(df["T"], df["E"])
+    plt.axvline(x=2.269)
+    plt.title("Energy")
+    plt.ylabel("E")
+    plt.xlabel("Temperature")
+    plt.savefig(savepath + "E_" + L + ".pdf")
 
     plt.clf()
     plt.plot(df["T"], df["Cv"], 'ro')
+    #plt.plot(df["T"], df["Cv"])
     plt.axvline(x=2.269)
     plt.title("Specific heat capacity")
     plt.ylabel("Cv")
@@ -81,7 +92,7 @@ def plot_obs(L):
     plt.savefig(savepath + "Cv_" + L + ".pdf")
 
     plt.clf()
-    plt.plot(df["T"], df["chi"], 'ro')  
+    plt.plot(df["T"], df["chi"], 'ro')
     plt.axvline(x=2.269)
     plt.title("Susceptibility")
     plt.ylabel("chi")
@@ -92,16 +103,18 @@ def plot_obs(L):
     plt.plot(df["T"], df["M"], 'ro')
     plt.axvline(x=2.269)
     plt.title("Magnetization")
-    plt.ylabel("<M>")
+    plt.ylabel("<|M|>")
     plt.xlabel("Temperature")
     plt.savefig(savepath + "M" + L + ".pdf")
 
 
 
+plot_obs(10)
 
+"""
 for L in [40, 60, 80, 100, 120]:
     plot_obs(L)
-
+"""
 
 
 

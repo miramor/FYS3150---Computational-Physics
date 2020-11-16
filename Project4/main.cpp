@@ -17,18 +17,18 @@ int main(int argc, char const *argv[]) {
 
 
 
-  double Ti = 2.15;
-  double Tf = 2.5;
-  double dT = 0.05;
-  int T_length = 8;
+  double Ti = 2.0;
+  double Tf = 2.35;
+  double dT = 0.025;
+  int T_length = 8*2;
   double T_array [T_length];
 
   for (int i = 0; i < T_length; i++){
     T_array[i] = Ti + dT*i;
+    cout << T_array[i] << endl;
   }
 
-
-  for(int j = 10; j <=10; j+=20){
+  for(int j = 40; j <=100; j+=20){
     ofstream Lfile;
     Lfile.open("Observables_" + to_string(j) + ".csv");
     Lfile <<  "T, <E>, <M>, Cv, chi" << endl;
@@ -38,6 +38,7 @@ int main(int argc, char const *argv[]) {
     // 283 sek - 40*40
     #pragma omp parallel
     {
+      //Thread specific variables
       double start;
       double end;
       #pragma omp single
