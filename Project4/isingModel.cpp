@@ -124,7 +124,7 @@ void IsingModel::solve(){
   double r;
   int N_sq = N*N;
   cout << "Started " << endl;
-  long int numMC_cycles = 10000000;  // num of monte carco cycles
+  long int numMC_cycles = 1000000;  // num of monte carco cycles
   long int sampleCount = 0;
   //N_sq = 2;
 
