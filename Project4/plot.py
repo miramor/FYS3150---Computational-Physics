@@ -19,7 +19,7 @@ def plot_d():
     df = pd.read_csv("./e_hist.csv", index_col=False, names=["E_mean", "M_mean", "numFlips", "E"], skiprows = 1)
 
     #plt.rcParams['axes.labelsize'] = 16
-    #plt.rcParams['axes.titlesize'] = 16
+    #plt.rcParams['axes.titlesize'] = 16s
     #plt.rcParams['legend.fontsize'] = 19
 
     #axs[0].set_xlabel('distance (m)') Axis labels
@@ -65,8 +65,44 @@ def plot_hist():
 
 #plot_hist()
 
-def plot_obs():
-    return
+def plot_obs(L):
+    L = str(L)
+    path = "./ResultsLong_1mill/"
+    savepath = "./Plots/"
+    filename = "Observables_" + L + ".csv"
+    df = pd.read_csv(path + filename, index_col=False, names=["T", "E", "M", "Cv", "chi"], skiprows = 1)
+
+    plt.clf()
+    plt.plot(df["T"], df["Cv"], 'ro')
+    plt.axvline(x=2.269)
+    plt.title("Specific heat capacity")
+    plt.ylabel("Cv")
+    plt.xlabel("Temperature")
+    plt.savefig(savepath + "Cv_" + L + ".pdf")
+
+    plt.clf()
+    plt.plot(df["T"], df["chi"], 'ro')  
+    plt.axvline(x=2.269)
+    plt.title("Susceptibility")
+    plt.ylabel("chi")
+    plt.xlabel("Temperature")
+    plt.savefig(savepath + "chi_" + L + ".pdf")
+
+    plt.clf()
+    plt.plot(df["T"], df["M"], 'ro')
+    plt.axvline(x=2.269)
+    plt.title("Magnetization")
+    plt.ylabel("<M>")
+    plt.xlabel("Temperature")
+    plt.savefig(savepath + "M" + L + ".pdf")
+
+
+
+
+for L in [40, 60, 80, 100, 120]:
+    plot_obs(L)
+
+
 
 
 
