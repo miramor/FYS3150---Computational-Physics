@@ -129,7 +129,7 @@ void IsingModel::solve(){
 
   ofstream ofile;
   ofile.open("e_hist.csv");
-  double cutoff = 0.1;
+  double cutoff = 0.001;
   double loopCutoff = N_sq*cutoff*numMC_cycles;
   ofile << cutoff << ", " << numMC_cycles << ", " << T0 << ", " << N << endl;
 
@@ -137,7 +137,7 @@ void IsingModel::solve(){
   for(long int i = 1; i <= loopCutoff; i++){
     if(i > k*numMC_cycles*N_sq){
       cout << "Finish " << k*100 << " %, precutoff" << endl;
-      k += 0.1;
+      k += 0.0001;
     }
     Metropolis();
     //if(i > k*numMC_cycles*N_sq){
@@ -148,7 +148,7 @@ void IsingModel::solve(){
   for(long int i = loopCutoff; i <= (long int) N_sq*numMC_cycles ; i++){
     if(i > k*numMC_cycles*N_sq){
       cout << "Finish " << k*100 << " %" << endl;
-      k += 0.1;
+      k += 0.01;
     }
     Metropolis();
     sampleCount ++;
