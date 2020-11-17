@@ -28,6 +28,11 @@ int main(int argc, char const *argv[]) {
     cout << T_array[i] << endl;
   }
 
+  IsingModel is = IsingModel(40, 1, 2); // n, temp, initmethod: (0)up, (1)down or (2)random
+  is.solve();
+
+
+/*
   for(int j = 40; j <=100; j+=20){
     ofstream Lfile;
     Lfile.open("Observables_" + to_string(j) + ".csv");

@@ -96,23 +96,26 @@ void IsingModel::Metropolis(){
   //int i_ = rand() % N; //error when defined i_ outside loop
   //int j_ = rand() % N;
   double r = drand48();
-  double deltaE = calcE_ij(i_, j_);
-  double e_exp = expVals[(int)deltaE+8];
+  #pragma omp parallel critical
+  {
+    double deltaE = calcE_ij(i_, j_);
+    double e_exp = expVals[(int)deltaE+8];
 
-  if(deltaE < 0){
-    //cout << "Flip success!" << endl;
-    spin_matrix[i_][j_] *= -1;
-    M = M + 2*spin_matrix[i_][j_];
-    E = E + deltaE;
-    numFlips += 1;
-  }
-  //cout << "r: " << r << "  , exp: " << e_exp << " E: " << deltaE << endl;
-  else if(r <= e_exp){
-    //cout << "Flip success!" << endl;
-    spin_matrix[i_][j_] *= -1;
-    M = M + 2*spin_matrix[i_][j_];
-    E = E + deltaE;
-    numFlips += 1;
+    if(deltaE < 0){
+      //cout << "Flip success!" << endl;
+      spin_matrix[i_][j_] *= -1;
+      M = M + 2*spin_matrix[i_][j_];
+      E = E + deltaE;
+      numFlips += 1;
+    }
+    //cout << "r: " << r << "  , exp: " << e_exp << " E: " << deltaE << endl;
+    else if(r <= e_exp){
+      //cout << "Flip success!" << endl;
+      spin_matrix[i_][j_] *= -1;
+      M = M + 2*spin_matrix[i_][j_];
+      E = E + deltaE;
+      numFlips += 1;
+    }
   }
 }
 
@@ -136,6 +139,9 @@ void IsingModel::solve(){
 
   long double k = 0.00;
   cout << "Started2 " << endl;
+
+
+  #pragma omp parallel for
   for(long int i = 1; i <= loopCutoff; i++){
     Metropolis();
     //if(i > k*numMC_cycles*N_sq){
@@ -182,18 +188,12 @@ void IsingModel::writeFile(){
 
 double IsingModel::calcE_ij(int i, int j){
   // check E when flipped, does not actually modify the spin_matrix
-  double E_now = 0;
-  double E_after = 0;
   int s_ij = spin_matrix[i][j];
   int s_iplus = spin_matrix[plus1[i]][j];
   int s_jplus = spin_matrix[i][plus1[j]];
   int s_imin = spin_matrix[min1[i]][j];
   int s_jmin = spin_matrix[i][min1[j]];
-
-  E_now -= s_ij*(s_iplus+s_jplus+s_imin+s_jmin);
-  E_after = -E_now; //tilsvarer å gange s_ij med -1
-
-  double deltaE = E_after-E_now; // -8,-4,0,4,8 possible values
+  double deltaE = 2 *s_ij*(s_iplus+s_jplus+s_imin+s_jmin);
   return deltaE;
 }
 
