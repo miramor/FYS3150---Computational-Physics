@@ -127,7 +127,7 @@ void IsingModel::solve(){
   // Confirm the flip and update spin matrix.
   double r;
   int N_sq = N*N;
-  long int numMC_cycles = 700000;  // num of monte carco cycles
+  long int numMC_cycles = 15000000;  // num of monte carco cycles
   long int sampleCount = 0;
   //N_sq = 2;
 
@@ -187,12 +187,16 @@ void IsingModel::writeFile(){
 
 double IsingModel::calcE_ij(int i, int j){
   // check E when flipped, does not actually modify the spin_matrix
+  double E_now = 0;
+  double E_after = 0;
   int s_ij = spin_matrix[i][j];
   int s_iplus = spin_matrix[plus1[i]][j];
   int s_jplus = spin_matrix[i][plus1[j]];
   int s_imin = spin_matrix[min1[i]][j];
   int s_jmin = spin_matrix[i][min1[j]];
-  double deltaE = 2 *s_ij*(s_iplus+s_jplus+s_imin+s_jmin);
+  E_now -= s_ij*(s_iplus+s_jplus+s_imin+s_jmin);
+  E_after = -E_now; //tilsvarer å gange s_ij med -1
+  double deltaE = E_after-E_now; // -8,-4,0,4,8 possible values
   return deltaE;
 }
 
