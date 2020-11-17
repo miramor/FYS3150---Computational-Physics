@@ -14,14 +14,13 @@ int main(int argc, char const *argv[]) {
   //double Tf = stod(argv[3]);
   //double dT = stod(argv[4]);
 
-
-
   int L = atoi(argv[1]);
 
+  int numThreadx8 = 4;
   double Ti = 2.0;
   double Tf = 2.35;
-  double dT = 0.05/4;
-  int T_length = 8*4;
+  double dT = 0.05/numThreadx8;
+  int T_length = 8*numThreadx8;
   double T_array [T_length];
 
   for (int i = 0; i < T_length; i++){
