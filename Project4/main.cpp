@@ -19,8 +19,8 @@ int main(int argc, char const *argv[]) {
 
   double Ti = 2.0;
   double Tf = 2.35;
-  double dT = 0.05;
-  int T_length = 8;
+  double dT = 0.025/2;
+  int T_length = 8*4;
   double T_array [T_length];
 
   for (int i = 0; i < T_length; i++){
@@ -28,7 +28,7 @@ int main(int argc, char const *argv[]) {
     cout << T_array[i] << endl;
   }
 
-  for(int j = 60; j <=100; j+=20){
+  for(int j = 80; j <=80; j+=20){
     ofstream Lfile;
     Lfile.open("Observables_" + to_string(j) + ".csv");
     Lfile <<  "T, <E>, <M>, Cv, chi" << endl;

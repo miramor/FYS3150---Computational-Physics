@@ -140,6 +140,10 @@ void IsingModel::solve(){
       k += 0.1;
     }
     Metropolis();
+    //if(i > k*numMC_cycles*N_sq){
+    //  cout << "Finish " << k*100 << " %, precutoff" << endl;
+    //  k += 0.01;
+    //}
   }
   for(long int i = loopCutoff; i <= (long int) N_sq*numMC_cycles ; i++){
     if(i > k*numMC_cycles*N_sq){
