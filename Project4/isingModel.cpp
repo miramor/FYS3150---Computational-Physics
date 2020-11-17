@@ -127,7 +127,7 @@ void IsingModel::solve(){
   // Confirm the flip and update spin matrix.
   double r;
   int N_sq = N*N;
-  long int numMC_cycles = 10000;  // num of monte carco cycles
+  long int numMC_cycles = 15000000;    // num of monte carco cycles
   long int sampleCount = 0;
   //N_sq = 2;
 

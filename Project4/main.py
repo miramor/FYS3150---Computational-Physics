@@ -2,10 +2,10 @@ import sys
 import os
 import matplotlib.pyplot as plt
 
-"""
+
 if not os.path.exists("Results"):
     os.makedirs("Results")
-"""
+
 if not os.path.exists("Plots"):
     os.makedirs("Plots")
 
@@ -19,5 +19,7 @@ os.system("./output.exe " + cla)
 
 #os.system("echo Making plots...")
 #os.system("python3 plot.py " + cla)
+
+os.system("mv" + " Observables_" + str(cla) + ".csv" + " " + "./Results/") #Move data file to results directory.
 
 os.system("echo Full program finished")

@@ -16,11 +16,11 @@ int main(int argc, char const *argv[]) {
 
   int L = atoi(argv[1]);
 
-  int numThreadx8 = 4;
-  double Ti = 2.0;
-  double Tf = 2.35;
-  double dT = 0.05/numThreadx8;
+  int numThreadx8 = 1;
+  double Ti = 2. + 0.05/2;
+  double Tf = 2.35 + 0.05/2;
   int T_length = 8*numThreadx8;
+  double dT = (Tf-Ti)/(T_length-1);
   double T_array [T_length];
 
   for (int i = 0; i < T_length; i++){
