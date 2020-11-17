@@ -123,7 +123,7 @@ void IsingModel::solve(){
   // Confirm the flip and update spin matrix.
   double r;
   int N_sq = N*N;
-  long int numMC_cycles = 10000000;  // num of monte carco cycles
+  long int numMC_cycles = 700000;  // num of monte carco cycles
   long int sampleCount = 0;
   //N_sq = 2;
 
@@ -137,7 +137,7 @@ void IsingModel::solve(){
   for(long int i = 1; i <= loopCutoff; i++){
     if(i > k*numMC_cycles*N_sq){
       cout << "Finish " << k*100 << " %, precutoff" << endl;
-      k += 0.0001;
+      k += 0.1;
     }
     Metropolis();
     //if(i > k*numMC_cycles*N_sq){
@@ -148,7 +148,7 @@ void IsingModel::solve(){
   for(long int i = loopCutoff; i <= (long int) N_sq*numMC_cycles ; i++){
     if(i > k*numMC_cycles*N_sq){
       cout << "Finish " << k*100 << " %" << endl;
-      k += 0.01;
+      k += 0.1;
     }
     Metropolis();
     sampleCount ++;
