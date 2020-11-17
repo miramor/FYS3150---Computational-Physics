@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <fstream>
+
 #include <string>
 using namespace std;
 
@@ -96,27 +97,27 @@ void IsingModel::Metropolis(){
   //int i_ = rand() % N; //error when defined i_ outside loop
   //int j_ = rand() % N;
   double r = drand48();
-  #pragma omp parallel critical
-  {
-    double deltaE = calcE_ij(i_, j_);
-    double e_exp = expVals[(int)deltaE+8];
 
-    if(deltaE < 0){
-      //cout << "Flip success!" << endl;
-      spin_matrix[i_][j_] *= -1;
-      M = M + 2*spin_matrix[i_][j_];
-      E = E + deltaE;
-      numFlips += 1;
-    }
-    //cout << "r: " << r << "  , exp: " << e_exp << " E: " << deltaE << endl;
-    else if(r <= e_exp){
-      //cout << "Flip success!" << endl;
-      spin_matrix[i_][j_] *= -1;
-      M = M + 2*spin_matrix[i_][j_];
-      E = E + deltaE;
-      numFlips += 1;
-    }
+
+  double deltaE = calcE_ij(i_, j_);
+  double e_exp = expVals[(int)deltaE+8];
+
+  if(deltaE < 0){
+    //cout << "Flip success!" << endl;
+    spin_matrix[i_][j_] *= -1;
+    M = M + 2*spin_matrix[i_][j_];
+    E = E + deltaE;
+    numFlips += 1;
   }
+  //cout << "r: " << r << "  , exp: " << e_exp << " E: " << deltaE << endl;
+  else if(r <= e_exp){
+    //cout << "Flip success!" << endl;
+    spin_matrix[i_][j_] *= -1;
+    M = M + 2*spin_matrix[i_][j_];
+    E = E + deltaE;
+    numFlips += 1;
+  }
+
 }
 
 void IsingModel::solve(){
@@ -140,17 +141,16 @@ void IsingModel::solve(){
   long double k = 0.00;
   cout << "Started2 " << endl;
 
-
-  #pragma omp parallel for
-  for(long int i = 1; i <= loopCutoff; i++){
+  for(long int i = 1; i < (long int)loopCutoff; i++){
     Metropolis();
     //if(i > k*numMC_cycles*N_sq){
     //  cout << "Finish " << k*100 << " %, precutoff" << endl;
     //  k += 0.01;
     //}
   }
-  cout << "Started3 " << endl;
-  for(long int i = loopCutoff; i <= (long int) N_sq*numMC_cycles ; i++){
+
+  cout << "Loop before cutoff took " << (end - start)/ (double) CLOCKS_PER_SEC << "s" << endl;
+  for(long int i = loopCutoff; i < (long int) N_sq*numMC_cycles ; i++){
   //  if(i > k*numMC_cycles*N_sq){
   //    cout << "Finish " << k*100 << " %" << endl;
   //    k += 0.01;
