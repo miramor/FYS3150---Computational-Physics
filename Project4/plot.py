@@ -109,7 +109,7 @@ def plot_obs(L):
 
 
 
-plot_obs(10)
+plot_obs(40)
 
 """
 for L in [40, 60, 80, 100, 120]:
