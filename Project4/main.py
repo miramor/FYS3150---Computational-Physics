@@ -5,9 +5,9 @@ import matplotlib.pyplot as plt
 """
 if not os.path.exists("Results"):
     os.makedirs("Results")
+"""
 if not os.path.exists("Plots"):
     os.makedirs("Plots")
-"""
 
 cla = " ".join(sys.argv[1:])
 print(cla)

@@ -128,7 +128,7 @@ void IsingModel::solve(){
   double r;
   int N_sq = N*N;
   cout << "Started " << endl;
-  long int numMC_cycles = 10000000;  // num of monte carco cycles
+  long int numMC_cycles = 1000000;  // num of monte carco cycles
   long int sampleCount = 0;
   //N_sq = 2;
 
@@ -149,7 +149,7 @@ void IsingModel::solve(){
     //}
   }
 
-  cout << "Loop before cutoff took " << (end - start)/ (double) CLOCKS_PER_SEC << "s" << endl;
+  cout << "Started3" << endl;
   for(long int i = loopCutoff; i < (long int) N_sq*numMC_cycles ; i++){
   //  if(i > k*numMC_cycles*N_sq){
   //    cout << "Finish " << k*100 << " %" << endl;
