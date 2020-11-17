@@ -70,13 +70,12 @@ def plot_obs(L):
     path = "./ResultsLong_1mill/"
     savepath = "./Plots/"
     filename = "Observables_" + L + ".csv"
-    df = pd.read_csv(path + filename, index_col=False, names=["T", "E", "M", "Cv", "chi"], skiprows = 1)
+    df = pd.read_csv(filename, index_col=False, names=["T", "E", "M", "Cv", "chi"], skiprows = 1)
     #print(df)
 
     plt.clf()
     plt.plot(df["T"], df["E"], 'ro')
-    #plt.plot(df["T"], df["E"])
-    plt.axvline(x=2.269)
+    #plt.axvline(x=2.269)
     plt.title("Energy")
     plt.ylabel("E")
     plt.xlabel("Temperature")
@@ -84,8 +83,7 @@ def plot_obs(L):
 
     plt.clf()
     plt.plot(df["T"], df["Cv"], 'ro')
-    #plt.plot(df["T"], df["Cv"])
-    plt.axvline(x=2.269)
+    #plt.axvline(x=2.269)
     plt.title("Specific heat capacity")
     plt.ylabel("Cv")
     plt.xlabel("Temperature")
@@ -93,7 +91,7 @@ def plot_obs(L):
 
     plt.clf()
     plt.plot(df["T"], df["chi"], 'ro')
-    plt.axvline(x=2.269)
+    #plt.axvline(x=2.269)
     plt.title("Susceptibility")
     plt.ylabel("chi")
     plt.xlabel("Temperature")
@@ -109,7 +107,7 @@ def plot_obs(L):
 
 
 
-plot_obs(40)
+plot_obs(2)
 
 """
 for L in [40, 60, 80, 100, 120]:

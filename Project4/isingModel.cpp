@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <fstream>
+
 #include <string>
 using namespace std;
 
@@ -96,6 +97,8 @@ void IsingModel::Metropolis(){
   //int i_ = rand() % N; //error when defined i_ outside loop
   //int j_ = rand() % N;
   double r = drand48();
+
+
   double deltaE = calcE_ij(i_, j_);
   double e_exp = expVals[(int)deltaE+8];
 
@@ -114,6 +117,7 @@ void IsingModel::Metropolis(){
     E = E + deltaE;
     numFlips += 1;
   }
+
 }
 
 void IsingModel::solve(){
@@ -129,7 +133,7 @@ void IsingModel::solve(){
 
   ofstream ofile;
   ofile.open("e_hist.csv");
-  double cutoff = 0.001;
+  double cutoff = 0.1;
   double loopCutoff = N_sq*cutoff*numMC_cycles;
   ofile << cutoff << ", " << numMC_cycles << ", " << T0 << ", " << N << endl;
 
@@ -183,18 +187,12 @@ void IsingModel::writeFile(){
 
 double IsingModel::calcE_ij(int i, int j){
   // check E when flipped, does not actually modify the spin_matrix
-  double E_now = 0;
-  double E_after = 0;
   int s_ij = spin_matrix[i][j];
   int s_iplus = spin_matrix[plus1[i]][j];
   int s_jplus = spin_matrix[i][plus1[j]];
   int s_imin = spin_matrix[min1[i]][j];
   int s_jmin = spin_matrix[i][min1[j]];
-
-  E_now -= s_ij*(s_iplus+s_jplus+s_imin+s_jmin);
-  E_after = -E_now; //tilsvarer å gange s_ij med -1
-
-  double deltaE = E_after-E_now; // -8,-4,0,4,8 possible values
+  double deltaE = 2 *s_ij*(s_iplus+s_jplus+s_imin+s_jmin);
   return deltaE;
 }
 

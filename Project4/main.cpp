@@ -10,13 +10,13 @@ using namespace std;
 
 
 int main(int argc, char const *argv[]) {
-  //int L = atoi(argv[1]);
   //double Ti = stod(argv[2]);
   //double Tf = stod(argv[3]);
   //double dT = stod(argv[4]);
 
 
 
+  int L = atoi(argv[1]);
 
   double Ti = 2.0;
   double Tf = 2.35;
@@ -29,37 +29,36 @@ int main(int argc, char const *argv[]) {
     cout << T_array[i] << endl;
   }
 
-  for(int j = 15; j <=15; j+=20){
-    ofstream Lfile;
-    Lfile.open("Observables_" + to_string(j) + ".csv");
-    Lfile <<  "T, <E>, <M>, Cv, chi" << endl;
+  ofstream Lfile;
+  Lfile.open("Observables_" + to_string(L) + ".csv");
+  Lfile <<  "T, <E>, <M>, Cv, chi" << endl;
 
+  double start;
+  double end;
+  // 283 sek - 40*40
+  #pragma omp parallel
+  {
+    //Thread specific variables
     double start;
     double end;
-    // 283 sek - 40*40
-    #pragma omp parallel
-    {
-      //Thread specific variables
-      double start;
-      double end;
-      #pragma omp single
-      cout << "Number of threads in use: " << omp_get_num_threads() << endl;
+    #pragma omp single
+    cout << "Number of threads in use: " << omp_get_num_threads() << endl;
 
-      #pragma omp for
-      for (int i = 0; i < T_length; i++){
-        start = omp_get_wtime();
-        IsingModel is = IsingModel(j, T_array[i], 2); // n, temp, initmethod: (0)up, (1)down or (2)random
-        //is.printMatrix();
-        is.solve();
-        end = omp_get_wtime();
-        #pragma omp critical
-        cout << "L: " << j << ".  Thread " << omp_get_thread_num() << " finished with: " <<  "T: " << T_array[i] << ". Time: " << end-start << "s" << endl;
-        is.writeFile();
+    #pragma omp for
+    for (int i = 0; i < T_length; i++){
+      start = omp_get_wtime();
+      IsingModel is = IsingModel(L, T_array[i], 2); // n, temp, initmethod: (0)up, (1)down or (2)random
+      //is.printMatrix();
+      is.solve();
+      end = omp_get_wtime();
+      #pragma omp critical
+      cout << "L: " << L << ".  Thread " << omp_get_thread_num() << " finished with: " <<  "T: " << T_array[i] << ". Time: " << end-start << "s" << endl;
+      is.writeFile();
 
-        //cout << "\n" << "----------------------------------------------" << endl;
-      }
+      //cout << "\n" << "----------------------------------------------" << endl;
     }
   }
+
 
 
 
