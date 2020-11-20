@@ -213,9 +213,18 @@ def T_critical():
         T_c[i] = df["T"][np.argmax(df["Cv"].to_numpy())]
 
     print(T_c)
+    approx_coeff=np.polyfit(L,T_c,1)
+    approx_func=np.poly1d(approx_coeff)
+    print(approx_func)
 
     plt.clf()
     plt.plot(L,T_c,'o')
+    plt.plot(L,approx_func(L), label=approx_func)
+    # for i in range(len(x_values)):
+    #     plt.plot(L[i],T_c[i],"o")
+    plt.legend()
+    plt.savefig("7_13plot.png")
+    plt.show()
     plt.title("Critical Temperature")
     plt.xlabel("Lattice Size")
     plt.ylabel("Temperature")
@@ -223,6 +232,18 @@ def T_critical():
 
     linreg = LinearRegression().fit(L,T_c)
     print(linreg)
+
+y = np.array([1e-17, 3e-16, 4e-15, 5e-14, 9e-13, 5e-12])
+x = np.array([900+273, 1000+273, 1100+273, 1200+273, 1300+273, 1400+273])
+
+
+#1
+x_values= 1/x
+y_values=np.log(y)
+
+
+
+
 
 T_critical()
 #plot_obs(100)
