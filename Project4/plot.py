@@ -101,8 +101,9 @@ def plot_obs(L):
     savepath = "./Plots/"
     filename = "Observables_" + L + ".csv"
     df = pd.read_csv(path + filename, index_col=False, names=["T", "E", "M", "Cv", "chi"], skiprows = 1)
-    df.sort_values(by=["T"])
     print(df.sort_values(by=["T"]))
+    df = df.sort_values(by=["T"])
+
     plt.clf()
     plt.plot(df["T"], df["E"], 'ro')
     #plt.axvline(x=2.269)
@@ -112,8 +113,13 @@ def plot_obs(L):
     plt.grid()
     plt.savefig(savepath + "E_" + L + ".pdf")
 
+
+    approx_coeff=np.polyfit(df["T"].to_numpy(),df["Cv"].to_numpy(),3)
+    approx_func=np.poly1d(approx_coeff)
+
     plt.clf()
     plt.plot(df["T"], df["Cv"], 'ro')
+    plt.plot(df["T"], approx_func(df["T"].to_numpy()))
     #plt.axvline(x=2.269)
     plt.title("Specific heat capacity")
     plt.ylabel("Cv")
@@ -132,7 +138,7 @@ def plot_obs(L):
 
     plt.clf()
     plt.plot(df["T"], df["M"], 'ro')
-    plt.axvline(x=2.269)
+    #plt.axvline(x=2.269)
     plt.title("Magnetization")
     plt.ylabel("<|M|>")
     plt.grid()
@@ -207,46 +213,48 @@ def T_critical():
     dfs = []
     L = np.array([40,60,80,100])
     T_c = np.zeros(len(L))
+    Tc_fit = np.zeros(len(L))
     for i in range(len(L)):
         filename = "Observables_" + str(L[i]) + ".csv"
         df = pd.read_csv(path + filename, index_col=False, names=["T", "E", "M", "Cv", "chi"], skiprows = 1)
         T_c[i] = df["T"][np.argmax(df["Cv"].to_numpy())]
+        approx_coeff = np.polyfit(df["T"].to_numpy(),df["Cv"].to_numpy(),3)
+        approx_func=np.poly1d(approx_coeff)
+        x = np. linspace(2,2.4, 1000)
+        Tc_fit[i] = x[np.argmax(approx_func(x))]
 
-    print(T_c)
-    approx_coeff=np.polyfit(L,T_c,1)
+
+
+
+    approx_coeff=np.polyfit(L,Tc_fit,1)
     approx_func=np.poly1d(approx_coeff)
-    print(approx_func)
+    print(T_c)
+    print(Tc_fit)
+
 
     plt.clf()
-    plt.plot(L,T_c,'o')
+    plt.plot(L,Tc_fit,'o')
     plt.plot(L,approx_func(L), label=approx_func)
     # for i in range(len(x_values)):
     #     plt.plot(L[i],T_c[i],"o")
     plt.legend()
-    plt.savefig("7_13plot.png")
     plt.show()
     plt.title("Critical Temperature")
     plt.xlabel("Lattice Size")
     plt.ylabel("Temperature")
     plt.savefig("T_c.pdf")
 
-    linreg = LinearRegression().fit(L,T_c)
-    print(linreg)
 
-y = np.array([1e-17, 3e-16, 4e-15, 5e-14, 9e-13, 5e-12])
-x = np.array([900+273, 1000+273, 1100+273, 1200+273, 1300+273, 1400+273])
-
-
-#1
-x_values= 1/x
-y_values=np.log(y)
 
 
 
 
 
 T_critical()
-#plot_obs(100)
+
+L = [40,60,80,100]
+for i in L:
+    plot_obs(i)
 
 #plot_d()
 #plot_hist()
