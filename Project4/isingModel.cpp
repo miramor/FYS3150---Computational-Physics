@@ -2,9 +2,7 @@
 #include <iostream>
 #include <math.h>
 #include <stdlib.h>
-#include <time.h>
 #include <fstream>
-
 #include <string>
 using namespace std;
 
@@ -137,23 +135,19 @@ void IsingModel::solve(){
   double loopCutoff = N_sq*cutoff*numMC_cycles;
   ofile << cutoff << ", " << numMC_cycles << ", " << T0 << ", " << N << endl;
 
-  long double k = 0.00;
+  //long double k = 0.00;
   for(long int i = 1; i <= loopCutoff; i++){
-    /*if(i > k*numMC_cycles*N_sq){
-      cout << "Finish " << k*100 << " %, precutoff" << endl;
-      k += 0.1;
-    }*/
-    Metropolis();
     //if(i > k*numMC_cycles*N_sq){
     //  cout << "Finish " << k*100 << " %, precutoff" << endl;
-    //  k += 0.01;
+    //  k += 0.1;
     //}
+    Metropolis();
   }
   for(long int i = loopCutoff; i <= (long int) N_sq*numMC_cycles ; i++){
-    /*if(i > k*numMC_cycles*N_sq){
-      cout << "Finish " << k*100 << " %" << endl;
-      k += 0.1;
-    }*/
+    //if(i > k*numMC_cycles*N_sq){
+    //  cout << "Finish " << k*100 << " %" << endl;
+    //  k += 0.1;
+    //}
     Metropolis();
     sampleCount ++;
     average[0] += E; average[1] += E*E;

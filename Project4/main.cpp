@@ -5,8 +5,36 @@
 #include <iostream>
 #include <fstream>
 #include "isingModel.hpp"
+#include <time.h>
 
 using namespace std;
+
+void timeAnalysis();
+void regularSim();
+void parallelizedSim();
+
+
+/*
+void timeAnalysis(){
+  ofstream timep;
+  ofstream timer;
+  timefile.open("TimeParallelized.csv")
+  timefile.open("TimeRegular.csv")
+
+  //Runs simulation for a given number of temperatures,
+  //a given number of times.
+  int temp = 8; //8 temperatures each time sample
+  int samples = 50;
+
+  double Ti = 1;
+  double Tf = 2.4;
+  double dT = (Tf-Ti)/((double)temp);
+  for (int i = 0; i < T_length; i++){
+    T_array[i] = Ti + dT*i;
+    cout << T_array[i] << endl;
+  }
+}
+*/
 
 
 int main(int argc, char const *argv[]) {
@@ -17,7 +45,7 @@ int main(int argc, char const *argv[]) {
   int L = atoi(argv[1]);
 
   int numThreadx8 = 1;
-  double Ti = 2.0;
+  double Ti = 2;
   double Tf = 2.35;
   double dT = (Tf-Ti)/(8*numThreadx8-1);
   cout << dT << endl;
@@ -26,16 +54,25 @@ int main(int argc, char const *argv[]) {
 
   for (int i = 0; i < T_length; i++){
     T_array[i] = Ti + dT*i;
-    cout << T_array[i] << endl;
+    //cout << T_array[i] << endl;
   }
 
   ofstream Lfile;
-  Lfile.open("Observables_" + to_string(L) + ".csv");
-  Lfile <<  "T, <E>, <M>, Cv, chi" << endl;
+  //Lfile.open("Observables_test" + to_string(L) + ".csv");
+  //Lfile <<  "T, <E>, <M>, Cv, chi" << endl;
 
-  double start;
-  double end;
-  // 283 sek - 40*40
+  clock_t start = clock();
+  clock_t end;
+
+  //for (int i = 0; i < T_length; i++){
+  //  IsingModel is = IsingModel(L, T_array[i], 2); // n, temp, initmethod: (0)up, (1)down or (2)random
+  //  is.solve();
+  //  is.writeFile();
+  //}
+
+  //end = clock();
+  //cout << "Time: " << (end - start)/CLOCKS_PER_SEC << "s" << endl;
+  omp_set_num_threads(1);
   #pragma omp parallel
   {
     //Thread specific variables

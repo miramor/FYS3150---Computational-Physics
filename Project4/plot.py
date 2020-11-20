@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 from matplotlib.widgets import MultiCursor
 from scipy.stats import norm
-
+from sklearn.linear_model import LinearRegression
 
 
 
@@ -51,7 +51,6 @@ def plot_d():
     #plt.tight_layout()
     plt.savefig(f"stabi_4d_{T}.pdf", dpi = 150)
 
-#plot_d()
 
 def plot_hist():
     plt.clf()
@@ -63,22 +62,23 @@ def plot_hist():
     plt.savefig("prob_E_hist.pdf")
     print(energyGrouped)
 
-#plot_hist()
+
 
 def plot_obs(L):
     L = str(L)
-    path = "./ResultsLong_1mill/"
+    path = "./Results/"
     savepath = "./Plots/"
     filename = "Observables_" + L + ".csv"
-    df = pd.read_csv(filename, index_col=False, names=["T", "E", "M", "Cv", "chi"], skiprows = 1)
-    #print(df)
-
+    df = pd.read_csv(path + filename, index_col=False, names=["T", "E", "M", "Cv", "chi"], skiprows = 1)
+    df.sort_values(by=["T"])
+    print(df.sort_values(by=["T"]))
     plt.clf()
     plt.plot(df["T"], df["E"], 'ro')
     #plt.axvline(x=2.269)
     plt.title("Energy")
     plt.ylabel("E")
     plt.xlabel("Temperature")
+    plt.grid()
     plt.savefig(savepath + "E_" + L + ".pdf")
 
     plt.clf()
@@ -86,6 +86,7 @@ def plot_obs(L):
     #plt.axvline(x=2.269)
     plt.title("Specific heat capacity")
     plt.ylabel("Cv")
+    plt.grid()
     plt.xlabel("Temperature")
     plt.savefig(savepath + "Cv_" + L + ".pdf")
 
@@ -94,6 +95,7 @@ def plot_obs(L):
     #plt.axvline(x=2.269)
     plt.title("Susceptibility")
     plt.ylabel("chi")
+    plt.grid()
     plt.xlabel("Temperature")
     plt.savefig(savepath + "chi_" + L + ".pdf")
 
@@ -102,21 +104,101 @@ def plot_obs(L):
     plt.axvline(x=2.269)
     plt.title("Magnetization")
     plt.ylabel("<|M|>")
+    plt.grid()
     plt.xlabel("Temperature")
     plt.savefig(savepath + "M" + L + ".pdf")
 
 
 
-plot_obs(2)
+
 
 """
 for L in [40, 60, 80, 100, 120]:
     plot_obs(L)
 """
+def plot_all_obs(L):
+    path = "./Results/"
+    savepath = "./Plots_all/"
+    dfs = []
+    for i in L:
+        filename = "Observables_" + str(i) + ".csv"
+        df = pd.read_csv(path + filename, index_col=False, names=["T", "E", "M", "Cv", "chi"], skiprows = 1)
+        dfs.append(df.sort_values(by=["T"]))
+
+    print(dfs[0])
+    print(dfs[1])
+
+    linestyle = [":", "-.", "--", "-"]
+    color = ["r", "g", "b", "y"]
+    alpha = 0.8
+    lw = 0.8
+    #Plot Cvs
+    for i in range(len(L)):
+        plt.plot(dfs[i]["T"], dfs[i]["Cv"],color[i] + linestyle[i],  label="L=" + str(L[i]), alpha=alpha, linewidth = lw)
+        plt.plot(dfs[i]["T"], dfs[i]["Cv"],color[i]+"o", markersize=5)
+
+    #plt.axvline(x=2.269)
+    plt.title("Specific heat capacity")
+    plt.ylabel("Cv")
+    plt.xlabel("Temperature")
+    plt.grid()
+    plt.legend()
+    plt.savefig(savepath + "Cv_all.pdf")
+    plt.clf()
+
+    for i in range(len(L)):
+        plt.plot(dfs[i]["T"], dfs[i]["chi"],color[i] + linestyle[i], label="L="+str(L[i]), alpha=alpha, linewidth = lw)
+        plt.plot(dfs[i]["T"], dfs[i]["chi"],color[i]+"o", markersize=5)
+    #plt.axvline(x=2.269)
+    plt.title("Susceptibility")
+    plt.ylabel("chi")
+    plt.xlabel("Temperature")
+    plt.legend()
+    plt.grid()
+    plt.savefig(savepath + "chi_all.pdf")
+    plt.clf()
+
+    for i in range(len(L)):
+        plt.plot(dfs[i]["T"], dfs[i]["M"],color[i] + linestyle[i], label="L="+str(L[i]), alpha=alpha, linewidth = lw)
+        plt.plot(dfs[i]["T"], dfs[i]["M"],color[i]+"o", markersize=5)
+    #plt.axvline(x=2.269)
+    plt.title("Magnetization")
+    plt.legend()
+    plt.ylabel("<|M|>")
+    plt.grid()
+    plt.xlabel("Temperature")
+    plt.savefig(savepath + "M_all.pdf")
 
 
+def T_critical():
+    path = "./Results/"
+    savepath = "./Plots_all/"
+    dfs = []
+    L = np.array([40,60,80,100])
+    T_c = np.zeros(len(L))
+    for i in range(len(L)):
+        filename = "Observables_" + str(L[i]) + ".csv"
+        df = pd.read_csv(path + filename, index_col=False, names=["T", "E", "M", "Cv", "chi"], skiprows = 1)
+        T_c[i] = df["T"][np.argmax(df["Cv"].to_numpy())]
 
+    print(T_c)
 
+    plt.clf()
+    plt.plot(L,T_c,'o')
+    plt.title("Critical Temperature")
+    plt.xlabel("Lattice Size")
+    plt.ylabel("Temperature")
+    plt.savefig("T_c.pdf")
+
+    linreg = LinearRegression().fit(L,T_c)
+    print(linreg)
+
+T_critical()
+#plot_obs(100)
+
+#plot_d()
+#plot_hist()
+#plot_all_obs([40,60,80,100])
 #multi = MultiCursor(fig.canvas, (axs[0], axs[1], axs[2]), color='r', lw=1)
 #plt.show()
 
@@ -125,5 +207,6 @@ for L in [40, 60, 80, 100, 120]:
 #plt.savefig("E_T1_Up.pdf", dpi = 350)
 #plt.savefig("E_T2_Ran.pdf", dpi = 350)
 #plt.savefig("E_T2_Up.pdf", dpi = 350)
-
+#23  2.3000 -1.35775  0.451313  2.102940  61.703400
+#21  2.2500 -1.46358  0.678521  1.929050
 #plt.show()

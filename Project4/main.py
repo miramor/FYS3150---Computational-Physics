@@ -20,6 +20,6 @@ os.system("./output.exe " + cla)
 #os.system("echo Making plots...")
 #os.system("python3 plot.py " + cla)
 
-os.system("mv" + " Observables_" + str(cla) + ".csv" + " " + "./Results/") #Move data file to results directory.
+#os.system("mv" + " Observables_" + str(cla) + ".csv" + " " + "./Results/") #Move data file to results directory.
 
 os.system("echo Full program finished")
