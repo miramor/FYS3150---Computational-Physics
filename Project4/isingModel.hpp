@@ -25,6 +25,7 @@ class IsingModel{
     double M; // magnetization
     double Cv; //heat capacity
     double chi; //Susceptibility
+    double sigma; //standard deviation for energy
 
     double T0; //temperatur, also equals T*k_b since k = 1
     double T_end;
@@ -41,6 +42,7 @@ class IsingModel{
     void Metropolis();
     double* getAverage(); //contains <E>, <M>, <E**2> used for plotting
     double calcE_ij(int i, int j);
+    double getSigma();
     ~IsingModel(); //deletes array when object is "dead"
 };
 

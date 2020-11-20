@@ -32,8 +32,8 @@ def plot_d():
     numFlips = df["numFlips"].to_numpy()
     MC = np.linspace(cutoff*numCycles,numCycles, E.size)
 
+    axs[0].plot(MC, E, label = "E", lw=0.4)
     axs[0].plot(MC, E_mean, label = "<E>")
-    #axs[0].plot(MC, E, label = "E", lw=0.7)
     axs[1].plot(MC, M_mean)
     axs[2].plot(MC, numFlips) #nr of flips
     fig.suptitle(f'2D Isingmodel stabilization at T = {T}', fontsize=14)
@@ -51,19 +51,49 @@ def plot_d():
     #plt.tight_layout()
     plt.savefig(f"stabi_4d_{T}.pdf", dpi = 150)
 
+    #plt.clf()
+    #plt.figure(figsize=(10,8))
+    #plt.plot(MC[400*4:10000], E[400*4:10000], label= "Energy 5000 samples")
+    #plt.savefig("just_e.pdf", dpi = 300)
+
 #plot_d()
 
 def plot_hist():
     plt.clf()
     df = pd.read_csv("./e_hist.csv", index_col=False, names=["E_mean", "M_mean", "numFlips", "E"], skiprows = 1)
     energyGrouped = df.groupby(df["E"],as_index=False).size()
-    sb.distplot(df["E"], kde = False)
+    sb.distplot(df["E"], norm_hist=True, kde = False, bins = 109)
+    #print(f"NORM: {norm.fit(df["E"])})
+    plt.title("Probability distribution, T: 2.4", fontsize = 12)
     plt.ylabel("P(E)")
     plt.xlabel("Energy")
     plt.savefig("prob_E_hist.pdf")
     print(energyGrouped)
 
+def plot_hist_nump():
+    plt.clf()
+    df = pd.read_csv("./e_hist.csv", index_col=False, names=["E_mean", "M_mean", "numFlips", "E"], skiprows = 1)
+    energyGrouped = df.groupby(df["E"],as_index=False).size()
+    print(np.std(df["E"])**2)
+
+    """
+    hist2, bins2 = np.histogram(df["E"], bins = 109)
+    bins2 = bins2[:-1] + (bins2[1:]-bins2[:-1])/2
+    plt.bar(bins2, hist2)
+    plt.savefig("barsBasic.pdf",dpi = 300)
+    """
+    binSize = 109
+    L = 20
+    hist,bins = np.histogram(df["E"]*400, bins = binSize)
+    bins = bins[:-1] + (bins[1:]-bins[:-1])/2
+    deltax = np.abs(bins[1]-bins[0])
+    a = np.sum(hist*deltax)
+    hist = hist/a
+    plt.bar(bins/(L*L),hist, width = 1/(binSize))
+    plt.savefig("barplot.pdf", dpi = 300)
+
 #plot_hist()
+plot_hist_nump()
 
 def plot_obs(L):
     L = str(L)
@@ -107,7 +137,7 @@ def plot_obs(L):
 
 
 
-plot_obs(2)
+#plot_obs(2)
 
 """
 for L in [40, 60, 80, 100, 120]:
