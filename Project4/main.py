@@ -23,3 +23,20 @@ os.system("./output.exe " + cla)
 #os.system("mv" + " Observables_" + str(cla) + ".csv" + " " + "./Results/") #Move data file to results directory.
 
 os.system("echo Full program finished")
+
+
+"""
+
+Regn ut a:
+
+Tc(40) - Tc(inf) = a*L**(-1)
+Tc(60) - Tc(inf) = a*L**(-1)
+
+Tc(60) - Tc(inf) = a*L**(-1)
+Tc(80) - Tc(inf) = a*L**(-1)
+
+Tc(80) - Tc(inf) = a*L**(-1)
+Tc(100) - Tc(inf) = a*L**(-1)
+
+finn a for hvert liningspar og bruk middelverdien av a.
+"""

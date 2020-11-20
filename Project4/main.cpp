@@ -3,38 +3,12 @@
 #include <omp.h>
 #include <cmath>
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include "isingModel.hpp"
 #include <time.h>
 
 using namespace std;
-
-void timeAnalysis();
-void regularSim();
-void parallelizedSim();
-
-
-/*
-void timeAnalysis(){
-  ofstream timep;
-  ofstream timer;
-  timefile.open("TimeParallelized.csv")
-  timefile.open("TimeRegular.csv")
-
-  //Runs simulation for a given number of temperatures,
-  //a given number of times.
-  int temp = 8; //8 temperatures each time sample
-  int samples = 50;
-
-  double Ti = 1;
-  double Tf = 2.4;
-  double dT = (Tf-Ti)/((double)temp);
-  for (int i = 0; i < T_length; i++){
-    T_array[i] = Ti + dT*i;
-    cout << T_array[i] << endl;
-  }
-}
-*/
 
 
 int main(int argc, char const *argv[]) {
@@ -43,6 +17,12 @@ int main(int argc, char const *argv[]) {
   //double dT = stod(argv[4]);
 
   int L = atoi(argv[1]);
+  //IsingModel is = IsingModel(20, 2.4, 0); // n, temp, initmethod: (0)up, (1)down or (2)random
+  // cv/beta = varians histo
+  //is.printMatrix();
+  //is.solve();
+  //cout << setprecision(6) << "Sigma: " << is.getSigma() << endl;
+
 
   int numThreadx8 = 1;
   double Ti = 2;
@@ -70,9 +50,10 @@ int main(int argc, char const *argv[]) {
   //  is.writeFile();
   //}
 
-  //end = clock();
-  //cout << "Time: " << (end - start)/CLOCKS_PER_SEC << "s" << endl;
-  omp_set_num_threads(1);
+  double start;
+  double end;
+  // 283 sek - 40*40
+  omp_set_num_threads(2);
   #pragma omp parallel
   {
     //Thread specific variables

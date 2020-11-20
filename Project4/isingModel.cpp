@@ -29,6 +29,7 @@ IsingModel::IsingModel(int n, double temp, int initMethod){
   M = 0;
   E = 0;
   numFlips = 0;
+  sigma = 0;
 
   //Set up spin_matrix NxN matrix, with spin up or down each element
   spin_matrix = new int*[N];
@@ -125,15 +126,15 @@ void IsingModel::solve(){
   // Confirm the flip and update spin matrix.
   double r;
   int N_sq = N*N;
-  long int numMC_cycles = 15000000;  // num of monte carco cycles
+  long int numMC_cycles = 1000000;  // num of monte carco cycles
   long int sampleCount = 0;
   //N_sq = 2;
 
   ofstream ofile;
-  ofile.open("e_hist.csv");
+  //ofile.open("e_hist.csv");
   double cutoff = 0.1;
   double loopCutoff = N_sq*cutoff*numMC_cycles;
-  ofile << cutoff << ", " << numMC_cycles << ", " << T0 << ", " << N << endl;
+  //ofile << cutoff << ", " << numMC_cycles << ", " << T0 << ", " << N << endl;
 
   //long double k = 0.00;
   for(long int i = 1; i <= loopCutoff; i++){
@@ -152,19 +153,17 @@ void IsingModel::solve(){
     sampleCount ++;
     average[0] += E; average[1] += E*E;
     average[2] += M; average[3] += M*M; average[4] += fabs(M);
-    //ofile << average[0]/sampleCount << ", " << average[4]/sampleCount << ", " << numFlips << ", " << E/N_sq << endl;
+    //ofile << average[0]/(sampleCount*N_sq) << ", " << average[4]/(sampleCount*N_sq) << ", " << numFlips << ", " << E/N_sq << endl;
   }
 
   for(int i = 0; i < 5; i++){
     average[i] /= (sampleCount);
   }
+  double variance = (average[1] - average[0] * average[0])/N_sq;
+  double Cv = (average[1] - average[0] * average[0])/ (T0*T0) /N_sq;
+  double chi = (average[3] - average[4] * average[4]) / T0 / N_sq;
 
-  Cv = (average[1] - average[0] * average[0]) / (T0*T0) / N_sq;
-  chi = (average[3] - average[4] * average[4]) / T0 / N_sq;
-
-  for(int i = 0; i < 5; i++){
-    average[i] /= N_sq;
-  }
+  cout << "Cv: " << Cv << ".  chi: " << chi << "  variance: " << variance << endl;
 
   //cout << "<E> " << average[0]<< "  <M> " << average[4] << endl;
   //cout << "CV: " << Cv << "  chi: " << chi << endl;
@@ -177,6 +176,9 @@ void IsingModel::writeFile(){
   Lfile << T0 << ", " << average[0] << ", " << average[4] << ", " << Cv << ", " << chi << endl;
 }
 
+double IsingModel::getSigma(){
+  return sigma;
+}
 
 
 double IsingModel::calcE_ij(int i, int j){
