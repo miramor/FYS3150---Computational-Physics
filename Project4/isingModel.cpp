@@ -143,8 +143,8 @@ void IsingModel::solve(){
   // Confirm the flip and update spin matrix.
   double r;
   int N_sq = N*N;
-  long int numMC_cycles = 100000;  // num of monte carco cycles
-  long int sampleCount = 0;
+  //long int numMC_cycles = 1500000;  // num of monte carco cycles
+  long int sampleCount = 0.15;
   //N_sq = 2;
   ofstream ofile;
   //ofile.open("e_hist.csv");
@@ -154,7 +154,7 @@ void IsingModel::solve(){
   uniform_real_distribution<double> ddist(0,1);
   uniform_int_distribution<int> idist(0,N-1);
 
-  long double k = 0.00;
+  //long double k = 0.00;
   for(long int i = 1; i <= loopCutoff; i++){
     //if(i > k*numMC_cycles*N_sq){
     //  cout << "Finish " << k*100 << " %, precutoff" << endl;
@@ -163,15 +163,15 @@ void IsingModel::solve(){
     Metropolis(idist, ddist);
   }
   for(long int i = loopCutoff; i <= (long int) N_sq*numMC_cycles ; i++){
-    if(i > k*numMC_cycles*N_sq){
-      cout << "Finish " << k*100 << " %" << endl;
-      k += 0.1;
-    }
-    Metropolis();
+    //if(i > k*numMC_cycles*N_sq){
+    //  cout << "Finish " << k*100 << " %" << endl;
+    //  k += 0.1;
+    //}
+    Metropolis(idist, ddist);
     sampleCount ++;
     average[0] += E; average[1] += E*E;
     average[2] += M; average[3] += M*M; average[4] += fabs(M);
-    ofile << average[0]/(sampleCount*N_sq) << ", " << average[4]/(sampleCount*N_sq) << ", " << numFlips << ", " << E/N_sq << endl;
+    //ofile << average[0]/(sampleCount*N_sq) << ", " << average[4]/(sampleCount*N_sq) << ", " << numFlips << ", " << E/N_sq << endl;
   }
 
   for(int i = 0; i < 5; i++){

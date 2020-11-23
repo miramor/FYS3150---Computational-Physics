@@ -12,27 +12,17 @@ using namespace std;
 
 
 int main(int argc, char const *argv[]) {
-  //double Ti = stod(argv[2]);
-  //double Tf = stod(argv[3]);
-  //double dT = stod(argv[4]);
+  int L = atoi(argv[1]);
+  double Ti = stod(argv[2]);
+  double Tf = stod(argv[3]);
+  int n_T = atoi(argv[4]);
+  long int num_cycles= stol(argv[5]);
 
-  //int L = atoi(argv[1]);
-  IsingModel is = IsingModel(20, 1, 2); // n, temp, initmethod: (0)up, (1)down or (2)random
-  // cv/beta = varians histo
-  //is.printMatrix();
-  is.solve();
-  //cout << setprecision(6) << "Sigma: " << is.getSigma() << endl;
+  double dT = (Tf-Ti)/((double) n_T -1);
+  double T_array [n_T];
 
- /*
-  int numThreadx8 = 1;
-  double Ti = 2;
-  double Tf = 2.35;
-  double dT = (Tf-Ti)/(8*numThreadx8-1);
-  cout << dT << endl;
-  int T_length = 8*numThreadx8;
-  double T_array [T_length];
-
-  for (int i = 0; i < T_length; i++){
+  cout << "Simulating for temperatures: ";
+  for (int i = 0; i < n_T; i++){
     T_array[i] = Ti + dT*i;
     cout << T_array[i] << ", ";
   }
@@ -87,7 +77,7 @@ int main(int argc, char const *argv[]) {
         is.writeFile();
       }
     }
-  }*/
+  }
 
 
 
