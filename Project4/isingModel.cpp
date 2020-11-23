@@ -144,11 +144,11 @@ void IsingModel::solve(){
   double r;
   int N_sq = N*N;
   //long int numMC_cycles = 1500000;  // num of monte carco cycles
-  long int sampleCount = 0.15;
+  long int sampleCount = 0;
   //N_sq = 2;
   ofstream ofile;
   //ofile.open("e_hist.csv");
-  double cutoff = 0.15;
+  double cutoff = 0.1;
   double loopCutoff = N_sq*cutoff*numMC_cycles;
   //ofile << cutoff << ", " << numMC_cycles << ", " << T0 << ", " << N << endl;
   uniform_real_distribution<double> ddist(0,1);
