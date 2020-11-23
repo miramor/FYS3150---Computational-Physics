@@ -1,7 +1,7 @@
 all: compile
 
 compile:
-	g++-10 -std=c++17 -O3 main.cpp isingModel.cpp -o output.exe -fopenmp
+	g++ -std=c++11 -O3 main.cpp isingModel.cpp -o output.exe -fopenmp
 
 execute:
 	./output.exe

@@ -34,46 +34,58 @@ int main(int argc, char const *argv[]) {
 
   for (int i = 0; i < T_length; i++){
     T_array[i] = Ti + dT*i;
-    //cout << T_array[i] << endl;
+    cout << T_array[i] << ", ";
   }
+  cout << " with a dT = " << dT << endl;
 
   ofstream Lfile;
-  //Lfile.open("Observables_test" + to_string(L) + ".csv");
-  //Lfile <<  "T, <E>, <M>, Cv, chi" << endl;
+  Lfile.open("Observables_" + to_string(L) + ".csv");
+  Lfile <<  "T, <E>, <M>, Cv, chi" << endl;
 
-  clock_t start = clock();
-  clock_t end;
+  int threads_available;
+  #pragma omp parallel
+  {
+    #pragma omp single
+    {
+      threads_available = omp_get_num_threads();
+      cout << "You have " << threads_available << " threads available, how many do you want to use? (max " << threads_available << ")" << endl;
+    }
+  }
 
-  //for (int i = 0; i < T_length; i++){
-  //  IsingModel is = IsingModel(L, T_array[i], 2); // n, temp, initmethod: (0)up, (1)down or (2)random
-  //  is.solve();
-  //  is.writeFile();
-  //}
+  int num_threads;
+  cin >> num_threads;
 
-  double start;
-  double end;
-  // 283 sek - 40*40
-  omp_set_num_threads(2);
+  if(num_threads > threads_available || num_threads< 1){
+    cout << num_threads << " is not possible. Automatically changed to max_threads = " << threads_available << endl;
+    num_threads = threads_available;
+  }
+
+  omp_set_num_threads(num_threads);
   #pragma omp parallel
   {
     //Thread specific variables
     double start;
     double end;
     #pragma omp single
-    cout << "Number of threads in use: " << omp_get_num_threads() << endl;
-
+    {
+      cout << "Number of threads in use: " << omp_get_num_threads() << endl;
+      cout << "----------------------------------------------" << endl;
+    }
     #pragma omp for
-    for (int i = 0; i < T_length; i++){
+    for (int i = 0; i < n_T; i++){
       start = omp_get_wtime();
-      IsingModel is = IsingModel(L, T_array[i], 2); // n, temp, initmethod: (0)up, (1)down or (2)random
+      double thread_seed = time(0) + omp_get_thread_num();
+      IsingModel is = IsingModel(L, T_array[i], 2, num_cycles, thread_seed); // n, temp, initmethod: (0)up, (1)down or (2)random
       //is.printMatrix();
       is.solve();
       end = omp_get_wtime();
       #pragma omp critical
-      cout << "L: " << L << ".  Thread " << omp_get_thread_num() << " finished with: " <<  "T: " << T_array[i] << ". Time: " << end-start << "s" << endl;
-      is.writeFile();
-
-      //cout << "\n" << "----------------------------------------------" << endl;
+      {
+        cout << "Thread " << omp_get_thread_num() << " finished with " <<  "T=" << T_array[i] << ". Time: " << end-start << "s" << endl;
+        is.printValues();
+        cout << "----------------------------------------------" << endl;
+        is.writeFile();
+      }
     }
   }*/
 
