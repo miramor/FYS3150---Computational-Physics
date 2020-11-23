@@ -30,7 +30,6 @@ IsingModel::IsingModel(int n, double temp, int initMethod, long int numMC_cyc, d
   mt.seed(thread_seed);
   uniform_real_distribution<double> ddist(0,1);
   uniform_int_distribution<int> idist(0,N-1);
-
   //Set up spin_matrix NxN matrix, with spin up or down each element
   spin_matrix = new int*[N];
   for (int i = 0; i < N; i++)

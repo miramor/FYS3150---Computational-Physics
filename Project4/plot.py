@@ -10,22 +10,17 @@ labelsize = 16
 titlesize = 18
 legendsize = 14
 
-def plot_d():
-    with open("./e_hist.csv", 'r') as f:
+def plot_d(): #Plot function for 4d) WHen is the most likely state reached?
+    filename = "e_hist.csv"
+    path = "./Results/"
+    with open(path + filename, 'r') as f:
         line = f.readline().split(',')
         cutoff = float(line[0])
         numCycles = int(line[1])
         T = float(line[2])
         N = int(line[3])
 
-    df = pd.read_csv("./e_hist.csv", index_col=False, names=["E_mean", "M_mean", "numFlips", "E"], skiprows = 1)
-
-    #plt.rcParams['axes.labelsize'] = 16
-    #plt.rcParams['axes.titlesize'] = 16s
-    #plt.rcParams['legend.fontsize'] = 19
-
-    #axs[0].set_xlabel('distance (m)') Axis labels
-    #axs[0].set_ylabel('Damped oscillation')
+    df = pd.read_csv(path + "e_hist.csv", index_col=False, names=["E_mean", "M_mean", "numFlips", "E"], skiprows = 1)
 
     fig, axs = plt.subplots(3, 1, constrained_layout=True, sharex = True, figsize=(4,8))
     E_mean = df["E_mean"].to_numpy()
@@ -49,16 +44,7 @@ def plot_d():
     axs[0].legend(prop={'size': legendsize})
     for i in range(3):
         axs[i].grid()
-
-    #plt.tight_layout()
-    plt.savefig(f"stabi_4d_{T}.pdf", dpi = 150)
-
-    #plt.clf()
-    #plt.figure(figsize=(10,8))
-    #plt.plot(MC[400*4:10000], E[400*4:10000], label= "Energy 5000 samples")
-    #plt.savefig("just_e.pdf", dpi = 300)
-
-#plot_d()
+    plt.savefig(f"./Plots/stabi_4d_{T}.pdf", dpi = 150)
 
 def plot_hist():
     plt.clf()
@@ -69,16 +55,15 @@ def plot_hist():
     plt.title("Probability distribution, T: 2.4", size = titlesize)
     plt.ylabel("P(E)", size = labelsize)
     plt.xlabel("Energy", size = labelsize)
-    plt.savefig("prob_E_hist.pdf")
+    plt.savefig("./Plots/prob_E_hist.pdf")
     print(energyGrouped)
 
-def plot_hist_nump():
-    plt.clf()
-    df = pd.read_csv("./e_hist_up_1.csv", index_col=False, names=["E_mean", "M_mean", "numFlips", "E"], skiprows = 1)
+def plot_hist_nump():#Plotting histogram for  4e) Analyzing the probability ditribution
+    filename = "e_hist.csv"
+    path = "./Results/"
+    df = pd.read_csv(path + filename, index_col=False, names=["E_mean", "M_mean", "numFlips", "E"], skiprows = 1)
     energyGrouped = df.groupby(df["E"],as_index=False).size()
     variance = np.std(df["E"])**2
-    print(energyGrouped.size)
-
     """
     hist2, bins2 = np.histogram(df["E"], bins = 109)
     bins2 = bins2[:-1] + (bins2[1:]-bins2[:-1])/2
@@ -88,6 +73,7 @@ def plot_hist_nump():
     binSize = energyGrouped.size
     binSize = 109
     L = 20
+    plt.clf()
     hist,bins = np.histogram(df["E"]*400, bins = binSize)
     bins = bins[:-1] + (bins[1:]-bins[:-1])/2
     deltax = np.abs(bins[1]-bins[0])
@@ -98,12 +84,10 @@ def plot_hist_nump():
     plt.title("Probability distribution, T=1", size = titlesize)
     plt.ylabel("P(E)", size = labelsize)
     plt.xlabel("Energy", size = labelsize)
-    plt.savefig("barplot_up_1.pdf", dpi = 300)
+    plt.savefig("./Plots/barplot_up_1.pdf", dpi = 300)
 
-#plot_hist()
-#plot_hist_nump()
 
-def plot_obs(L):
+def plot_obs(L): #Plots <E>, <M>, chi and Cv for lattice size L.
     L = str(L)
     path = "./Results/"
     savepath = "./Plots/"
@@ -121,9 +105,10 @@ def plot_obs(L):
     plt.savefig(savepath + "E_" + L + ".pdf")
 
 
+    #Polynomial fit for Cv.
     approx_coeff=np.polyfit(df["T"].to_numpy(),df["Cv"].to_numpy(),3)
     approx_func=np.poly1d(approx_coeff)
-    T = np.linspace(2,2.375s,1000)
+    T = np.linspace(df["T"][0],df["T"][-1],1000)
     plt.clf()
     plt.plot(df["T"], df["Cv"], 'ro')
     plt.plot(T, approx_func(T))
@@ -151,12 +136,7 @@ def plot_obs(L):
 
 
 
-
-"""
-for L in [40, 60, 80, 100, 120]:
-    plot_obs(L)
-"""
-def plot_all_obs(L):
+def plot_all_obs(L): #Plots the observables for all L input. L is a list with lattice sizes.
     plt.clf()
     path = "./Results/"
     savepath = "./Plots/"
@@ -223,25 +203,30 @@ def plot_all_obs(L):
     plt.savefig(savepath + "E_all.pdf")
 
 
-def T_critical():
+def T_critical(): #Finds the critical temperature from analyzing Cv for all L.
     path = "./Results/"
     savepath = "./Plots/"
     dfs = []
     L = np.array([40,60,80,100])
     T_c = np.zeros(len(L))
     Tc_fit = np.zeros(len(L))
+
+
     for i in range(len(L)):
         filename = "Observables_" + str(L[i]) + ".csv"
         df = pd.read_csv(path + filename, index_col=False, names=["T", "E", "M", "Cv", "chi"], skiprows = 1)
+        df.sort_values(by="T", inplace=True)
         T_c[i] = df["T"][np.argmax(df["Cv"].to_numpy())]
+
+        #Fits function to Cv vs T for all L, and finds the T_max from the peak.
         approx_coeff = np.polyfit(df["T"].to_numpy(),df["Cv"].to_numpy(),3)
         approx_func=np.poly1d(approx_coeff)
-        x = np. linspace(2,2.35, 100)
+        x = np. linspace(df["T"].loc[0],df["T"].loc[len(df["T"])-1], 100)
         Tc_fit[i] = x[np.argmax(approx_func(x))]
 
 
 
-
+    #Linear fit for all the T_max found for different L.
     approx_coeff=np.polyfit(1/L,Tc_fit,1)
     approx_func=np.poly1d(approx_coeff)
     print("Critical temperature = %.4f" %(approx_coeff[1]))
@@ -257,25 +242,11 @@ def T_critical():
     plt.savefig(savepath + "T_c.pdf")
 
 
-T_critical()
-#plot_all_obs([40,60,80,100])
 
-L = [40,60,80,100]
-for i in L:
-    plot_obs(i)
 
-#plot_d()
-#plot_hist()
-plot_all_obs([40,60,80,100])
 
-#multi = MultiCursor(fig.canvas, (axs[0], axs[1], axs[2]), color='r', lw=1)
-#plt.show()
-
-# Four different plots for opg 4d.
-#plt.savefig("E_T1_Ran.pdf", dpi = 350)
-#plt.savefig("E_T1_Up.pdf", dpi = 350)
-#plt.savefig("E_T2_Ran.pdf", dpi = 350)
-#plt.savefig("E_T2_Up.pdf", dpi = 350)
-#23  2.3000 -1.35775  0.451313  2.102940  61.703400
-#21  2.2500 -1.46358  0.678521  1.929050
-#plt.show()
+if __name__ == "__main__":
+    T_critical()
+    #plot_d()
+    plot_hist_nump()
+    plot_all_obs([40,60,80,100])

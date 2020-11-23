@@ -12,6 +12,7 @@ using namespace std;
 
 
 int main(int argc, char const *argv[]) {
+  // python3 main.py L Ti Tf n_T num_cycles
   int L = atoi(argv[1]);
   double Ti = stod(argv[2]);
   double Tf = stod(argv[3]);
@@ -54,6 +55,7 @@ int main(int argc, char const *argv[]) {
   #pragma omp parallel
   {
     //Thread specific variables
+    double start_tot = omp_get_wtime();
     double start;
     double end;
     #pragma omp single
@@ -72,11 +74,15 @@ int main(int argc, char const *argv[]) {
       #pragma omp critical
       {
         cout << "Thread " << omp_get_thread_num() << " finished with " <<  "T=" << T_array[i] << ". Time: " << end-start << "s" << endl;
-        is.printValues();
+        //is.printValues();
         cout << "----------------------------------------------" << endl;
         is.writeFile();
       }
     }
+
+    double end_tot = omp_get_wtime();
+    #pragma omp single
+      cout << "Total time for " << num_threads << "threads: " << end_tot - start_tot << "s." << endl;
   }
 
 
