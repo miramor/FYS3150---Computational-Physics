@@ -23,13 +23,14 @@ void IsingModel::findTotalEnergy(){
   }
 }
 
-IsingModel::IsingModel(int n, double temp, int initMethod){
+IsingModel::IsingModel(int n, double temp, int initMethod, long int numMC_cyc){
   N = n;
   T0 = temp;
   M = 0;
   E = 0;
   numFlips = 0;
   sigma = 0;
+  numMC_cycles = numMC_cyc;
 
   //Set up spin_matrix NxN matrix, with spin up or down each element
   spin_matrix = new int*[N];
@@ -126,7 +127,7 @@ void IsingModel::solve(){
   // Confirm the flip and update spin matrix.
   double r;
   int N_sq = N*N;
-  long int numMC_cycles = 1500000;  // num of monte carco cycles
+  //long int numMC_cycles = 1500000;  // num of monte carco cycles
   long int sampleCount = 0.15;
   //N_sq = 2;
 
@@ -159,11 +160,10 @@ void IsingModel::solve(){
   for(int i = 0; i < 5; i++){
     average[i] /= (sampleCount);
   }
-  double variance = (average[1] - average[0] * average[0])/N_sq;
+  variance = (average[1] - average[0] * average[0])/N_sq;
   Cv = (average[1] - average[0] * average[0])/ (T0*T0) /N_sq;
   chi = (average[3] - average[4] * average[4]) / T0 / N_sq;
 
-  cout << "Cv: " << Cv << ".  chi: " << chi << "  variance: " << variance << endl;
   //cout << "<E> " << average[0]<< "  <M> " << average[4] << endl;
   //cout << "CV: " << Cv << "  chi: " << chi << endl;
 }
@@ -171,13 +171,13 @@ void IsingModel::solve(){
 void IsingModel::writeFile(){
   ofstream Lfile;
   Lfile.open("Observables_" + to_string(N) + ".csv", ios_base::app);
-  cout << T0 << ", " << average[0] << ", " << average[4] << ", " << Cv << ", " << chi << endl;
-  // T, <E>, <M>, Cv, chi
+  // T, <E>, <M>, Cv, chicout << "Cv=" << Cv << ",  chi=" << chi << ",  variance=" << get_Variance << endl;
   Lfile << T0 << ", " << average[0] << ", " << average[4] << ", " << Cv << ", " << chi << endl;
 }
 
-double IsingModel::getSigma(){
-  return Cv;
+void IsingModel::printValues(){
+  cout << "Cv=" << Cv << ",  chi=" << chi << ",  variance=" << variance << endl;
+  return;
 }
 
 

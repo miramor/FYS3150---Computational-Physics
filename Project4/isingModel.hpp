@@ -26,13 +26,15 @@ class IsingModel{
     double Cv; //heat capacity
     double chi; //Susceptibility
     double sigma; //standard deviation for energy
+    double variance;
 
     double T0; //temperatur, also equals T*k_b since k = 1
     double T_end;
     int N;
+    long int numMC_cycles;
 
   public:
-    IsingModel(int n, double temp, int initMethod); // initMethod: (0)up, (1)down or (2)random
+    IsingModel(int n, double temp, int initMethod, long int numMC_cyc); // initMethod: (0)up, (1)down or (2)random
     void findNeighbour();
     void swapSpinOnce();
     void findTotalEnergy();
@@ -42,7 +44,7 @@ class IsingModel{
     void Metropolis();
     double* getAverage(); //contains <E>, <M>, <E**2> used for plotting
     double calcE_ij(int i, int j);
-    double getSigma();
+    void printValues();
     ~IsingModel(); //deletes array when object is "dead"
 };
 
