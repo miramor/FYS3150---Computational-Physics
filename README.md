@@ -60,7 +60,18 @@ main.py systemA VV 2 0.00001
 
 ### Project 4:
 **Studies of phase transitions in magnetic systems**
-'''python
-print("hello")
-'''
+The isingModel make use of the Metropolis algorithm (Markov chain Monte Carlo) to find the most stable state for the system depending on the size of the lattice(N) and the temperature(T) given. The program picks a random place in the grid, calculates the change in energy and depending on the change the spin is either flipped or remains the same. This is repeated for N*N*MCcycles and depending on what to explore the results including energy, specific heat capacity and susceptibility.
+
+The program is quite simply built up by an isingModel class and a *main.cpp* which set ups the parallelization over different temperatures using OpenMP. Additionally a program *plot.py* is used to visualize the results. The *main.py* simply compile and executes all the code. The solve method loops over **N^2 x MCcycles** of iterations and calls on Metropolis function which either flips the given position in the lattice or remains the same. 
+
+Two solve methods are created due to one needing to write continuous results for each sampling (*solve_write()*) to when used for finding the effects of which way the lattice is initialized and one just writing out the final values all the cycles is done (*solve*) without needed to manually comment in and out lines of code. 
+
+**How to use:**
+Run *main.py* with the arguments in the commandline: N(lattice size) and MC_cycles(num of cycles). User will be given option to write results for all states file, where only one temperature is chosen and results written to "Results/e_hist.csv" containing: 
+If option 2 is chosen, the user is then asked for starttemp, endtemp and number of datapoints wanted between the two temperatures(ideally 4, 8 or 12 etc to make use of max amount of threads). Then it makes use of OpenMp and asks for number of threads you wish to use.  Finally the values T, \<E\>, \<M\>, Cv, chi are written to a .csv file named "Observable_[N]" in the "./Results" folder. The values and time needed for each temp is printed out in terminal.
+ 
+**Example use:**
+```python
+python3 main.py N MC_cycles
+```
 
