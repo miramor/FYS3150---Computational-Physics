@@ -64,7 +64,8 @@ int main(int argc, char const *argv[]) {
     #pragma omp for
     for (int i = 0; i < n_T; i++){
       start = omp_get_wtime();
-      IsingModel is = IsingModel(L, T_array[i], 2, num_cycles); // n, temp, initmethod: (0)up, (1)down or (2)random
+      double thread_seed = time(0) + omp_get_thread_num();
+      IsingModel is = IsingModel(L, T_array[i], 2, num_cycles, thread_seed); // n, temp, initmethod: (0)up, (1)down or (2)random
       //is.printMatrix();
       is.solve();
       end = omp_get_wtime();

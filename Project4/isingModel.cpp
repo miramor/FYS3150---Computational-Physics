@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include <fstream>
 #include <string>
+#include <functional>
+#include <random>
+#include <ostream>
 using namespace std;
 
 void IsingModel::findTotalEnergy(){
@@ -23,7 +26,7 @@ void IsingModel::findTotalEnergy(){
   }
 }
 
-IsingModel::IsingModel(int n, double temp, int initMethod, long int numMC_cyc){
+IsingModel::IsingModel(int n, double temp, int initMethod, long int numMC_cyc, double thread_seed){
   N = n;
   T0 = temp;
   M = 0;
@@ -31,6 +34,10 @@ IsingModel::IsingModel(int n, double temp, int initMethod, long int numMC_cyc){
   numFlips = 0;
   sigma = 0;
   numMC_cycles = numMC_cyc;
+
+  mt.seed(thread_seed);
+  uniform_real_distribution<double> ddist(0,1);
+  uniform_int_distribution<int> idist(0,N-1);
 
   //Set up spin_matrix NxN matrix, with spin up or down each element
   spin_matrix = new int*[N];
@@ -57,7 +64,7 @@ IsingModel::IsingModel(int n, double temp, int initMethod, long int numMC_cyc){
   }
   plus1[N-1] = 0;
   min1[0] = N-1;
-  srand (time(NULL)); // Set seed for random gen numbers
+  //srand (time(NULL)); // Set seed for random gen numbers
 
   //Fill initial matrix
   for (int i = 0; i < N; i ++){ // row
@@ -70,7 +77,8 @@ IsingModel::IsingModel(int n, double temp, int initMethod, long int numMC_cyc){
       }
 
       if(initMethod == 2){
-        double choice = drand48();
+        double choice = ddist(mt);
+
 
         //cout << choice << endl;
         if(choice < 0.5){
@@ -88,16 +96,24 @@ IsingModel::IsingModel(int n, double temp, int initMethod, long int numMC_cyc){
   return;
 }
 
-void IsingModel::Metropolis(){
+void IsingModel::Metropolis(uniform_int_distribution<int> idist,uniform_real_distribution<double> ddist){
+
+  int i_ = idist(mt);
+  int j_ = idist(mt);
+  double r = ddist(mt);
+  /*
+  int i_ = (int)bind(uniform_int_distribution<int>(0,N-1), mt19937(seed));
+  int j_ = (int)bind(uniform_int_distribution<int>(0,N-1), mt19937(seed));
+  double r = (double)bind(uniform_real_distribution<double>(0,1), mt19937(seed));
+  cout << i_ << " " << j_ << endl;
+
+  //int j_ = rand() % N;
+  //int i_ = rand() % N; //error when defined i_ outside loop
   double a =  drand48();
   double b = drand48();
-  int i_ = (int)(a*N);
-  int j_ = (int)(b*N);
 
-  //int i_ = rand() % N; //error when defined i_ outside loop
-  //int j_ = rand() % N;
   double r = drand48();
-
+  */
 
   double deltaE = calcE_ij(i_, j_);
   double e_exp = expVals[(int)deltaE+8];
@@ -121,7 +137,7 @@ void IsingModel::Metropolis(){
 }
 
 void IsingModel::solve(){
-  srand (time(NULL)); // Set seed for random gen numbers
+  //srand (time(NULL)); // Set seed for random gen numbers
   //Choose random i and j and calculate the shift in E.
   // Calculate deltaE, if the random number r is <= exp(E/kT) then it happens
   // Confirm the flip and update spin matrix.
@@ -130,12 +146,13 @@ void IsingModel::solve(){
   //long int numMC_cycles = 1500000;  // num of monte carco cycles
   long int sampleCount = 0.15;
   //N_sq = 2;
-
   ofstream ofile;
   //ofile.open("e_hist.csv");
   double cutoff = 0.15;
   double loopCutoff = N_sq*cutoff*numMC_cycles;
   //ofile << cutoff << ", " << numMC_cycles << ", " << T0 << ", " << N << endl;
+  uniform_real_distribution<double> ddist(0,1);
+  uniform_int_distribution<int> idist(0,N-1);
 
   //long double k = 0.00;
   for(long int i = 1; i <= loopCutoff; i++){
@@ -143,14 +160,14 @@ void IsingModel::solve(){
     //  cout << "Finish " << k*100 << " %, precutoff" << endl;
     //  k += 0.1;
     //}
-    Metropolis();
+    Metropolis(idist, ddist);
   }
   for(long int i = loopCutoff; i <= (long int) N_sq*numMC_cycles ; i++){
     //if(i > k*numMC_cycles*N_sq){
     //  cout << "Finish " << k*100 << " %" << endl;
     //  k += 0.1;
     //}
-    Metropolis();
+    Metropolis(idist, ddist);
     sampleCount ++;
     average[0] += E; average[1] += E*E;
     average[2] += M; average[3] += M*M; average[4] += fabs(M);

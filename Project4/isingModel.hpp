@@ -3,6 +3,14 @@
 
 #include <vector>
 #include <string.h>
+#include <random>
+#include <iostream>
+#include <math.h>
+#include <stdlib.h>
+#include <fstream>
+#include <string>
+#include <functional>
+#include <ostream>
 using namespace std;
 
 
@@ -33,15 +41,17 @@ class IsingModel{
     int N;
     long int numMC_cycles;
 
+    mt19937 mt;
+
   public:
-    IsingModel(int n, double temp, int initMethod, long int numMC_cyc); // initMethod: (0)up, (1)down or (2)random
+    IsingModel(int n, double temp, int initMethod, long int numMC_cyc, double thread_seed); // initMethod: (0)up, (1)down or (2)random
     void findNeighbour();
     void swapSpinOnce();
     void findTotalEnergy();
     void writeFile();
     void solve();
     void printMatrix();
-    void Metropolis();
+    void Metropolis(uniform_int_distribution<int> idist, uniform_real_distribution<double> ddist);
     double* getAverage(); //contains <E>, <M>, <E**2> used for plotting
     double calcE_ij(int i, int j);
     void printValues();
