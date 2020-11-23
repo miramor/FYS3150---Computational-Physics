@@ -126,13 +126,13 @@ void IsingModel::solve(){
   // Confirm the flip and update spin matrix.
   double r;
   int N_sq = N*N;
-  long int numMC_cycles = 1000000;  // num of monte carco cycles
-  long int sampleCount = 0;
+  long int numMC_cycles = 1500000;  // num of monte carco cycles
+  long int sampleCount = 0.15;
   //N_sq = 2;
 
   ofstream ofile;
   //ofile.open("e_hist.csv");
-  double cutoff = 0.1;
+  double cutoff = 0.15;
   double loopCutoff = N_sq*cutoff*numMC_cycles;
   //ofile << cutoff << ", " << numMC_cycles << ", " << T0 << ", " << N << endl;
 
@@ -160,11 +160,10 @@ void IsingModel::solve(){
     average[i] /= (sampleCount);
   }
   double variance = (average[1] - average[0] * average[0])/N_sq;
-  double Cv = (average[1] - average[0] * average[0])/ (T0*T0) /N_sq;
-  double chi = (average[3] - average[4] * average[4]) / T0 / N_sq;
+  Cv = (average[1] - average[0] * average[0])/ (T0*T0) /N_sq;
+  chi = (average[3] - average[4] * average[4]) / T0 / N_sq;
 
   cout << "Cv: " << Cv << ".  chi: " << chi << "  variance: " << variance << endl;
-
   //cout << "<E> " << average[0]<< "  <M> " << average[4] << endl;
   //cout << "CV: " << Cv << "  chi: " << chi << endl;
 }
@@ -172,12 +171,13 @@ void IsingModel::solve(){
 void IsingModel::writeFile(){
   ofstream Lfile;
   Lfile.open("Observables_" + to_string(N) + ".csv", ios_base::app);
+  cout << T0 << ", " << average[0] << ", " << average[4] << ", " << Cv << ", " << chi << endl;
   // T, <E>, <M>, Cv, chi
   Lfile << T0 << ", " << average[0] << ", " << average[4] << ", " << Cv << ", " << chi << endl;
 }
 
 double IsingModel::getSigma(){
-  return sigma;
+  return Cv;
 }
 
 

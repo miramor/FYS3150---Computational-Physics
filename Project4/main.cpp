@@ -25,7 +25,7 @@ int main(int argc, char const *argv[]) {
 
 
   int numThreadx8 = 1;
-  double Ti = 2;
+  double Ti = 2.25;
   double Tf = 2.35;
   double dT = (Tf-Ti)/(8*numThreadx8-1);
   cout << dT << endl;
@@ -34,26 +34,22 @@ int main(int argc, char const *argv[]) {
 
   for (int i = 0; i < T_length; i++){
     T_array[i] = Ti + dT*i;
-    //cout << T_array[i] << endl;
+    cout << T_array[i] << endl;
   }
 
   ofstream Lfile;
-  //Lfile.open("Observables_test" + to_string(L) + ".csv");
-  //Lfile <<  "T, <E>, <M>, Cv, chi" << endl;
+  Lfile.open("Observables_" + to_string(L) + ".csv");
+  Lfile <<  "T, <E>, <M>, Cv, chi" << endl;
 
-  clock_t start = clock();
-  clock_t end;
 
   //for (int i = 0; i < T_length; i++){
-  //  IsingModel is = IsingModel(L, T_array[i], 2); // n, temp, initmethod: (0)up, (1)down or (2)random
-  //  is.solve();
-  //  is.writeFile();
+  //IsingModel is = IsingModel(2, 1, 2); // n, temp, initmethod: (0)up, (1)down or (2)random
+  //is.solve();
+  //is.writeFile();
   //}
 
-  double start;
-  double end;
-  // 283 sek - 40*40
-  omp_set_num_threads(2);
+  //omp_set_num_threads(8);
+  /*
   #pragma omp parallel
   {
     //Thread specific variables
@@ -69,6 +65,7 @@ int main(int argc, char const *argv[]) {
       //is.printMatrix();
       is.solve();
       end = omp_get_wtime();
+      cout << is.getSigma() << endl;
       #pragma omp critical
       cout << "L: " << L << ".  Thread " << omp_get_thread_num() << " finished with: " <<  "T: " << T_array[i] << ". Time: " << end-start << "s" << endl;
       is.writeFile();

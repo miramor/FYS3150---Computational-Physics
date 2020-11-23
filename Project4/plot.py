@@ -74,7 +74,7 @@ def plot_hist_nump():
     plt.clf()
     df = pd.read_csv("./e_hist.csv", index_col=False, names=["E_mean", "M_mean", "numFlips", "E"], skiprows = 1)
     energyGrouped = df.groupby(df["E"],as_index=False).size()
-    print(np.std(df["E"])**2)
+    #print(np.std(df["E"])**2)
 
     """
     hist2, bins2 = np.histogram(df["E"], bins = 109)
@@ -93,7 +93,7 @@ def plot_hist_nump():
     plt.savefig("barplot.pdf", dpi = 300)
 
 #plot_hist()
-plot_hist_nump()
+#plot_hist_nump()
 
 def plot_obs(L):
     L = str(L)
@@ -162,16 +162,16 @@ def plot_all_obs(L):
         df = pd.read_csv(path + filename, index_col=False, names=["T", "E", "M", "Cv", "chi"], skiprows = 1)
         dfs.append(df.sort_values(by=["T"]))
 
-    print(dfs[0])
-    print(dfs[1])
+
 
     linestyle = [":", "-.", "--", "-"]
     color = ["r", "g", "b", "y"]
     alpha = 0.8
     lw = 0.8
     #Plot Cvs
+    plt.clf()
     for i in range(len(L)):
-        plt.plot(dfs[i]["T"], dfs[i]["Cv"],color[i] + linestyle[i],  label="L=" + str(L[i]), alpha=alpha, linewidth = lw)
+        plt.plot(dfs[i]["T"], dfs[i]["Cv"],color[i] + linestyle[i],  label="N=" + str(L[i]), alpha=alpha, linewidth = lw)
         plt.plot(dfs[i]["T"], dfs[i]["Cv"],color[i]+"o", markersize=5)
 
     #plt.axvline(x=2.269)
@@ -184,7 +184,7 @@ def plot_all_obs(L):
     plt.clf()
 
     for i in range(len(L)):
-        plt.plot(dfs[i]["T"], dfs[i]["chi"],color[i] + linestyle[i], label="L="+str(L[i]), alpha=alpha, linewidth = lw)
+        plt.plot(dfs[i]["T"], dfs[i]["chi"],color[i] + linestyle[i], label="N="+str(L[i]), alpha=alpha, linewidth = lw)
         plt.plot(dfs[i]["T"], dfs[i]["chi"],color[i]+"o", markersize=5)
     #plt.axvline(x=2.269)
     plt.title("Susceptibility")
@@ -195,8 +195,10 @@ def plot_all_obs(L):
     plt.savefig(savepath + "chi_all.pdf")
     plt.clf()
 
+
     for i in range(len(L)):
-        plt.plot(dfs[i]["T"], dfs[i]["M"],color[i] + linestyle[i], label="L="+str(L[i]), alpha=alpha, linewidth = lw)
+        dfs[i] = dfs[i].apply (pd.to_numeric, errors='coerce')
+        plt.plot(dfs[i]["T"], dfs[i]["M"],color[i] + linestyle[i], label="N="+str(L[i]), alpha=alpha, linewidth = lw)
         plt.plot(dfs[i]["T"], dfs[i]["M"],color[i]+"o", markersize=5)
     #plt.axvline(x=2.269)
     plt.title("Magnetization")
@@ -226,23 +228,23 @@ def T_critical():
 
 
 
-    approx_coeff=np.polyfit(L,Tc_fit,1)
+    approx_coeff=np.polyfit(1/L,Tc_fit,1)
     approx_func=np.poly1d(approx_coeff)
     print(T_c)
     print(Tc_fit)
-
+    print(approx_coeff)
 
     plt.clf()
-    plt.plot(L,Tc_fit,'o')
-    plt.plot(L,approx_func(L), label=approx_func)
+    plt.plot(1/L,Tc_fit,'o')
+    plt.plot(1/L,approx_func(1/L), label="T=%.4fx+%.4f" %(approx_coeff[0], approx_coeff[1]))
     # for i in range(len(x_values)):
     #     plt.plot(L[i],T_c[i],"o")
     plt.legend()
     plt.show()
     plt.title("Critical Temperature")
-    plt.xlabel("Lattice Size")
+    plt.xlabel("1/Lattice Size")
     plt.ylabel("Temperature")
-    plt.savefig("T_c.pdf")
+    plt.savefig("./Plots_all/T_c.pdf")
 
 
 
@@ -251,14 +253,14 @@ def T_critical():
 
 
 T_critical()
-
+"""
 L = [40,60,80,100]
 for i in L:
-    plot_obs(i)
-
+"""
+#plot_obs(40)
 #plot_d()
 #plot_hist()
-#plot_all_obs([40,60,80,100])
+plot_all_obs([40,60,80,100])
 #multi = MultiCursor(fig.canvas, (axs[0], axs[1], axs[2]), color='r', lw=1)
 #plt.show()
 
