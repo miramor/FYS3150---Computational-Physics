@@ -253,7 +253,7 @@ def T_critical():
     plt.title("Critical Temperature", size = titlesize)
     plt.xlabel("1/Lattice Size", size = labelsize)
     plt.ylabel("Temperature", size = labelsize)
-    plt.savefig("./Plots_all/T_c.pdf")
+    plt.savefig("./Plots/T_c.pdf")
 
 
 #T_critical()

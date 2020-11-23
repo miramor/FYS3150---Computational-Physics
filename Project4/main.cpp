@@ -17,7 +17,7 @@ int main(int argc, char const *argv[]) {
   //double dT = stod(argv[4]);
 
   //int L = atoi(argv[1]);
-  IsingModel is = IsingModel(20, 1, 2); // n, temp, initmethod: (0)up, (1)down or (2)random
+  IsingModel is = IsingModel(20, 1, 2); // n, temp, initmethod: (0)up, (1)down or (2)random
   // cv/beta = varians histo
   //is.printMatrix();
   is.solve();
@@ -40,7 +40,7 @@ int main(int argc, char const *argv[]) {
 
   ofstream Lfile;
   Lfile.open("Observables_" + to_string(L) + ".csv");
-  Lfile <<  "T, <E>, <M>, Cv, chi" << endl;
+  Lfile <<  "T, <E>, <M>, Cv, chi" << endl;
 
   int threads_available;
   #pragma omp parallel
@@ -75,13 +75,13 @@ int main(int argc, char const *argv[]) {
     for (int i = 0; i < n_T; i++){
       start = omp_get_wtime();
       double thread_seed = time(0) + omp_get_thread_num();
-      IsingModel is = IsingModel(L, T_array[i], 2, num_cycles, thread_seed); // n, temp, initmethod: (0)up, (1)down or (2)random
+      IsingModel is = IsingModel(L, T_array[i], 2, num_cycles, thread_seed); // n, temp, initmethod: (0)up, (1)down or (2)random
       //is.printMatrix();
       is.solve();
       end = omp_get_wtime();
       #pragma omp critical
       {
-        cout << "Thread " << omp_get_thread_num() << " finished with " <<  "T=" << T_array[i] << ". Time: " << end-start << "s" << endl;
+        cout << "Thread " << omp_get_thread_num() << " finished with " <<  "T=" << T_array[i] << ". Time: " << end-start << "s" << endl;
         is.printValues();
         cout << "----------------------------------------------" << endl;
         is.writeFile();
@@ -93,11 +93,11 @@ int main(int argc, char const *argv[]) {
 
 
   /*
-  IsingModel is = IsingModel(L, Ti, 2); // n, temp, initmethod: (0)up, (1)down or (2)random
+  IsingModel is = IsingModel(L, Ti, 2); // n, temp, initmethod: (0)up, (1)down or (2)random
   is.solve();
   is.printMatrix();
   TO DO:
-  Run for L = 2, compare to analytical results.
+  Run for L = 2, compare to analytical results.
   How does the number of accepted configurations behave as function of temperature T?
   Temp = 1 and 2.4 for L = 20 only
 

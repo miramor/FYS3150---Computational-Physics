@@ -125,7 +125,7 @@ void IsingModel::Metropolis(uniform_int_distribution<int> idist,uniform_real_dis
     E = E + deltaE;
     numFlips += 1;
   }
-  //cout << "r: " << r << "  , exp: " << e_exp << " E: " << deltaE << endl;
+  //cout << "r: " << r << "  , exp: " << e_exp << " E: " << deltaE << endl;
   else if(r <= e_exp){
     //cout << "Flip success!" << endl;
     spin_matrix[i_][j_] *= -1;
@@ -182,13 +182,13 @@ void IsingModel::solve(){
   chi = (average[3] - average[4] * average[4]) / T0 / N_sq;
 
   //cout << "<E> " << average[0]<< "  <M> " << average[4] << endl;
-  //cout << "CV: " << Cv << "  chi: " << chi << endl;
+  //cout << "CV: " << Cv << "  chi: " << chi << endl;
 }
 
 void IsingModel::writeFile(){
   ofstream Lfile;
   Lfile.open("Observables_" + to_string(N) + ".csv", ios_base::app);
-  // T, <E>, <M>, Cv, chicout << "Cv=" << Cv << ",  chi=" << chi << ",  variance=" << get_Variance << endl;
+  // T, <E>, <M>, Cv, chicout << "Cv=" << Cv << ",  chi=" << chi << ",  variance=" << get_Variance << endl;
   Lfile << T0 << ", " << average[0] << ", " << average[4] << ", " << Cv << ", " << chi << endl;
 }
 
