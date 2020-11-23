@@ -6,7 +6,9 @@ from matplotlib.widgets import MultiCursor
 from scipy.stats import norm
 from sklearn.linear_model import LinearRegression
 
-
+labelsize = 12
+titlesize = 14
+legendsize = 12
 
 def plot_d():
     with open("./e_hist.csv", 'r') as f:
@@ -40,11 +42,11 @@ def plot_d():
 
     #y-labels
     axs[2].set_xlabel("MonteCarlo cycles")
-    axs[0].set_ylabel('Energy')
-    axs[1].set_ylabel('Magnetization')
-    axs[2].set_ylabel('Total Flips')
+    axs[0].set_ylabel('Energy', size = labelsize)
+    axs[1].set_ylabel('Magnetization', size = labelsize)
+    axs[2].set_ylabel('Total Flips', size = labelsize)
 
-    axs[0].legend()
+    axs[0].legend(prop={'size': legendsize})
     for i in range(3):
         axs[i].grid()
 
@@ -64,17 +66,18 @@ def plot_hist():
     energyGrouped = df.groupby(df["E"],as_index=False).size()
     sb.distplot(df["E"], norm_hist=True, kde = False, bins = 109)
     #print(f"NORM: {norm.fit(df["E"])})
-    plt.title("Probability distribution, T: 2.4", fontsize = 12)
-    plt.ylabel("P(E)")
-    plt.xlabel("Energy")
+    plt.title("Probability distribution, T: 2.4", size = titlesize)
+    plt.ylabel("P(E)", size = labelsize)
+    plt.xlabel("Energy", size = labelsize)
     plt.savefig("prob_E_hist.pdf")
     print(energyGrouped)
 
 def plot_hist_nump():
     plt.clf()
-    df = pd.read_csv("./e_hist.csv", index_col=False, names=["E_mean", "M_mean", "numFlips", "E"], skiprows = 1)
+    df = pd.read_csv("./e_hist_up_1.csv", index_col=False, names=["E_mean", "M_mean", "numFlips", "E"], skiprows = 1)
     energyGrouped = df.groupby(df["E"],as_index=False).size()
-    print(np.std(df["E"])**2)
+    variance = np.std(df["E"])**2
+    print(energyGrouped.size)
 
     """
     hist2, bins2 = np.histogram(df["E"], bins = 109)
@@ -82,6 +85,7 @@ def plot_hist_nump():
     plt.bar(bins2, hist2)
     plt.savefig("barsBasic.pdf",dpi = 300)
     """
+    binSize = energyGrouped.size
     binSize = 109
     L = 20
     hist,bins = np.histogram(df["E"]*400, bins = binSize)
@@ -90,7 +94,11 @@ def plot_hist_nump():
     a = np.sum(hist*deltax)
     hist = hist/a
     plt.bar(bins/(L*L),hist, width = 1/(binSize))
-    plt.savefig("barplot.pdf", dpi = 300)
+    plt.annotate(f"Var= {variance:.2e}", xy=(-0.8, 0.006), xytext=(-1.1, 0.006), size = 12)
+    plt.title("Probability distribution, T=1", size = titlesize)
+    plt.ylabel("P(E)", size = labelsize)
+    plt.xlabel("Energy", size = labelsize)
+    plt.savefig("barplot_up_1.pdf", dpi = 300)
 
 #plot_hist()
 plot_hist_nump()
@@ -101,15 +109,15 @@ def plot_obs(L):
     savepath = "./Plots/"
     filename = "Observables_" + L + ".csv"
     df = pd.read_csv(path + filename, index_col=False, names=["T", "E", "M", "Cv", "chi"], skiprows = 1)
-    print(df.sort_values(by=["T"]))
+    #print(df.sort_values(by=["T"]))
     df = df.sort_values(by=["T"])
 
     plt.clf()
     plt.plot(df["T"], df["E"], 'ro')
     #plt.axvline(x=2.269)
-    plt.title("Energy")
-    plt.ylabel("E")
-    plt.xlabel("Temperature")
+    plt.title("Energy", size = titlesize)
+    plt.ylabel("E", size = labelsize)
+    plt.xlabel("Temperature", size = labelsize)
     plt.grid()
     plt.savefig(savepath + "E_" + L + ".pdf")
 
@@ -121,28 +129,28 @@ def plot_obs(L):
     plt.plot(df["T"], df["Cv"], 'ro')
     plt.plot(df["T"], approx_func(df["T"].to_numpy()))
     #plt.axvline(x=2.269)
-    plt.title("Specific heat capacity")
-    plt.ylabel("Cv")
+    plt.title("Specific heat capacity", size = titlesize)
+    plt.ylabel("Cv", size = labelsize)
     plt.grid()
-    plt.xlabel("Temperature")
+    plt.xlabel("Temperature", size = labelsize)
     plt.savefig(savepath + "Cv_" + L + ".pdf")
 
     plt.clf()
     plt.plot(df["T"], df["chi"], 'ro')
     #plt.axvline(x=2.269)
-    plt.title("Susceptibility")
-    plt.ylabel("chi")
+    plt.title("Susceptibility", size = titlesize)
+    plt.ylabel("chi", size = labelsize)
     plt.grid()
-    plt.xlabel("Temperature")
+    plt.xlabel("Temperature", size = labelsize)
     plt.savefig(savepath + "chi_" + L + ".pdf")
 
     plt.clf()
     plt.plot(df["T"], df["M"], 'ro')
     #plt.axvline(x=2.269)
-    plt.title("Magnetization")
-    plt.ylabel("<|M|>")
+    plt.title("Magnetization", size = titlesize)
+    plt.ylabel("<|M|>", size = labelsize)
     plt.grid()
-    plt.xlabel("Temperature")
+    plt.xlabel("Temperature", size = labelsize)
     plt.savefig(savepath + "M" + L + ".pdf")
 
 
@@ -154,6 +162,7 @@ for L in [40, 60, 80, 100, 120]:
     plot_obs(L)
 """
 def plot_all_obs(L):
+    plt.clf()
     path = "./Results/"
     savepath = "./Plots_all/"
     dfs = []
@@ -162,8 +171,8 @@ def plot_all_obs(L):
         df = pd.read_csv(path + filename, index_col=False, names=["T", "E", "M", "Cv", "chi"], skiprows = 1)
         dfs.append(df.sort_values(by=["T"]))
 
-    print(dfs[0])
-    print(dfs[1])
+    #print(dfs[0])
+    #print(dfs[1])
 
     linestyle = [":", "-.", "--", "-"]
     color = ["r", "g", "b", "y"]
@@ -175,11 +184,11 @@ def plot_all_obs(L):
         plt.plot(dfs[i]["T"], dfs[i]["Cv"],color[i]+"o", markersize=5)
 
     #plt.axvline(x=2.269)
-    plt.title("Specific heat capacity")
-    plt.ylabel("Cv")
-    plt.xlabel("Temperature")
+    plt.title("Specific heat capacity", size = titlesize)
+    plt.ylabel("Cv", size = labelsize)
+    plt.xlabel("Temperature", size = labelsize)
     plt.grid()
-    plt.legend()
+    plt.legend(prop={'size': legendsize})
     plt.savefig(savepath + "Cv_all.pdf")
     plt.clf()
 
@@ -187,10 +196,10 @@ def plot_all_obs(L):
         plt.plot(dfs[i]["T"], dfs[i]["chi"],color[i] + linestyle[i], label="L="+str(L[i]), alpha=alpha, linewidth = lw)
         plt.plot(dfs[i]["T"], dfs[i]["chi"],color[i]+"o", markersize=5)
     #plt.axvline(x=2.269)
-    plt.title("Susceptibility")
-    plt.ylabel("chi")
-    plt.xlabel("Temperature")
-    plt.legend()
+    plt.title("Susceptibility", size = titlesize)
+    plt.ylabel("chi", size = labelsize)
+    plt.xlabel("Temperature", size = labelsize)
+    plt.legend(prop={'size': legendsize})
     plt.grid()
     plt.savefig(savepath + "chi_all.pdf")
     plt.clf()
@@ -199,11 +208,11 @@ def plot_all_obs(L):
         plt.plot(dfs[i]["T"], dfs[i]["M"],color[i] + linestyle[i], label="L="+str(L[i]), alpha=alpha, linewidth = lw)
         plt.plot(dfs[i]["T"], dfs[i]["M"],color[i]+"o", markersize=5)
     #plt.axvline(x=2.269)
-    plt.title("Magnetization")
-    plt.legend()
-    plt.ylabel("<|M|>")
+    plt.title("Magnetization", size = titlesize)
+    plt.legend(prop={'size': legendsize})
+    plt.ylabel("<|M|>", size = labelsize)
     plt.grid()
-    plt.xlabel("Temperature")
+    plt.xlabel("Temperature", size = labelsize)
     plt.savefig(savepath + "M_all.pdf")
 
 
@@ -223,13 +232,10 @@ def T_critical():
         x = np. linspace(2,2.4, 1000)
         Tc_fit[i] = x[np.argmax(approx_func(x))]
 
-
-
-
     approx_coeff=np.polyfit(L,Tc_fit,1)
     approx_func=np.poly1d(approx_coeff)
-    print(T_c)
-    print(Tc_fit)
+    #print(T_c)
+    #print(Tc_fit)
 
 
     plt.clf()
@@ -237,25 +243,21 @@ def T_critical():
     plt.plot(L,approx_func(L), label=approx_func)
     # for i in range(len(x_values)):
     #     plt.plot(L[i],T_c[i],"o")
-    plt.legend()
-    plt.show()
-    plt.title("Critical Temperature")
-    plt.xlabel("Lattice Size")
-    plt.ylabel("Temperature")
+    plt.legend(prop={'size': legendsize})
+    plt.grid()
+    plt.title("Critical Temperature", size = titlesize)
+    plt.xlabel("Lattice Size", size = labelsize)
+    plt.ylabel("Temperature", size = labelsize)
     plt.savefig("T_c.pdf")
 
 
-
-
-
-
-
-T_critical()
-
+#T_critical()
+#plot_all_obs([40,60,80,100])
+"""
 L = [40,60,80,100]
 for i in L:
     plot_obs(i)
-
+"""
 #plot_d()
 #plot_hist()
 #plot_all_obs([40,60,80,100])

@@ -16,14 +16,14 @@ int main(int argc, char const *argv[]) {
   //double Tf = stod(argv[3]);
   //double dT = stod(argv[4]);
 
-  int L = atoi(argv[1]);
-  //IsingModel is = IsingModel(20, 2.4, 0); // n, temp, initmethod: (0)up, (1)down or (2)random
+  //int L = atoi(argv[1]);
+  IsingModel is = IsingModel(20, 1, 2); // n, temp, initmethod: (0)up, (1)down or (2)random
   // cv/beta = varians histo
   //is.printMatrix();
-  //is.solve();
+  is.solve();
   //cout << setprecision(6) << "Sigma: " << is.getSigma() << endl;
 
-
+ /*
   int numThreadx8 = 1;
   double Ti = 2;
   double Tf = 2.35;
@@ -75,7 +75,7 @@ int main(int argc, char const *argv[]) {
 
       //cout << "\n" << "----------------------------------------------" << endl;
     }
-  }
+  }*/
 
 
 

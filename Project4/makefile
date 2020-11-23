@@ -1,4 +1,4 @@
-all: compile execute
+all: compile
 
 compile:
 	g++-10 -std=c++17 -O3 main.cpp isingModel.cpp -o output.exe -fopenmp
