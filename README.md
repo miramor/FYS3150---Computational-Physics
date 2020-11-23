@@ -68,7 +68,7 @@ Two solve methods are created due to one needing to write continuous results for
 
 **How to use:**
 Run *main.py* with the arguments in the commandline: N(lattice size) and MC_cycles(num of cycles). User will be given option to write results for all states file, where only one temperature is chosen and results written to "Results/e_hist.csv" containing: 
-If option 2 is chosen, the user is then asked for starttemp, endtemp and number of datapoints wanted between the two temperatures(ideally 4, 8 or 12 etc to make use of max amount of threads). Then it makes use of OpenMp and asks for number of threads you wish to use.  Finally the values T, <E>, <M>, Cv, chi are written to a .csv file named "Observable_[N]" in the "./Results" folder. The values and time needed for each temp is printed out in terminal.
+If option 2 is chosen, the user is then asked for starttemp, endtemp and number of datapoints wanted between the two temperatures(ideally 4, 8 or 12 etc to make use of max amount of threads). Then it makes use of OpenMp and asks for number of threads you wish to use.  Finally the values T, \<E\>, \<M\>, Cv, chi are written to a .csv file named "Observable_[N]" in the "./Results" folder. The values and time needed for each temp is printed out in terminal.
  
 **Example use:**
 ```python
