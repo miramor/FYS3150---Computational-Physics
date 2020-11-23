@@ -6,9 +6,9 @@ from matplotlib.widgets import MultiCursor
 from scipy.stats import norm
 from sklearn.linear_model import LinearRegression
 
-labelsize = 12
-titlesize = 14
-legendsize = 12
+labelsize = 16
+titlesize = 18
+legendsize = 14
 
 def plot_stabi():
     with open("./e_hist.csv", 'r') as f:
@@ -106,7 +106,6 @@ def plot_obs(L):
 
     plt.clf()
     plt.plot(df["T"], df["E"], 'ro')
-    #plt.axvline(x=2.269)
     plt.title("Energy", size = titlesize)
     plt.ylabel("E", size = labelsize)
     plt.xlabel("Temperature", size = labelsize)
@@ -116,11 +115,10 @@ def plot_obs(L):
 
     approx_coeff=np.polyfit(df["T"].to_numpy(),df["Cv"].to_numpy(),3)
     approx_func=np.poly1d(approx_coeff)
-
+    T = np.linspace(2,2.375s,1000)
     plt.clf()
     plt.plot(df["T"], df["Cv"], 'ro')
-    plt.plot(df["T"], approx_func(df["T"].to_numpy()))
-    #plt.axvline(x=2.269)
+    plt.plot(T, approx_func(T))
     plt.title("Specific heat capacity", size = titlesize)
     plt.ylabel("Cv", size = labelsize)
     plt.grid()
@@ -129,7 +127,6 @@ def plot_obs(L):
 
     plt.clf()
     plt.plot(df["T"], df["chi"], 'ro')
-    #plt.axvline(x=2.269)
     plt.title("Susceptibility", size = titlesize)
     plt.ylabel("chi", size = labelsize)
     plt.grid()
@@ -138,13 +135,11 @@ def plot_obs(L):
 
     plt.clf()
     plt.plot(df["T"], df["M"], 'ro')
-    #plt.axvline(x=2.269)
     plt.title("Magnetization", size = titlesize)
     plt.ylabel("<|M|>", size = labelsize)
     plt.grid()
     plt.xlabel("Temperature", size = labelsize)
     plt.savefig(savepath + "M" + L + ".pdf")
-
 
 
 
@@ -156,7 +151,7 @@ for L in [40, 60, 80, 100, 120]:
 def plot_all_obs(L):
     plt.clf()
     path = "./Results/"
-    savepath = "./Plots_all/"
+    savepath = "./Plots/"
     dfs = []
     for i in L:
         filename = "Observables_" + str(i) + ".csv"
@@ -175,7 +170,7 @@ def plot_all_obs(L):
         plt.plot(dfs[i]["T"], dfs[i]["Cv"],color[i] + linestyle[i],  label="N=" + str(L[i]), alpha=alpha, linewidth = lw)
         plt.plot(dfs[i]["T"], dfs[i]["Cv"],color[i]+"o", markersize=5)
 
-    #plt.axvline(x=2.269)
+
     plt.title("Specific heat capacity", size = titlesize)
     plt.ylabel("Cv", size = labelsize)
     plt.xlabel("Temperature", size = labelsize)
@@ -187,7 +182,6 @@ def plot_all_obs(L):
     for i in range(len(L)):
         plt.plot(dfs[i]["T"], dfs[i]["chi"],color[i] + linestyle[i], label="N="+str(L[i]), alpha=alpha, linewidth = lw)
         plt.plot(dfs[i]["T"], dfs[i]["chi"],color[i]+"o", markersize=5)
-    #plt.axvline(x=2.269)
     plt.title("Susceptibility", size = titlesize)
     plt.ylabel("chi", size = labelsize)
     plt.xlabel("Temperature", size = labelsize)
@@ -201,7 +195,6 @@ def plot_all_obs(L):
         dfs[i] = dfs[i].apply (pd.to_numeric, errors='coerce')
         plt.plot(dfs[i]["T"], dfs[i]["M"],color[i] + linestyle[i], label="N="+str(L[i]), alpha=alpha, linewidth = lw)
         plt.plot(dfs[i]["T"], dfs[i]["M"],color[i]+"o", markersize=5)
-    #plt.axvline(x=2.269)
     plt.title("Magnetization", size = titlesize)
     plt.legend(prop={'size': legendsize})
     plt.ylabel("<|M|>", size = labelsize)
@@ -210,9 +203,21 @@ def plot_all_obs(L):
     plt.savefig(savepath + "M_all.pdf")
 
 
+    plt.clf()
+    for i in range(len(L)):
+        plt.plot(dfs[i]["T"], dfs[i]["E"],color[i] + linestyle[i], label="N="+str(L[i]), alpha=alpha, linewidth = lw)
+        plt.plot(dfs[i]["T"], dfs[i]["E"],color[i]+"o", markersize=5)
+    plt.title("Energy", size = titlesize)
+    plt.legend(prop={'size': legendsize})
+    plt.ylabel("<E>", size = labelsize)
+    plt.grid()
+    plt.xlabel("Temperature", size = labelsize)
+    plt.savefig(savepath + "E_all.pdf")
+
+
 def T_critical():
     path = "./Results/"
-    savepath = "./Plots_all/"
+    savepath = "./Plots/"
     dfs = []
     L = np.array([40,60,80,100])
     T_c = np.zeros(len(L))
@@ -223,7 +228,7 @@ def T_critical():
         T_c[i] = df["T"][np.argmax(df["Cv"].to_numpy())]
         approx_coeff = np.polyfit(df["T"].to_numpy(),df["Cv"].to_numpy(),3)
         approx_func=np.poly1d(approx_coeff)
-        x = np. linspace(2,2.4, 1000)
+        x = np. linspace(2,2.35, 100)
         Tc_fit[i] = x[np.argmax(approx_func(x))]
 
 
@@ -231,33 +236,30 @@ def T_critical():
 
     approx_coeff=np.polyfit(1/L,Tc_fit,1)
     approx_func=np.poly1d(approx_coeff)
-    print(T_c)
-    print(Tc_fit)
-    print(approx_coeff)
+    print("Critical temperature = %.4f" %(approx_coeff[1]))
 
     plt.clf()
     plt.plot(1/L,Tc_fit,'o')
     plt.plot(1/L,approx_func(1/L), label="T=%.4fx+%.4f" %(approx_coeff[0], approx_coeff[1]))
-    # for i in range(len(x_values)):
-    #     plt.plot(L[i],T_c[i],"o")
     plt.legend(prop={'size': legendsize})
     plt.grid()
     plt.title("Critical Temperature", size = titlesize)
     plt.xlabel("1/Lattice Size", size = labelsize)
     plt.ylabel("Temperature", size = labelsize)
-    plt.savefig("./Plots/T_c.pdf")
+    plt.savefig(savepath + "T_c.pdf")
 
 
-#T_critical()
+T_critical()
 #plot_all_obs([40,60,80,100])
-"""
+
 L = [40,60,80,100]
 for i in L:
     plot_obs(i)
-"""
+
 #plot_d()
 #plot_hist()
 plot_all_obs([40,60,80,100])
+
 #multi = MultiCursor(fig.canvas, (axs[0], axs[1], axs[2]), color='r', lw=1)
 #plt.show()
 
