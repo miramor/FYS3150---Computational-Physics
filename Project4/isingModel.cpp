@@ -139,7 +139,6 @@ void IsingModel::writeFile(){
   ofstream Lfile;
   Lfile.open("Observables_" + to_string(N) + ".csv", ios_base::app);
   // T, <E>, <M>, Cv, chi
-  //cout << "Cv=" << Cv << ",  chi=" << chi << ",  variance=" << variance << endl;
   Lfile << T0 << ", " << average[0] << ", " << average[4] << ", " << Cv << ", " << chi << endl;
 }
 

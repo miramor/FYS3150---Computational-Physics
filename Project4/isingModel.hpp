@@ -42,15 +42,12 @@ class IsingModel{
 
   public:
     IsingModel(int n, double temp, int initMethod, long int numMC_cyc, double thread_seed); // initMethod: (0)up, (1)down or (2)random
-    void findNeighbour();
-    void swapSpinOnce();
     void findTotalEnergy();
     void writeFile();
     void solve();
     void solve_write();
     void printMatrix();
     void Metropolis(uniform_int_distribution<int> idist, uniform_real_distribution<double> ddist);
-    double* getAverage(); //contains <E>, <M>, <E**2> used for plotting
     double calcE_ij(int i, int j);
     void printValues();
     ~IsingModel(); //deletes array when object is "dead"
