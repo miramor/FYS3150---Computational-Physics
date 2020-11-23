@@ -57,3 +57,10 @@ main.py systemE VV2 1 0.00000001
 
 3.Basic example
 main.py systemA VV 2 0.00001
+
+### Project 4:
+**Studies of phase transitions in magnetic systems**
+'''python
+print("hello")
+'''
+
