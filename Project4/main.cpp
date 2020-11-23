@@ -43,9 +43,9 @@ int main(int argc, char const *argv[]) {
     }
   }
 
+  //Asks user for num of threads to use
   int num_threads;
   cin >> num_threads;
-
   if(num_threads > threads_available || num_threads< 1){
     cout << num_threads << " is not possible. Automatically changed to max_threads = " << threads_available << endl;
     num_threads = threads_available;
@@ -64,9 +64,10 @@ int main(int argc, char const *argv[]) {
       cout << "----------------------------------------------" << endl;
     }
     #pragma omp for
+    //Each thread executes for a seperate temperature at a time
     for (int i = 0; i < n_T; i++){
       start = omp_get_wtime();
-      double thread_seed = time(0) + omp_get_thread_num();
+      double thread_seed = time(0) + omp_get_thread_num(); //unique seed for each object
       IsingModel is = IsingModel(L, T_array[i], 2, num_cycles, thread_seed); // n, temp, initmethod: (0)up, (1)down or (2)random
       //is.printMatrix();
       is.solve();
@@ -84,26 +85,5 @@ int main(int argc, char const *argv[]) {
     #pragma omp single
       cout << "Total time for " << num_threads << "threads: " << end_tot - start_tot << "s." << endl;
   }
-
-
-
-
-  /*
-  IsingModel is = IsingModel(L, Ti, 2); // n, temp, initmethod: (0)up, (1)down or (2)random
-  is.solve();
-  is.printMatrix();
-  TO DO:
-  Run for L = 2, compare to analytical results.
-  How does the number of accepted configurations behave as function of temperature T?
-  Temp = 1 and 2.4 for L = 20 only
-
-  Run simulation for multiple values of T
-  Write Cv and chi to file for every T value.
-
-  Spørsmål:
-  Hvordan skrive verdi til 1 fil når det kjøret for flere tråder
-  Skrive T, Cv, chi, M.
-
-  */
   return 0;
 }

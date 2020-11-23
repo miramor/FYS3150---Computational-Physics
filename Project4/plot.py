@@ -20,7 +20,7 @@ def plot_d(): #Plot function for 4d) WHen is the most likely state reached?
         T = float(line[2])
         N = int(line[3])
 
-    df = pd.read_csv(path + "e_hist.csv", index_col=False, names=["E_mean", "M_mean", "numFlips", "E"], skiprows = 1)
+    df = pd.read_csv(path + filename, index_col=False, names=["E_mean", "M_mean", "numFlips", "E"], skiprows = 1)
 
     fig, axs = plt.subplots(3, 1, constrained_layout=True, sharex = True, figsize=(4,8))
     E_mean = df["E_mean"].to_numpy()
