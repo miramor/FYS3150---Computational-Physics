@@ -92,8 +92,7 @@ def plot_obs(L): #Plots <E>, <M>, chi and Cv for lattice size L.
     savepath = "./Plots/"
     filename = "Observables_" + L + ".csv"
     df = pd.read_csv(path + filename, index_col=False, names=["T", "E", "M", "Cv", "chi"], skiprows = 1)
-    #print(df.sort_values(by=["T"]))
-    df = df.sort_values(by=["T"])
+    df.sort_values(by="T", inplace = True)
 
     plt.clf()
     plt.plot(df["T"], df["E"], 'ro')
@@ -103,11 +102,10 @@ def plot_obs(L): #Plots <E>, <M>, chi and Cv for lattice size L.
     plt.grid()
     plt.savefig(savepath + "E_" + L + ".pdf")
 
-
     #Polynomial fit for Cv.
     approx_coeff=np.polyfit(df["T"].to_numpy(),df["Cv"].to_numpy(),3)
     approx_func=np.poly1d(approx_coeff)
-    T = np.linspace(df["T"][0],df["T"][-1],1000)
+    T = np.linspace(2,2.35,1000)
     plt.clf()
     plt.plot(df["T"], df["Cv"], 'ro')
     plt.plot(T, approx_func(T))
@@ -247,3 +245,4 @@ if __name__ == "__main__":
     #plot_stabi() #Plots the E, <E>, <M>, number of flips vs MC cycles, to see stabilization
     #plot_hist_nump() #Makes histogram of energy state distribution
     plot_all_obs([40,60,80,100]) #Plots observables with all L in same plot
+    plot_obs(100) #Plot observables for given lattice size.
