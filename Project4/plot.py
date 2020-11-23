@@ -10,7 +10,7 @@ labelsize = 12
 titlesize = 14
 legendsize = 12
 
-def plot_d():
+def plot_stabi():
     with open("./e_hist.csv", 'r') as f:
         line = f.readline().split(',')
         cutoff = float(line[0])
@@ -19,14 +19,6 @@ def plot_d():
         N = int(line[3])
 
     df = pd.read_csv("./e_hist.csv", index_col=False, names=["E_mean", "M_mean", "numFlips", "E"], skiprows = 1)
-
-    #plt.rcParams['axes.labelsize'] = 16
-    #plt.rcParams['axes.titlesize'] = 16s
-    #plt.rcParams['legend.fontsize'] = 19
-
-    #axs[0].set_xlabel('distance (m)') Axis labels
-    #axs[0].set_ylabel('Damped oscillation')
-
     fig, axs = plt.subplots(3, 1, constrained_layout=True, sharex = True, figsize=(4,8))
     E_mean = df["E_mean"].to_numpy()
     M_mean = df["M_mean"].to_numpy()

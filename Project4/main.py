@@ -2,7 +2,6 @@ import sys
 import os
 import matplotlib.pyplot as plt
 
-
 if not os.path.exists("Results"):
     os.makedirs("Results")
 
@@ -20,23 +19,4 @@ os.system("./output.exe " + cla)
 #os.system("echo Making plots...")
 #os.system("python3 plot.py " + cla)
 
-#os.system("mv" + " Observables_" + str(cla) + ".csv" + " " + "./Results/") #Move data file to results directory.
-
 os.system("echo Full program finished")
-
-
-"""
-
-Regn ut a:
-
-Tc(40) - Tc(inf) = a*L**(-1)
-Tc(60) - Tc(inf) = a*L**(-1)
-
-Tc(60) - Tc(inf) = a*L**(-1)
-Tc(80) - Tc(inf) = a*L**(-1)
-
-Tc(80) - Tc(inf) = a*L**(-1)
-Tc(100) - Tc(inf) = a*L**(-1)
-
-finn a for hvert liningspar og bruk middelverdien av a.
-"""
