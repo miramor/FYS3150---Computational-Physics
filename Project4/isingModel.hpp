@@ -47,6 +47,7 @@ class IsingModel{
     void findTotalEnergy();
     void writeFile();
     void solve();
+    void solve_write();
     void printMatrix();
     void Metropolis(uniform_int_distribution<int> idist, uniform_real_distribution<double> ddist);
     double* getAverage(); //contains <E>, <M>, <E**2> used for plotting

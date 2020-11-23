@@ -64,14 +64,13 @@ def plot_hist_nump():#Plotting histogram for  4e) Analyzing the probability ditr
     df = pd.read_csv(path + filename, index_col=False, names=["E_mean", "M_mean", "numFlips", "E"], skiprows = 1)
     energyGrouped = df.groupby(df["E"],as_index=False).size()
     variance = np.std(df["E"])**2
-    """
-    hist2, bins2 = np.histogram(df["E"], bins = 109)
-    bins2 = bins2[:-1] + (bins2[1:]-bins2[:-1])/2
-    plt.bar(bins2, hist2)
-    plt.savefig("barsBasic.pdf",dpi = 300)
-    """
-    binSize = energyGrouped.size
-    binSize = 109
+
+    if energyGrouped.size > 20:
+        binSize = energyGrouped.size
+    else:
+        binSize = 109
+
+    print(binSize)
     L = 20
     plt.clf()
     hist,bins = np.histogram(df["E"]*400, bins = binSize)
@@ -81,7 +80,7 @@ def plot_hist_nump():#Plotting histogram for  4e) Analyzing the probability ditr
     hist = hist/a
     plt.bar(bins/(L*L),hist, width = 1/(binSize))
     plt.annotate(f"Var= {variance:.2e}", xy=(-0.8, 0.006), xytext=(-1.1, 0.006), size = 12)
-    plt.title("Probability distribution, T=1", size = titlesize)
+    plt.title("Probability distribution, T=2.4", size = titlesize)
     plt.ylabel("P(E)", size = labelsize)
     plt.xlabel("Energy", size = labelsize)
     plt.savefig("./Plots/barplot_up_1.pdf", dpi = 300)
@@ -243,10 +242,8 @@ def T_critical(): #Finds the critical temperature from analyzing Cv for all L.
 
 
 
-
-
 if __name__ == "__main__":
-    T_critical()
-    #plot_d()
-    plot_hist_nump()
-    plot_all_obs([40,60,80,100])
+    T_critical() #Plots the linear regression of Cv peaks vs Temperature.
+    #plot_stabi() #Plots the E, <E>, <M>, number of flips vs MC cycles, to see stabilization
+    #plot_hist_nump() #Makes histogram of energy state distribution
+    plot_all_obs([40,60,80,100]) #Plots observables with all L in same plot

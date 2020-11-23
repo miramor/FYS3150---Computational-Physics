@@ -111,28 +111,19 @@ void IsingModel::solve(){
   uniform_real_distribution<double> ddist(0,1);
   uniform_int_distribution<int> idist(0,N-1);
 
-  //Comment this in when writing all values to file, for each sample.
-  //ofile.open("e_hist.csv");
-  //long double k = 0.00; //Used if wish to see progress, used to get
   for(long int i = 1; i <= loopCutoff; i++){
-    //if(i > k*numMC_cycles*N_sq){
-    //  cout << "Finish " << k*100 << " %, precutoff" << endl;
-    //  k += 0.1;
-    //}
     Metropolis(idist, ddist);
   }
   for(long int i = loopCutoff; i <= (long int) N_sq*numMC_cycles ; i++){
-    //if(i > k*numMC_cycles*N_sq){
-    //  cout << "Finish " << k*100 << " %" << endl;
-    //  k += 0.1;
-    //}
+    /*
+    if(i > k*numMC_cycles*N_sq){
+      cout << "Finish " << k*100 << " %" << endl;
+      k += 0.1;
+    }*/
     Metropolis(idist, ddist);
     sampleCount ++;
     average[0] += E; average[1] += E*E;
     average[2] += M; average[3] += M*M; average[4] += fabs(M);
-
-    //Comment this line in when writing an value for each sample attempted to file, used for plotting and finding stability threshold.
-    //ofile << average[0]/(sampleCount*N_sq) << ", " << average[4]/(sampleCount*N_sq) << ", " << numFlips << ", " << E/N_sq << endl;
   }
 
   for(int i = 0; i < 5; i++){
@@ -206,4 +197,39 @@ void IsingModel::printMatrix(){
     }
     cout << endl;
   }
+}
+
+
+void IsingModel::solve_write(){
+  // Identical to solve, except writes to file for each sample to file
+  double r;
+  int N_sq = N*N;
+  long int sampleCount = 0;
+  ofstream ofile;
+  double cutoff = 0.1;
+  double loopCutoff = N_sq*cutoff*numMC_cycles;
+  uniform_real_distribution<double> ddist(0,1);
+  uniform_int_distribution<int> idist(0,N-1);
+
+  ofile.open("e_hist.csv");
+  long double k = 0.00; //Used if wish to see progress, used to get
+  for(long int i = 1; i <= loopCutoff; i++){
+    Metropolis(idist, ddist);
+  }
+  for(long int i = loopCutoff; i <= (long int) N_sq*numMC_cycles ; i++){
+    Metropolis(idist, ddist);
+    sampleCount ++;
+    average[0] += E; average[1] += E*E;
+    average[2] += M; average[3] += M*M; average[4] += fabs(M);
+    //Write to file for each sample after cutoff
+    ofile << average[0]/(sampleCount*N_sq) << ", " << average[4]/(sampleCount*N_sq) << ", " << numFlips << ", " << E/N_sq << endl;
+  }
+
+  for(int i = 0; i < 5; i++){
+    average[i] /= (sampleCount); //divide value by the num of samples done in total
+  }
+  //Update important values when finished solving
+  variance = (average[1] - average[0] * average[0])/N_sq;
+  Cv = (average[1] - average[0] * average[0])/ (T0*T0) /N_sq;
+  chi = (average[3] - average[4] * average[4]) / T0 / N_sq;
 }
