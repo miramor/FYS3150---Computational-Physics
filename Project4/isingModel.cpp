@@ -12,15 +12,7 @@ using namespace std;
 void IsingModel::findTotalEnergy(){
   for (int i =0; i < N; i++){
     for (int j = 0; j < N; j++){
-      // this is not right
-
       double E_ij = spin_matrix[i][j]*spin_matrix[plus1[i]][j]+spin_matrix[i][j]*spin_matrix[i][plus1[j]];
-
-      /* Print test for the 2x2 example
-      cout << "Row +1: " <<  spin_matrix[plus1[i]][j] << endl;
-      cout << "Col + 1: " << spin_matrix[i][plus1[j]] << endl;
-      cout << "Energy for: i, j: " << i << ", " << j << "  . E: " << E_ij << "\n" << endl;
-      */
       E -= E_ij; //energy for one point
     }
   }
@@ -101,19 +93,6 @@ void IsingModel::Metropolis(uniform_int_distribution<int> idist,uniform_real_dis
   int i_ = idist(mt);
   int j_ = idist(mt);
   double r = ddist(mt);
-  /*
-  int i_ = (int)bind(uniform_int_distribution<int>(0,N-1), mt19937(seed));
-  int j_ = (int)bind(uniform_int_distribution<int>(0,N-1), mt19937(seed));
-  double r = (double)bind(uniform_real_distribution<double>(0,1), mt19937(seed));
-  cout << i_ << " " << j_ << endl;
-
-  //int j_ = rand() % N;
-  //int i_ = rand() % N; //error when defined i_ outside loop
-  double a =  drand48();
-  double b = drand48();
-
-  double r = drand48();
-  */
 
   double deltaE = calcE_ij(i_, j_);
   double e_exp = expVals[(int)deltaE+8];
@@ -137,16 +116,16 @@ void IsingModel::Metropolis(uniform_int_distribution<int> idist,uniform_real_dis
 }
 
 void IsingModel::solve(){
-  //srand (time(NULL)); // Set seed for random gen numbers
   //Choose random i and j and calculate the shift in E.
   // Calculate deltaE, if the random number r is <= exp(E/kT) then it happens
   // Confirm the flip and update spin matrix.
   double r;
   int N_sq = N*N;
   //long int numMC_cycles = 1500000;  // num of monte carco cycles
-  long int sampleCount = 0.15;
+  long int sampleCount = 0;
   //N_sq = 2;
-  ofstream ofile;
+
+  //ofstream ofile;
   //ofile.open("e_hist.csv");
   double cutoff = 0.15;
   double loopCutoff = N_sq*cutoff*numMC_cycles;
@@ -182,13 +161,14 @@ void IsingModel::solve(){
   chi = (average[3] - average[4] * average[4]) / T0 / N_sq;
 
   //cout << "<E> " << average[0]<< "  <M> " << average[4] << endl;
-  //cout << "CV: " << Cv << "  chi: " << chi << endl;
+  //cout << "Cv: " << Cv << "  chi: " << chi << endl;
 }
 
 void IsingModel::writeFile(){
   ofstream Lfile;
   Lfile.open("Observables_" + to_string(N) + ".csv", ios_base::app);
-  // T, <E>, <M>, Cv, chicout << "Cv=" << Cv << ",  chi=" << chi << ",  variance=" << get_Variance << endl;
+  // T, <E>, <M>, Cv, chi
+  //cout << "Cv=" << Cv << ",  chi=" << chi << ",  variance=" << variance << endl;
   Lfile << T0 << ", " << average[0] << ", " << average[4] << ", " << Cv << ", " << chi << endl;
 }
 
