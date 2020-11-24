@@ -211,6 +211,7 @@ void IsingModel::solve_write(){
   uniform_int_distribution<int> idist(0,N-1);
 
   ofile.open("e_hist.csv");
+  ofile << cutoff << ", " << numMC_cycles << ", " << T0 << ", " << N << endl;
   long double k = 0.00; //Used if wish to see progress, used to get
   for(long int i = 1; i <= loopCutoff; i++){
     Metropolis(idist, ddist);
