@@ -68,7 +68,7 @@ Two solve methods are created which call the Metropolis function for a set numbe
 
 **How to use:**
 Run *main.py* with the arguments in the commandline: N (lattice size) and MC_cycles (number of cycles). The user will be given an option to write the results for each sampling to file, looking only at one chosen temperature. The results are written to "Results/e_hist.csv" containing: mean energy per spin, mean absolute magnetization per spin, total number of accepted flips and energy per spin.
-If option 2 is chosen (calculation for different temperatures in parallel), the user is then asked for start temperature, end temperature and number of datapoints wanted between the two temperatures (ideally 4, 8 or 12 etc to make use of max amount of threads). Then, it makes use of OpenMp and asks for number of threads you wish to use.  Finally the values T, \<E\>, \<M\>, Cv, chi are written to a .csv file named "Observable_[N]" in the "./Results" folder. The values and time needed for each temp is printed out in the terminal.
+If option 2 is chosen (calculation for different temperatures in parallel), the user is then asked for start temperature, end temperature and number of datapoints wanted between the two temperatures (ideally 4, 8 or 12 etc to make use of max amount of threads). Then, it makes use of OpenMp and asks for number of threads you wish to use.  Finally the values T, \<E\>, \<|M|\>, Cv, chi are written to a .csv file named "Observable_[N]" in the "./Results" folder. The values and time needed for each temp is printed out in the terminal.
  
 **Example use:**
 ```python
