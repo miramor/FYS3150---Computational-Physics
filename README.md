@@ -72,6 +72,6 @@ If option 2 is chosen (calculation for different temperatures in parallel), the 
  
 **Example use:**
 ```python
-python3 main.py N MC_cycles
+python3 main.py 20 100000
 ```
 
