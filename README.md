@@ -60,7 +60,7 @@ main.py systemA VV 2 0.00001
 
 ### Project 4:
 **Studies of phase transitions in magnetic systems**
-The isingModel make use of the Metropolis algorithm (Markov chain Monte Carlo) to find the most stable state for the system depending on the size of the lattice (N) and the temperature (T) given. The program picks a random place in the grid, calculates the change in energy a spin-filp would cause and depending on the transition probability the spin is either flipped or remains the same. This sampling is repeated for N^2N x MCcycles. Therby, system specific properties such as energy, magnetization, specific heat capacity and susceptibility are computed.
+The isingModel make use of the Metropolis algorithm (Markov chain Monte Carlo) to find the most stable state for the system depending on the size of the lattice (N) and the temperature (T) given. The program picks a random place in the grid, calculates the change in energy a spin-filp would cause and depending on the transition probability the spin is either flipped or remains the same. This sampling is repeated for N^2 x MCcycles. Therby, system specific properties such as energy, magnetization, specific heat capacity and susceptibility are computed.
 
 The program is quite simply built up of an isingModel class and a *main.cpp* which set ups the parallelization over different temperatures using OpenMP. Additionally a program *plot.py* is used to visualize the results. The *main.py* simply compiles and executes all the code. The solve method loops over **N^2 x MCcycles** of iterations and calls on the Metropolis function which either flips the spin of a given position in the lattice or keeps its orientation. 
 
