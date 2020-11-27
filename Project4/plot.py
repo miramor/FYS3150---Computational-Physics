@@ -10,7 +10,7 @@ labelsize = 16
 titlesize = 18
 legendsize = 14
 
-def plot_d(): #Plot function for 4d) WHen is the most likely state reached?
+def plot_stabi(): #Plot function for 4d) WHen is the most likely state reached?
     filename = "e_hist.csv"
     path = "./Results/"
     with open(path + filename, 'r') as f:
@@ -226,7 +226,7 @@ def T_critical(): #Finds the critical temperature from analyzing Cv for all L.
     #Linear fit for all the T_max found for different L.
     approx_coeff=np.polyfit(1/L,Tc_fit,1)
     approx_func=np.poly1d(approx_coeff)
-    print("Critical temperature = %.4f" %(approx_coeff[1]))
+    print("Critical temperature from data = %.4f" %(approx_coeff[1]))
 
     plt.clf()
     plt.plot(1/L,Tc_fit,'o')
@@ -241,8 +241,8 @@ def T_critical(): #Finds the critical temperature from analyzing Cv for all L.
 
 
 if __name__ == "__main__":
-    T_critical() #Plots the linear regression of Cv peaks vs Temperature.
     #plot_stabi() #Plots the E, <E>, <M>, number of flips vs MC cycles, to see stabilization
     #plot_hist_nump() #Makes histogram of energy state distribution
     plot_all_obs([40,60,80,100]) #Plots observables with all L in same plot
-    plot_obs(100) #Plot observables for given lattice size.
+    plot_obs(100)
+    T_critical() #Plots the linear regression of Cv peaks vs Temperature.

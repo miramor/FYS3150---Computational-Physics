@@ -32,7 +32,7 @@ int main(int argc, char const *argv[]) {
 
     double Ti, Tf;
     int n_T; //Number of temperatures
-    cout << "Choose start temp, end temp and number of temps (e.g 2 2.3 4)" << endl;
+    cout << "Choose start temp, end temp and number of temps (e.g 1 2.3 4)" << endl;
     cin >> Ti >> Tf >> n_T;
     double dT = (Tf-Ti)/((double) n_T -1);
     double T_array [n_T];
