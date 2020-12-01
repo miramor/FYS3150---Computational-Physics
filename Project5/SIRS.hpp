@@ -1,12 +1,15 @@
 #ifndef SIRS_HPP
 #define SIRS_HPP
 #include <string>
-#include <vector>
+#include <armadillo>
+using namespace arma;
 using namespace std;
 
 class SIRS{
   private:
-    vector <double> y, dy;
+    //vector <double> y, dy;
+    vec y;
+    vec dy;
     double a;
     double b;
     double c;
@@ -17,11 +20,12 @@ class SIRS{
 
 
     void rk4();
-    vector <double> derivatives(vector <double> yt);
+    //vector <double> derivatives(vector <double> yt);
+    vec derivatives(vec yt);
 
 
   public:
-    SIRS(double S, double I, double a_, double b_, double c_, int t_, double dt_);
+    SIRS(double S, double I, double a_, double b_, double c_, double t_, double dt_);
     void solve(string filename);
 };
 
