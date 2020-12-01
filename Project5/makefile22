@@ -1,0 +1,10 @@
+all: compile
+
+compile:
+	g++ -std=c++11 -O3 main.cpp SIRS.cpp -o -larmadillo output.exe
+
+execute:
+	./output.exe
+
+clean:
+	rm *.o output.exe
