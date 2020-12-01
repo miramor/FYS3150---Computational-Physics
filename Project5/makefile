@@ -1,5 +1,5 @@
 LIB = -larmadillo
-CPPflags = g++ -std=c++11
+CPPflags = g++ -std=c++17
 
 output: main.o SIRS.o
 	${CPPflags} main.o SIRS.o ${LIB} -o output.exe

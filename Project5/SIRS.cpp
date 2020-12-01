@@ -7,7 +7,7 @@ using namespace std;
 SIRS::SIRS(double S_, double I_, double a_, double b_, double c_, double t_, double dt_){
 
   y.push_back(S_);
-  y.push_back(I_):
+  y.push_back(I_);
   y.push_back(0);
 
   dy.resize(3);
@@ -19,8 +19,10 @@ SIRS::SIRS(double S_, double I_, double a_, double b_, double c_, double t_, dou
   t = t_;
   dt = dt_;
   dt2 = dt/2;
+  return;
 }
 
+/*
 vector <double> SIRS::derivatives(yt){
   dy[0] = c*yt[2] - a*yt[1]*yt[0]/N;
   dy[1] = a*yt[0]*yt[0]/N - b*yt[1];
@@ -35,7 +37,7 @@ void SIRS::solve(string filename){
 
   for (int i = 0; i < t; i ++){
     rk4();
-    writeResults(ofile);
+    //writeResults(ofile);
   }
 
 }
@@ -51,6 +53,8 @@ void SIRS::rk4(){
   y = y + (K1 + 2.*K2 + 2.*K3 + K4)/6;
   y[2] = N - y[1] - y[0];
 }
+/*
 
+/*
 inline void writeResults(fstream file);
-  file << y[0] << ", " << y[1] << ", " <<  y[2] << endl;
+  file << y[0] << ", " << y[1] << ", " <<  y[2] << endl;*/

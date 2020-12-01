@@ -16,13 +16,13 @@ class SIRS{
     double N;
 
 
-    void rk4();
-    vector <double> derivatives(vector <double> yt);
+    //void rk4();
+    //vector <double> derivatives(vector <double> yt);
 
 
   public:
-    SIRS(double S, double I, double a_, double b_, double c_, int t_, double dt_);
-    void solve(string filename);
+    SIRS(double S, double I, double a_, double b_, double c_, double t_, double dt_);
+    //void solve(string filename);
 };
 
 
