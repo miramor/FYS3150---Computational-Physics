@@ -31,7 +31,10 @@ SIRS::SIRS(double S_, double I_, double a_, double b_, double c_, double t_, dou
 
 vec SIRS::derivatives(vec yt){
   dy(0) = c*yt(2) - a*yt(1)*yt(0)/N;
-  dy(1) = a*yt(0)*yt(0)/N - b*yt(1);
+  dy(1) = a*yt(0)*yt(1)/N - b*yt(1);
+  // dy(0) = c*(N-yt(0)-yt(1)) - a*yt(1)*yt(0)/N;
+  // dy(1) = a*yt(0)*yt(1)/N - b*yt(1);
+  //cout<<"dy: " << dy << endl;
   return dy;
 }
 
@@ -41,9 +44,12 @@ void SIRS::solve(string filename){
   ofstream ofile;
   ofile.open(filename + ".csv");
   //vector <double> y, dy, ynext;
+  ofile << t << ", " << dt << ", " << a << ", " << b << ", " << c << endl;
   ofile << y(0) << ", " << y(1) << ", " <<  y(2) << endl;
-  t = 1;
-  for (int i = 0; i < t; i ++){
+  //t = 2;
+
+
+  for (double i = 0; i < t; i += dt){
     rk4();
     ofile << y(0) << ", " << y(1) << ", " <<  y(2) << endl;
     //writeResults(ofile);
@@ -57,11 +63,11 @@ void SIRS::rk4(){
 
   K1 = dt*derivatives(y);
   //cout << "K1: " << K1 << endl;
-  K2 = dt2*derivatives(y+K1);
-  K3 = dt2*derivatives(y+K2);
+  K2 = dt*derivatives(y+0.5*K1);
+  K3 = dt*derivatives(y+0.5*K2);
   K4 = dt*derivatives(y+K3);
   //cout << K2 << endl;
-  y = y + (K1 + 2.0*K2 + 2.0*K3 + K4)/6;
+  y = y + (K1 + 2.0*K2 + 2.0*K3 + K4)/6.0;
   y(2) = N - y(1) - y(0);
 }
 

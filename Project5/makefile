@@ -1,10 +1,14 @@
-all: compile execute
+LIB = -larmadillo -llapack -lblas
+CPPflags = g++ -std=c++17
 
-compile:
-	g++ -std=c++11 -O3 main.cpp SIRS.cpp -larmadillo -o output.exe
+output: main.o SIRS.o
+	${CPPflags} main.o SIRS.o ${LIB} -o output.exe
 
-execute:
-	./output.exe
+main.o: main.cpp
+	${CPPflags} -c main.cpp
+
+SIRS.o: SIRS.cpp SIRS.hpp
+	${CPPflags} -c SIRS.cpp
 
 clean:
 	rm *.o output.exe
