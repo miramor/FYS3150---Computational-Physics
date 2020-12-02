@@ -22,11 +22,12 @@ class SIRS{
     void rk4();
     //vector <double> derivatives(vector <double> yt);
     vec derivatives(vec yt);
+    void MonteCarlo();
 
 
   public:
     SIRS(double S, double I, double a_, double b_, double c_, double t_, double dt_);
-    void solve(string filename);
+    void solve(string filename, string method);
 };
 
 
