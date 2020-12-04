@@ -7,7 +7,6 @@ using namespace std;
 
 class SIRS{
   private:
-    //vector <double> y, dy;
     vec y;
     vec dy;
     double a;
@@ -20,7 +19,6 @@ class SIRS{
 
 
     void rk4();
-    //vector <double> derivatives(vector <double> yt);
     vec derivatives(vec yt);
     void MonteCarlo();
 

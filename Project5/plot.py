@@ -9,6 +9,7 @@ legendsize = 14
 
 def Plot_HealthStatus(b, method):
     B = str(b)
+    method = method.strip()
     resultpath = "./Results/"
     plotpath = "./Plots/"
     #filename = "pop_" + B + "_MC" +".csv"
@@ -28,11 +29,11 @@ def Plot_HealthStatus(b, method):
     x = np.linspace(0, t, len(df["S"]))
     plt.clf()
 
-    lw = 1.2
+    lw = 1.5
     alpha = 1
     if method == "MC":
-        lw = 0.6
-        alpha = 0.6
+        lw = 0.5
+        alpha = 0.5
     #print(f"{method}: {lw}")
     plt.plot(x, df["S"]/N, 'b', alpha = alpha, lw= lw,  label = "S")
     plt.plot(x, df["I"]/N, 'r', alpha = alpha ,lw= lw, label = "I")
@@ -67,12 +68,13 @@ def plot_avg(x, df, N):
         S[i] = Stot/(i+1)
         I[i] = Itot/(i+1)
         R[i] = Rtot/(i+1)
+    lw = 2
+    plt.plot(x, S/N, "b", lw=lw, label= "<S>", ls = "dashed")
+    plt.plot(x, I/N, "r", lw = lw,label= "<I>", ls = "dashed")
+    plt.plot(x, R/N, "k" , lw = lw, label= "<R>", ls = "dashed")
 
-    plt.plot(x, S/N, "navy", label= "<S>", ls = "dashed")
-    plt.plot(x, I/N, "crimson", label= "<I>", ls = "dashed")
-    plt.plot(x, R/N, "peru" , label= "<R>", ls = "dashed")
-
-for i in [1, 2, 3, 4]:
+#for i in [1, 2, 3, 4]:
+for i in [1]:
     Plot_HealthStatus(i, "RK4")
     Plot_HealthStatus(i, "MC")
 
