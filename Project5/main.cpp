@@ -20,8 +20,8 @@ int main(int argc, char const *argv[]) {
   double t_MC = 20;
   double t_RK4 = 20;
   double dt = 0.0025;
+  int MC_cycles = 1000;
 
-  string method = "MC";
   list<double> b_val = {1, 2, 3, 4};
   map<double, double> b_totimeRK4;
   map<double, double> b_totimeMC;
@@ -38,13 +38,13 @@ int main(int argc, char const *argv[]) {
   //list<double> b_val = {1};
 
   for(double b : b_val){
-    //SIRS popMC(S, I, a, b, c, t_MC , dt);
-    SIRS popMC(S, I, a, b, c, b_totimeMC[b] , dt);
-    popMC.solve("./Results/pop_" + to_string((int)b), "MC");
+    //SIRS popMC(S, I, a, b, c, t_MC , MC_cycles);
+    SIRS pop(S, I, a, b, c, b_totimeMC[b], MC_cycles);
+    pop.solveMC("./Results/pop_" + to_string((int)b));
 
     //SIRS popMC(S, I, a, b, c, t_RK4 , dt);
-    SIRS popRK4(S, I, a, b, c,  b_totimeRK4[b] , dt);
-    popRK4.solve("./Results/pop_" + to_string((int)b), "RK4");
+    //SIRS popRK4(S, I, a, b, c,  b_totimeRK4[b] , dt);
+    //popRK4.solveRK4("./Results/pop_" + to_string((int)b));
   }
 
 
