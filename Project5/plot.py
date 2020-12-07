@@ -23,26 +23,6 @@ def read_file(filename):
     dp = len(df["S"])
     return df, N, t, dt, a, b, c, dp
 
-def find_avg(df):
-    dp = len(df["S"])
-    S = np.zeros(dp)
-    I = np.zeros(dp)
-    R = np.zeros(dp)
-
-    Stot = 0
-    Itot = 0
-    Rtot = 0
-
-    for i in range(dp):
-        Stot += df["S"][i]
-        Itot += df["I"][i]
-        Rtot += df["R"][i]
-
-        S[i] = Stot/(i+1)
-        I[i] = Itot/(i+1)
-        R[i] = Rtot/(i+1)
-
-        return S, I, R, dp
 
 def expectation(b,method):
     B = str(b)
@@ -69,11 +49,8 @@ def Plot_HealthStatus(b, method):
     x = np.linspace(0, t, dp)
     plt.clf()
 
-    lw = 1.5
+    lw = 1
     alpha = 1
-    if method == "MC":
-        lw = 0.5
-        alpha = 0.5
     #print(f"{method}: {lw}")
     plt.plot(x, df["S"]/N, 'b', alpha = alpha, lw= lw,  label = "S")
     plt.plot(x, df["I"]/N, 'r', alpha = alpha ,lw= lw, label = "I")
@@ -92,10 +69,31 @@ def Plot_HealthStatus(b, method):
 
 def plot_avg(x, df, N):
     S, I, R, dp = find_avg(df)
-    lw = 2
+    lw = 1.5
     plt.plot(x, S/N, "b", lw=lw, label= "<S>", ls = "dashed")
     plt.plot(x, I/N, "r", lw = lw,label= "<I>", ls = "dashed")
     plt.plot(x, R/N, "k" , lw = lw, label= "<R>", ls = "dashed")
+
+def find_avg(df):
+    dp = len(df["S"])
+    S = np.zeros(dp)
+    I = np.zeros(dp)
+    R = np.zeros(dp)
+
+    Stot = 0
+    Itot = 0
+    Rtot = 0
+
+    for i in range(dp):
+        Stot += df["S"][i]
+        Itot += df["I"][i]
+        Rtot += df["R"][i]
+
+        S[i] = Stot/(i+1)
+        I[i] = Itot/(i+1)
+        R[i] = Rtot/(i+1)
+
+    return S, I, R, dp
 
 def plot_hist(b_val, method):
     plt.clf()
@@ -118,9 +116,9 @@ def plot_hist(b_val, method):
 
 #plot_hist(1,"MC")
 #for i in [1, 2, 3, 4]:
-# for i in range(1,5):
-#     Plot_HealthStatus(i, "RK4")
-#     Plot_HealthStatus(i, "MC")
+for i in range(1,5):
+    #Plot_HealthStatus(i, "RK4")
+    Plot_HealthStatus(i, "MC")
 
 #Plot_HealthStatus(2, "MC")
 exp_values = expectation(2, "MC")

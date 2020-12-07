@@ -90,16 +90,14 @@ void SIRS::solveMC(string filename){
   //reset initial conditions with func
   double progress = 0;
   for (int j = 0; j < MC_cycles; j ++){
-    if( ){
-      cout << progress << "% done. Interval time: " << endl;
-
+    if(j+1 >= progress){
+      cout << progress*100/MC_cycles << "% done." << endl; //Interval time: " << endl;
+      progress += 0.1*MC_cycles;
     }
       //stop = clock();
       //double timeInterval = ( (stop - start)/(double)CLOCKS_PER_SEC );
       //totTime += timeInterval;
       //start = clock();
-    }
-
     for (int i = 0; i < num_pts; i++){
       MonteCarlo();
       S_mc(i) += y(0);
@@ -107,7 +105,6 @@ void SIRS::solveMC(string filename){
       R_mc(i) += y(2);
     }
     reset_states();
-    progress += 100/MC_cycles;
   }
   S_mc = S_mc/MC_cycles;
   I_mc = I_mc/MC_cycles;
