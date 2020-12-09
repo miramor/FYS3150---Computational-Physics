@@ -11,6 +11,9 @@ class SIRS{
     double a;
     double b;
     double c;
+    double d;
+    double e;
+    double d_I;
     int t;
     double dt;
     int num_pts;
@@ -29,15 +32,21 @@ class SIRS{
     //RK4 variables
     vec dy;
 
-    void rk4();
-    vec derivatives(vec yt);
+    void rk4(vec (*)(vec));
+    vec derivatives1(vec yt);
+    vec derivatives2(vec yt);
     void MonteCarlo();
     void reset_states();
 
 
   public:
     SIRS(double S, double I, double a_, double b_, double c_, double t_, double dt_); //RK4
+    SIRS(double S, double I, double a_, double b_, double c_, double t_, double dt_,
+       double e_, double d_, double dI); //RK4 with e and d
     SIRS(double S, double I, double a_, double b_, double c_, double t_, int MC_cyc); //MC
+    SIRS(double S, double I, double a_, double b_, double c_, double t_, int MC_cyc,
+       double e_, double d_, double dI); //MC with e, d and d_I
+
     void solveMC(string filename);
     void solveRK4(string filename);
 };
