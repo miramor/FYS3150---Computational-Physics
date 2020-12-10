@@ -20,7 +20,7 @@ int main(int argc, char const *argv[]) {
   double t_MC = 2.;
   double t_RK4 = 2.;
   double dt = 0.0025;
-  int MC_cycles = 2;
+  int MC_cycles = 100;
 
   double e = 0.015;
   double d = 0.012;
@@ -44,14 +44,13 @@ int main(int argc, char const *argv[]) {
   for(double b : b_val){
     //SIRS popMC(S, I, a, b, c, t_MC , MC_cycles);
     SIRS popMC(S, I, a, b, c, b_totimeMC[b]);
-    //popMC.specMC(MC_cycles);
+    popMC.specMC(MC_cycles);
     //popMC.specMC_VD(MC_cycles, e, d, dI);
-    //popMC.solveMC("./Results/pop_" + to_string((int)b));
+    popMC.solveMC("./Results/pop_" + to_string((int)b));
 
     SIRS popRK4(S, I, a, b, c, b_totimeRK4[b]);
-    //popRK4.specRK4(dt);
-    //popRK4
-    popRK4.specRK4_VD(dt, e, d, dI);
+    popRK4.specRK4(dt);
+    //popRK4.specRK4_VD(dt, e, d, dI);
     popRK4.solveRK4("./Results/pop_" + to_string((int)b));
   }
 

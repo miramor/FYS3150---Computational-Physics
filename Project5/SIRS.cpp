@@ -26,7 +26,7 @@ SIRS::SIRS(double S_, double I_, double a_, double b_, double c_, double t_){
 void SIRS::specRK4(double dt_){
   dt = dt_;
   dy = vec(3);
-  useDer1 = false;
+  useDer1 = true;
   num_pts = int(t/dt);
 }
 
@@ -71,8 +71,9 @@ vec SIRS::derivatives2(vec yt){
 void SIRS::solveRK4(string filename){
   ofstream ofile;
   ofile.open(filename + "_RK4.csv");
-
-  ofile << t << ", " << dt << ", " << a << ", " << b << ", " << c << ", RK4" << endl;
+  string prob_type = "VD";
+  if(useDer1) prob_type = "std";
+  ofile << t << ", " << dt << ", " << a << ", " << b << ", " << c << ", RK4, " << prob_type << endl;
   ofile << y(0) << ", " << y(1) << ", " <<  y(2) << endl;
   //for (double i = 0; i < t; i += dt){
   for(int i = 0; i < num_pts; i++){
@@ -100,7 +101,10 @@ void SIRS::solveMC(string filename){
   I_mc = vec(num_pts, fill::zeros);
   R_mc = vec(num_pts, fill::zeros);
 
-  ofile << t << ", " << dt << ", " << a << ", " << b << ", " << c << ", MC"  << endl;
+  string prob_type  = "std";
+  if(useVD) prob_type = "VD";
+
+  ofile << t << ", " << dt << ", " << a << ", " << b << ", " << c << ", MC, " << prob_type  << endl;
   ofile << y(0) << ", " << y(1) << ", " <<  y(2) << endl;
   cout << "dt: " << dt << endl;
   //Kjøre MC, ca 1000 ganger. Ha 3 t/dt lang array med verdier for S,I,R.
@@ -109,6 +113,7 @@ void SIRS::solveMC(string filename){
   //reset initial conditions with func
   bool useVD = false;
   double progress = 0;
+  cout << num_pts << endl;
   for (int j = 0; j < MC_cycles; j ++){
     if(j+1 >= progress){
       cout << progress*100/MC_cycles << "% done." << endl; //Interval time: " << endl;
@@ -140,7 +145,7 @@ void SIRS::solveMC(string filename){
 
   for (int i = 0; i < num_pts; i++){
     //cout << S_mc(i) << ", " << I_mc(i) << ", " << R_mc(i) << endl;
-    //ofile << S_mc(i) << ", " << I_mc(i) << ", " << R_mc(i) << endl;
+    ofile << S_mc(i) << ", " << I_mc(i) << ", " << R_mc(i) << endl;
   }
 }
 
@@ -172,9 +177,10 @@ void SIRS::rk4(bool useDer1){
   //cout <<"S: " << y(0) << ", I: "<< y(1) << endl;
 }
 
-void SIRS::MonteCarlo(bool useVD){
+void SIRS::MonteCarlo(bool useVD_){
   // S, I, R = y(0), y(1), y(2)
   //Tansition probabilities and dt
+  useVD = useVD_;
   pR_S = (c*y(2))*dt;
   pS_I = (a*y(0)*y(1)/N)*dt;
   pI_R = (b*y(1))*dt;

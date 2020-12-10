@@ -23,6 +23,7 @@ class SIRS{
     vec R_mc;
     double pS_I, pI_R, pR_S;
     double r;
+    bool useVD;
 
     int S0, I0, R0; //used to reset initial state when repeating MC
 
@@ -38,13 +39,13 @@ class SIRS{
     void rk4(bool useDer1);
     vec derivatives(vec yt);
     vec derivatives2(vec yt);
-    void MonteCarlo(bool useVD);
+    void MonteCarlo(bool useVD_);
     void reset_states();
 
 
   public:
     SIRS(double S_, double I_, double a_, double b_, double c_, double t_); //General
-    
+
     void specRK4(double dt_); //RK4 std
     void specMC(int MC_cyc); // MC std
 

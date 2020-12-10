@@ -17,11 +17,13 @@ def read_file(filename):
         a = float(line[2])
         b = float(line[3])
         c = float(line[4])
+        sol_met = line[5]
+        prob_type = line[6].strip()
 
     df = pd.read_csv(filename, index_col=False, names=["S", "I", "R"], skiprows = 1)
     N = df["S"][0] + df["I"][0] + df["R"][0]
     dp = len(df["S"])
-    return df, N, t, dt, a, b, c, dp
+    return df, N, t, dt, a, b, c, dp, sol_met, prob_type
 
 def equilibrium(a,b,c):
     s = b/a
@@ -33,7 +35,7 @@ def equilibrium(a,b,c):
 def expectation(b,method):
     B = str(b)
     filename = "./Results/" + f"pop_{B}_{method}.csv"
-    df, N, t, dt, a, b, c, dp = read_file(filename)
+    df, N, t, dt, a, b, c, dp, sol_met, prob_type = read_file(filename)
     dp_15 = int(0.15*dp)
 
     S_exp = np.mean(df["S"][dp_15:])
@@ -52,7 +54,7 @@ def Plot_HealthStatus(b, method):
     B = str(b)
     filename = "./Results/" + f"pop_{B}_{method}.csv"
     #Reading parameters
-    df, N, t, dt, a, b, c, dp = read_file(filename)
+    df, N, t, dt, a, b, c, dp, sol_met, prob_type = read_file(filename)
     x = np.linspace(0, t, dp)
     plt.clf()
 
@@ -72,7 +74,8 @@ def Plot_HealthStatus(b, method):
     plt.xlabel("Time", size = labelsize)
     plt.legend()
     plt.grid()
-    plt.savefig("./Plots/pop_" + B + "_" + method + ".pdf")
+    #plt.savefig("./Plots/pop_" + B + "_" + method +  ".pdf")
+    plt.savefig(f"./Plots/pop_{B}_{method}_{prob_type}.pdf")
 
 
 def plot_avg(x, df, N):
@@ -106,7 +109,7 @@ def find_avg(df):
 def plot_hist(b_val, method):
     plt.clf()
     filename = "./Results/" + f"pop_{b_val}_{method}.csv"
-    df, N, t, dt, a, b, c, dp = read_file(filename)
+    df, N, t, dt, a, b, c, dp, sol_met, prob_type = read_file(filename)
     popGrouped = df.groupby(df["S"],as_index=False).size()
     dp_15 = int(dp*0.15)
     fig, axs = plt.subplots(3)
@@ -126,14 +129,14 @@ def plot_hist(b_val, method):
 #for i in [1, 2, 3, 4]:
 for i in range(1,5):
     Plot_HealthStatus(i, "RK4")
-    """
+
     Plot_HealthStatus(i, "MC")
     print(f"______________")
     exp_values = expectation(i, "MC")
     print(f"<S> = {exp_values[0]:.4f} | STD(S) = {exp_values[3]:.4f}")
     print(f"<I> = {exp_values[1]:.4f} | STD(I) = {exp_values[4]:.4f}")
     print(f"<R> = {exp_values[2]:.4f} | STD(R) = {exp_values[5]:.4f}")
-    """
+
 
 #Plot_HealthStatus(2, "MC")
 
