@@ -32,6 +32,7 @@ void SIRS::specRK4(double dt_){
 
 void SIRS::specMC(int MC_cyc){ //MC
   MC_cycles = MC_cyc;
+  useVD = false;
 }
 
 void SIRS::specRK4_VD(double dt_, double e_, double d_, double dI){ //RK4 with e and d
@@ -49,6 +50,7 @@ void SIRS::specMC_VD(int MC_cyc, double e_, double d_, double dI){ //MC with e a
   d = d_;
   e = e_;
   d_I = dI;
+  useVD = true;
 }
 
 
@@ -111,7 +113,6 @@ void SIRS::solveMC(string filename){
   //Ta gjennomsnitt av alle kjøringene og skriv dette til fil.
   //Må vel resetee S0 etc hver gang vel, starte fra t0 for hver eksperiment,
   //reset initial conditions with func
-  bool useVD = false;
   double progress = 0;
   cout << num_pts << endl;
   for (int j = 0; j < MC_cycles; j ++){
