@@ -44,7 +44,7 @@ class SIRS{
 
   public:
     SIRS(double S_, double I_, double a_, double b_, double c_, double t_); //General
-
+    
     void specRK4(double dt_); //RK4 std
     void specMC(int MC_cyc); // MC std
 

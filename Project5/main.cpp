@@ -50,7 +50,8 @@ int main(int argc, char const *argv[]) {
 
     SIRS popRK4(S, I, a, b, c, b_totimeRK4[b]);
     //popRK4.specRK4(dt);
-    popMC.specRK4_VD(dt, e, d, dI);
+    //popRK4
+    popRK4.specRK4_VD(dt, e, d, dI);
     popRK4.solveRK4("./Results/pop_" + to_string((int)b));
   }
 
