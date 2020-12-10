@@ -40,9 +40,11 @@ void SIRS::specRK4_VD(double dt_, double e_, double d_, double dI){ //RK4 with e
  d = d_;
  e = e_;
  d_I = dI;
- cout << t/dt << endl;
- cout << int(t/dt) << endl;
+ cout <<"In spec dt = " << dt << endl;
+ //cout << t/dt << endl;
+ cout << "In spec: d/dt = " << int(t/dt) << endl;
  num_pts = int(t/dt);
+ cout << "In spec: num_pts = " <<  num_pts << endl;
  cout << "------------" << endl;
  useDer1 = false;
 }
@@ -78,7 +80,10 @@ void SIRS::solveRK4(string filename){
   ofile << t << ", " << dt << ", " << a << ", " << b << ", " << c << ", RK4" << endl;
   ofile << y(0) << ", " << y(1) << ", " <<  y(2) << endl;
   //for (double i = 0; i < t; i += dt){
-  cout << "Num pts in RK4 solve: " <<  num_pts << endl;
+  double
+  num_pts = int((double)t/(double)dt);
+  cout <<"In solve dt = " << dt << endl;
+  cout << "Num pts in RK4 solve: " <<  num_pts << endl; //THIS GIVES WRONG ANSWER. MEMORY PROBLEM??
   for(int i = 0; i < num_pts; i++){
     //cout << i << endl;
     rk4(useDer1);
@@ -219,6 +224,7 @@ void SIRS::MonteCarlo(bool useVD){
     r = rand() % 100001;
     if (r/100000 < d*y(2)*dt) //Is birth rate given for dt = 1??
         diedR ++;
+
     N = y(0) + y(1) + y(2); // Update tot pop after deaths and births
     // Do we have to update new dt since N change?
   }

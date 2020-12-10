@@ -11,7 +11,7 @@ class SIRS{
     double a;
     double b;
     double c;
-    int t;
+    double t;
     double dt;
     int num_pts;
     double N;

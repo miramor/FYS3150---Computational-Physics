@@ -17,8 +17,8 @@ int main(int argc, char const *argv[]) {
   double a = 4;
   //double b = 1;
   double c = .5;
-  double t_MC = 2;
-  double t_RK4 = 2;
+  double t_MC = 2.;
+  double t_RK4 = 2.;
   double dt = 0.0025;
   int MC_cycles = 2;
 
