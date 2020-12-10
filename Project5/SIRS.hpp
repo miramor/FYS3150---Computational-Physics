@@ -28,16 +28,29 @@ class SIRS{
 
     //RK4 variables
     vec dy;
+    bool useDer1;
 
-    void rk4();
+    //VD variables
+    double d;
+    double e;
+    double d_I;
+
+    void rk4(bool useDer1);
     vec derivatives(vec yt);
-    void MonteCarlo();
+    vec derivatives2(vec yt);
+    void MonteCarlo(bool useVD);
     void reset_states();
 
 
   public:
-    SIRS(double S, double I, double a_, double b_, double c_, double t_, double dt_); //RK4
-    SIRS(double S, double I, double a_, double b_, double c_, double t_, int MC_cyc); //MC
+    SIRS(double S_, double I_, double a_, double b_, double c_, double t_); //General
+
+    void specRK4(double dt_); //RK4 std
+    void specMC(int MC_cyc); // MC std
+
+    void specRK4_VD(double dt_, double e_, double d_, double dI); //RK4 vital dynamics
+    void specMC_VD(int MC_cyc, double e_, double d_, double dI); //MC vital dynamics
+
     void solveMC(string filename);
     void solveRK4(string filename);
 };
