@@ -31,14 +31,28 @@ void SIRS::specRK4(double dt_){
   num_pts = int(t/dt);
 }
 
+void SIRS::specRK4(double dt_, double f_){
+  dt = dt_;
+  cout << useV << endl;
+  dy = vec(3);
+  useVD = false;
+  num_pts = int(t/dt);
+  useV = true;
+  f = f_;
+  cout << "f=" << f << endl;
+
+}
+
 void SIRS::specMC(int MC_cyc){ //MC
   MC_cycles = MC_cyc;
   useVD = false;
-  /*
-  born = vec(num_pts, fill::zeros);
-  dead = vec(num_pts, fill::zeros);
-  deadDisease = vec(num_pts, fill::zeros);
-  */
+}
+
+void SIRS::specMC(int MC_cyc, double f_){ //MC
+  MC_cycles = MC_cyc;
+  useVD = false;
+  useV = true;
+  f = f_;
 }
 
 void SIRS::specRK4_VD(double dt_, double e_, double d_, double dI){ //RK4 with e and d
@@ -49,6 +63,7 @@ void SIRS::specRK4_VD(double dt_, double e_, double d_, double dI){ //RK4 with e
  d_I = dI;
  num_pts = int(t/dt);
  useVD = true;
+
 }
 
 void SIRS::specMC_VD(int MC_cyc, double e_, double d_, double dI){ //MC with e and d
@@ -74,8 +89,6 @@ vec SIRS::derivatives(vec yt){
   return dy;
 }
 
-
-
 vec SIRS::derivatives2(vec yt){
   //Update N since people die and get born
   // S, I, R = y(0), y(1), y(2)
@@ -85,12 +98,20 @@ vec SIRS::derivatives2(vec yt){
   return dy;
 }
 
+vec SIRS::derivatives3(vec yt){
+  // S, I, R = y(0), y(1), y(2)
+  dy(0) = c*(yt(2)) - a*yt(1)*yt(0)/N - f;
+  dy(1) = a*yt(0)*yt(1)/N - b*yt(1);
+  dy(2) = b*yt(1) - c*yt(2) + f;
+  return dy;
+}
 
 void SIRS::solveRK4(string filename){
   ofstream ofile;
   ofile.open(filename + "_RK4.csv");
   string prob_type = "std";
   if(useVD) prob_type = "VD";
+  if(useV) prob_type = "Vac";
   ofile << t << ", " << dt << ", " << a << ", " << b << ", " << c << ", RK4, " << prob_type << endl;
   ofile << y(0) << ", " << y(1) << ", " <<  y(2) << endl;
   //for (double i = 0; i < t; i += dt){
@@ -133,6 +154,7 @@ void SIRS::solveMC(string filename){
 
   string prob_type;
   if(useVD) prob_type = "VD";
+  else if(useV) prob_type = "Vac";
   else prob_type = "std";
   cout << "prob: " << prob_type << endl;
 
@@ -158,7 +180,7 @@ void SIRS::solveMC(string filename){
     int deadDiscount = 0;
     int borncount = 0;
     for (int i = 1; i < num_pts; i++){
-      //if(useVD) a = A*cos(w*dt*i) + A0; //OPG D - SEASONAL VARIATION
+      //a = A*cos(w*dt*i) + A0; //OPG D - SEASONAL VARIATION
       //if(useSV) a = A*cos(w*dt*i) + A0; //OPG D - SEASONAL VARIATION
       MonteCarlo();
       deadPopcount += diedS + diedI + diedR;
@@ -211,7 +233,7 @@ void SIRS::solveMC(string filename){
 void SIRS::rk4(bool useVD){
   vec K1(3), K2(3), K3(3), K4(3);
 
-  if(useVD == false){
+  if(useVD == false && useV == false){
     //cout << "Using derivate1 function." << endl;
     K1 = dt*derivatives(y);
     //cout << "K1: " << K1 << endl;
@@ -232,6 +254,14 @@ void SIRS::rk4(bool useVD){
     y = y + (K1 + 2.0*K2 + 2.0*K3 + K4)/6.0;
     N = y(0) + y(1) + y(2);
   }
+
+  else if(useV == true){
+    K1 = dt*derivatives3(y);
+    K2 = dt*derivatives3(y+0.5*K1);
+    K3 = dt*derivatives3(y+0.5*K2);
+    K4 = dt*derivatives3(y+K3);
+    y = y + (K1 + 2.0*K2 + 2.0*K3 + K4)/6.0;
+  }
 }
 
 void SIRS::MonteCarlo(){
@@ -241,8 +271,8 @@ void SIRS::MonteCarlo(){
   pS_I = (a*y(0)*y(1)/N)*dt;
   pI_R = (b*y(1))*dt;
 
-  int RS_count = 0, SI_count = 0, IR_count = 0;
-  bornS = 0, diedS = 0, diedI = 0, diedI_disease = 0, diedR = 0;
+  RS_count = SI_count = IR_count = 0;
+  bornS = diedS = diedI = diedI_disease = diedR = 0;
 
   r = rand() % 100001;
   if (r/100000 < pR_S)
@@ -279,9 +309,14 @@ void SIRS::MonteCarlo(){
     if (r/100000 < d*y(2)*dt) //Is birth rate given for dt = 1??
         diedR ++;
 
+  }
 
-
-    // Do we have to update new dt since N change?
+  if(useV){
+    r = rand() % 100001;
+    if (r/100000 < f*y(0)*dt){
+        y(2) ++;
+        y(0) --;
+    }
   }
   y(0) += RS_count - SI_count + bornS - diedS;
   y(1) += SI_count - IR_count - diedI - diedI_disease;

@@ -45,13 +45,13 @@ int main(int argc, char const *argv[]) {
   for(double b : b_val){
     //SIRS popMC(S, I, a, b, c, t_MC , MC_cycles);
     SIRS popMC(S, I, a, b, c, b_totimeMC[b]);
-    //popMC.specMC(MC_cycles);
-    popMC.specMC_VD(MC_cycles, e, d, dI);
+    popMC.specMC(MC_cycles, 0.50);
+    //popMC.specMC_VD(MC_cycles, e, d, dI);
     popMC.solveMC("./Results/pop_" + to_string((int)b));
 
     SIRS popRK4(S, I, a, b, c, b_totimeRK4[b]);
-    //popRK4.specRK4(dt);
-    popRK4.specRK4_VD(dt, e, d, dI);
+    popRK4.specRK4(dt,75);
+    //popRK4.specRK4_VD(dt, e, d, dI);
     popRK4.solveRK4("./Results/pop_" + to_string((int)b));
   }
 

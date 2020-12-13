@@ -19,6 +19,7 @@ class SIRS{
     double PI = 4*atan(1);
 
     bool useVD;
+    bool useV = false;
     vec born;
     vec dead;
     vec deadDisease;
@@ -29,13 +30,14 @@ class SIRS{
     vec I_mc;
     vec R_mc;
 
+    int RS_count, SI_count, IR_count;
     int bornS, diedS, diedI, diedI_disease, diedR;
     vec S_born;
     vec deadS;
     vec deadI;
     vec deadR;
     vec deadI_dis;
-    
+
     vec deadDis;
     vec deadPop;
 
@@ -53,9 +55,12 @@ class SIRS{
     double e;
     double d_I;
 
+    double f; //vaccination
+
     void rk4(bool useDer1);
     vec derivatives(vec yt);
     vec derivatives2(vec yt);
+    vec derivatives3(vec yt);
     void MonteCarlo();
     void reset_states();
 
@@ -64,7 +69,9 @@ class SIRS{
     SIRS(double S_, double I_, double a_, double b_, double c_, double t_); //General
 
     void specRK4(double dt_); //RK4 std
+    void specRK4(double dt_, double f_); //RK4 std
     void specMC(int MC_cyc); // MC std
+    void specMC(int MC_cyc, double f_); // MC std
 
     void specRK4_VD(double dt_, double e_, double d_, double dI); //RK4 vital dynamics
     void specMC_VD(int MC_cyc, double e_, double d_, double dI); //MC vital dynamics
