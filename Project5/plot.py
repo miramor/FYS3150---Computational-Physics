@@ -133,6 +133,25 @@ def plot_hist(b_val, method):
     plt.savefig("./Plots/hist.pdf")
     print(popGrouped)
 
+def Plot_PhasePortrait(b, method):
+    plt.clf()
+    B = str(b)
+    filename = "./Results/" + f"pop_{B}_{method}.csv"
+    df, N, t, dt, a, b, c, dp, sol_met, prob_type = read_file(filename)
+    plt.clf()
+    lw = 1
+    alpha = 1
+    #print(f"{method}: {lw}")
+    plt.plot(df["S"]/N,  df["I"]/N, 'b', alpha = alpha, lw= lw,  label = "S")
+    plt.title(f"Phase portrait, b={b}", size = titlesize)
+    plt.ylabel("I/N", size = labelsize)
+    plt.xlabel("S/N", size = labelsize)
+    #plt.legend()
+    plt.grid()
+    plt.savefig(f"./Plots/phasepor_{B}_{method}_{prob_type}.pdf")
+
+for i in range(1,5):
+    Plot_PhasePortrait(i, "RK4")
 #plot_hist(1,"MC")
 #for i in [1, 2, 3, 4]:
 for i in range(1,5):
