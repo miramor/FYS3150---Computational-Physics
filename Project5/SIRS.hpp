@@ -4,6 +4,7 @@
 #include <armadillo>
 using namespace arma;
 using namespace std;
+#include <math.h>
 
 class SIRS{
   private:
@@ -15,21 +16,37 @@ class SIRS{
     double dt;
     int num_pts;
     double N;
+    double PI = 4*atan(1);
+
+    bool useVD;
+    vec born;
+    vec dead;
+    vec deadDisease;
 
     //MC variables
     int MC_cycles;
     vec S_mc;
     vec I_mc;
     vec R_mc;
+
+    int bornS, diedS, diedI, diedI_disease, diedR;
+    vec S_born;
+    vec deadS;
+    vec deadI;
+    vec deadR;
+    vec deadI_dis;
+    
+    vec deadDis;
+    vec deadPop;
+
     double pS_I, pI_R, pR_S;
     double r;
-    bool useVD;
 
     int S0, I0, R0; //used to reset initial state when repeating MC
 
     //RK4 variables
     vec dy;
-    bool useDer1;
+
 
     //VD variables
     double d;
@@ -39,7 +56,7 @@ class SIRS{
     void rk4(bool useDer1);
     vec derivatives(vec yt);
     vec derivatives2(vec yt);
-    void MonteCarlo(bool useVD_);
+    void MonteCarlo();
     void reset_states();
 
 

@@ -7,6 +7,7 @@ labelsize = 16
 titlesize = 18
 legendsize = 14
 
+prob_type = "prob_type"
 
 def read_file(filename):
     #Reading parameters
@@ -20,7 +21,10 @@ def read_file(filename):
         sol_met = line[5]
         prob_type = line[6].strip()
 
-    df = pd.read_csv(filename, index_col=False, names=["S", "I", "R"], skiprows = 1)
+    if prob_type == "VD":
+        df = pd.read_csv(filename, index_col=False, names=["S", "I", "R", "dD", "dP", "B"], skiprows = 1)
+    else:
+        df = pd.read_csv(filename, index_col=False, names=["S", "I", "R"], skiprows = 1)
     N = df["S"][0] + df["I"][0] + df["R"][0]
     dp = len(df["S"])
     return df, N, t, dt, a, b, c, dp, sol_met, prob_type
@@ -65,6 +69,10 @@ def Plot_HealthStatus(b, method):
     plt.plot(x, df["I"]/N, 'r', alpha = alpha ,lw= lw, label = "I")
     plt.plot(x, df["R"]/N, 'k', alpha = alpha ,lw= lw, label = "R")
 
+    if prob_type == "VD":
+        plt.plot(x, df["dP"]/N, alpha = alpha, lw= lw,  label = "Natural deaths")
+        plt.plot(x, df["dD"]/N,  alpha = alpha ,lw= lw, label = "Deaths by disease")
+        plt.plot(x, df["B"]/N,  alpha = alpha ,lw= lw, label = "Births")
 
     #if method == "MC":
     #    plot_avg(x, df, N)
@@ -131,7 +139,7 @@ for i in range(1,5):
     Plot_HealthStatus(i, "RK4")
 
     Plot_HealthStatus(i, "MC")
-    print(f"______________")
+    print(f"______________________________")
     exp_values = expectation(i, "MC")
     print(f"<S> = {exp_values[0]:.4f} | STD(S) = {exp_values[3]:.4f}")
     print(f"<I> = {exp_values[1]:.4f} | STD(I) = {exp_values[4]:.4f}")

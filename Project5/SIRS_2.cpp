@@ -3,7 +3,6 @@
 #include <iostream>
 #include <fstream>
 #include <armadillo>
-#include <math.h>       /* cos */
 using namespace std;
 using namespace arma;
 
@@ -27,18 +26,13 @@ SIRS::SIRS(double S_, double I_, double a_, double b_, double c_, double t_){
 void SIRS::specRK4(double dt_){
   dt = dt_;
   dy = vec(3);
-  useVD = false;
+  useDer1 = false;
   num_pts = int(t/dt);
 }
 
 void SIRS::specMC(int MC_cyc){ //MC
   MC_cycles = MC_cyc;
   useVD = false;
-  /*
-  born = vec(num_pts, fill::zeros);
-  dead = vec(num_pts, fill::zeros);
-  deadDisease = vec(num_pts, fill::zeros);
-  */
 }
 
 void SIRS::specRK4_VD(double dt_, double e_, double d_, double dI){ //RK4 with e and d
@@ -48,7 +42,7 @@ void SIRS::specRK4_VD(double dt_, double e_, double d_, double dI){ //RK4 with e
  e = e_;
  d_I = dI;
  num_pts = int(t/dt);
- useVD = true;
+ useDer1 = false;
 }
 
 void SIRS::specMC_VD(int MC_cyc, double e_, double d_, double dI){ //MC with e and d
@@ -59,26 +53,16 @@ void SIRS::specMC_VD(int MC_cyc, double e_, double d_, double dI){ //MC with e a
   useVD = true;
 }
 
-/*
-vec SIRS::derivativesSimple(vec yt){
-  // S, I, R = y(0), y(1), y(2)
-  dy(0) = c*(N-y(0)-y(1))
-  dy(1) = a*yt(0)*yt(1)/N - b*yt(1);
-  return dy;
-}*/
 
 vec SIRS::derivatives(vec yt){
   // S, I, R = y(0), y(1), y(2)
-  dy(0) = c*(yt(2)) - a*yt(1)*yt(0)/N;
+  dy(0) = c*yt(2) - a*yt(1)*yt(0)/N;
   dy(1) = a*yt(0)*yt(1)/N - b*yt(1);
   return dy;
 }
 
-
-
 vec SIRS::derivatives2(vec yt){
   //Update N since people die and get born
-  // S, I, R = y(0), y(1), y(2)
   dy(0) = c*yt(2) - yt(0)*(a*yt(1)/N+d)+e*N;
   dy(1) = yt(1)*(a*yt(0)/N - b-d-d_I);
   dy(2) = b*yt(1) - (c+d)*yt(2);
@@ -89,18 +73,15 @@ vec SIRS::derivatives2(vec yt){
 void SIRS::solveRK4(string filename){
   ofstream ofile;
   ofile.open(filename + "_RK4.csv");
-  string prob_type = "std";
-  if(useVD) prob_type = "VD";
-  ofile << t << ", " << dt << ", " << a << ", " << b << ", " << c << ", RK4, " << prob_type << endl;
+
+  ofile << t << ", " << dt << ", " << a << ", " << b << ", " << c << ", RK4" << ", std" <<  endl;
   ofile << y(0) << ", " << y(1) << ", " <<  y(2) << endl;
   //for (double i = 0; i < t; i += dt){
-  //double A = 1.5 ;double A0 = 4;double w = 0.08*(2*PI);
+  cout << "Num pts in RK4 solve: " <<  num_pts << endl;
   for(int i = 0; i < num_pts; i++){
     //cout << i << endl;
-    //a = A*cos(w*dt*i) + A0; //OPG D - SEASONAL VARIATION
-    rk4(useVD);
+    rk4(useDer1);
     ofile << y(0) << ", " << y(1) << ", " <<  y(2) << endl;
-    //N = y(0) + y(1) + y(2);
     //writeResults(ofile);
   }
 }
@@ -122,60 +103,37 @@ void SIRS::solveMC(string filename){
   I_mc = vec(num_pts, fill::zeros);
   R_mc = vec(num_pts, fill::zeros);
 
-  deadS = vec(num_pts, fill::zeros);
-  deadI = vec(num_pts, fill::zeros);
-  deadR = vec(num_pts, fill::zeros);
-  deadI_dis = vec(num_pts, fill::zeros);
-  S_born = vec(num_pts, fill::zeros);
-
-  deadDis = vec(num_pts, fill::zeros);
-  deadPop = vec(num_pts, fill::zeros);
-
-  string prob_type;
-  if(useVD) prob_type = "VD";
-  else prob_type = "std";
-  cout << "prob: " << prob_type << endl;
-
-  ofile << t << ", " << dt << ", " << a << ", " << b << ", " << c << ", MC, " << prob_type  << endl;
-  ofile << y(0) << ", " << y(1) << ", " <<  y(2);
-
-  //Write death statistics to file
-  if(useVD){
-    ofile << deadDis(0) << ", " << deadPop(0) << ", " << S_born(0);
-  }
-  ofile << endl;
+  ofile << t << ", " << dt << ", " << a << ", " << b << ", " << c << ", MC"  << ", std" << endl;
+  ofile << y(0) << ", " << y(1) << ", " <<  y(2) << endl;
   cout << "dt: " << dt << endl;
-
-  //double A = 1.5 ;double A0 = 4;double w = 0.08*(2*PI);
+  //Kjøre MC, ca 1000 ganger. Ha 3 t/dt lang array med verdier for S,I,R.
+  //Ta gjennomsnitt av alle kjøringene og skriv dette til fil.
+  //Må vel resetee S0 etc hver gang vel, starte fra t0 for hver eksperiment,
+  //reset initial conditions with func
+  bool useVD = false;
   double progress = 0;
-  cout << num_pts << endl;
   for (int j = 0; j < MC_cycles; j ++){
     if(j+1 >= progress){
       cout << progress*100/MC_cycles << "% done." << endl; //Interval time: " << endl;
       progress += 0.1*MC_cycles;
     }
-    int deadPopcount = 0;
-    int deadDiscount = 0;
-    int borncount = 0;
-    for (int i = 1; i < num_pts; i++){
-      //if(useVD) a = A*cos(w*dt*i) + A0; //OPG D - SEASONAL VARIATION
-      //if(useSV) a = A*cos(w*dt*i) + A0; //OPG D - SEASONAL VARIATION
+      //stop = clock();
+      //double timeInterval = ( (stop - start)/(double)CLOCKS_PER_SEC );
+      //totTime += timeInterval;
+      //start = clock();
+    for (int i = 0; i < num_pts; i++){
+      /*
+      if(i == 2){
+        cout << "MC = " << j << endl;
+        cout << S0 << ", " << ", " << I0 << ", " << R0 << endl;
+        cout << y(0) << endl;
+        cout << S_mc(0) << endl;
+        cout << S_mc(1) << "\n" <<  endl;
+      }*/
       MonteCarlo();
-      deadPopcount += diedS + diedI + diedR;
-      deadDiscount += diedI_disease;
-      borncount += bornS;
       S_mc(i) += y(0);
       I_mc(i) += y(1);
       R_mc(i) += y(2);
-
-      deadDis(i) += deadDiscount;
-      deadPop(i) += deadPopcount;
-      S_born(i) += borncount;
-      //deadS(i) += deadS(i-1) + diedS;
-      //deadI(i) += deadI(i-1) + diedI;
-      //deadR(i) += deadR(i-1) + diedR;
-      //deadI_dis(i) += deadI_dis(i-1) + diedI_disease;
-      //S_born(i) += S_born(i-1) + bornS;
     }
     reset_states();
   }
@@ -183,66 +141,50 @@ void SIRS::solveMC(string filename){
   I_mc = I_mc/MC_cycles;
   R_mc = R_mc/MC_cycles;
 
-//dt = 1 dag. Simulere 1 år.
-//På 1 år skal 7.8/1000 dø. Altså
-//
-
-
-  //deadS = deadS/MC_cycles;
-  //deadI = deadI/MC_cycles;
-  //deadR = deadR/MC_cycles;
-  //deadI_dis = deadI_dis/MC_cycles;
-  deadDis /= MC_cycles;
-  deadPop /= MC_cycles;
-  S_born = S_born/MC_cycles;
-
-  cout << "Start write to file" << endl;
-  for (int i = 1; i < num_pts; i++){
-    ofile << S_mc(i) << ", " << I_mc(i) << ", " << R_mc(i);
-    if(useVD){
-      ofile << ", " << deadDis(i) << ", " << deadPop(i) << ", " << S_born(i);
-    }
-    ofile << endl;
+  for (int i = 0; i < num_pts; i++){
+    //cout << S_mc(i) << ", " << I_mc(i) << ", " << R_mc(i) << endl;
+    ofile << S_mc(i) << ", " << I_mc(i) << ", " << R_mc(i) << endl;
   }
-  cout << "done" << endl;
 }
 
 
-void SIRS::rk4(bool useVD){
+void SIRS::rk4(bool useDer1){
   vec K1(3), K2(3), K3(3), K4(3);
 
-  if(useVD == false){
+  if(useDer1 == true){
     //cout << "Using derivate1 function." << endl;
     K1 = dt*derivatives(y);
     //cout << "K1: " << K1 << endl;
     K2 = dt*derivatives(y+0.5*K1);
     K3 = dt*derivatives(y+0.5*K2);
     K4 = dt*derivatives(y+K3);
-    y = y + (K1 + 2.0*K2 + 2.0*K3 + K4)/6.0;
-    y(2) = N - y(1) - y(0);
   }
 
-  else if(useVD == true){
+  else if(useDer1 == false){
     //cout << "Using der2" << endl;
     K1 = dt*derivatives2(y);
     //cout << "K1: " << K1 << endl;
     K2 = dt*derivatives2(y+0.5*K1);
     K3 = dt*derivatives2(y+0.5*K2);
     K4 = dt*derivatives2(y+K3);
-    y = y + (K1 + 2.0*K2 + 2.0*K3 + K4)/6.0;
-    N = y(0) + y(1) + y(2);
   }
+  //cout << K2 << endl;
+  y = y + (K1 + 2.0*K2 + 2.0*K3 + K4)/6.0;
+  y(2) = N - y(1) - y(0);
+  //cout << "RK4" << endl;
+  //cout <<"S: " << y(0) << ", I: "<< y(1) << endl;
 }
 
+
 void SIRS::MonteCarlo(){
-  // S, I, R = y(0), y(1), y(2)atom://teletype/portal/db276bfd-41b3-422c-bf85-e19906e7780d
+  // S, I, R = y(0), y(1), y(2)
   //Tansition probabilities and dt
   pR_S = (c*y(2))*dt;
   pS_I = (a*y(0)*y(1)/N)*dt;
   pI_R = (b*y(1))*dt;
 
   int RS_count = 0, SI_count = 0, IR_count = 0;
-  bornS = 0, diedS = 0, diedI = 0, diedI_disease = 0, diedR = 0;
+  int bornS = 0, diedS = 0, diedI = 0, diedI_disease = 0, diedR = 0;
 
   r = rand() % 100001;
   if (r/100000 < pR_S)
@@ -256,7 +198,7 @@ void SIRS::MonteCarlo(){
   if (r/100000 < pI_R)
       IR_count ++;
 
-  if(useVD){
+  if(useVD == true){
     r = rand() % 100001;
     if (r/100000 < e*N*dt) //Is birth rate given for dt = 1??
         bornS ++;
@@ -265,11 +207,9 @@ void SIRS::MonteCarlo(){
     if (r/100000 < d*y(0)*dt) //Is birth rate given for dt = 1??
         diedS ++;
 
-
     r = rand() % 100001;
     if (r/100000 < d*y(1)*dt) //Is birth rate given for dt = 1??
         diedI ++;
-
 
     r = rand() % 100001;
     if (r/100000 < d*y(1)*dt) //Is birth rate given for dt = 1??
@@ -278,15 +218,12 @@ void SIRS::MonteCarlo(){
     r = rand() % 100001;
     if (r/100000 < d*y(2)*dt) //Is birth rate given for dt = 1??
         diedR ++;
-
-
-
+    N = y(0) + y(1) + y(2); // Update tot pop after deaths and births
     // Do we have to update new dt since N change?
   }
   y(0) += RS_count - SI_count + bornS - diedS;
   y(1) += SI_count - IR_count - diedI - diedI_disease;
   y(2) += IR_count - RS_count - diedR;
-  N = y(0) + y(1) + y(2); // Update tot pop after deaths and births
   //cout << "MC" << endl;
   //cout <<"S: " << y(0) << ", I: "<< y(1) << endl;
 }
