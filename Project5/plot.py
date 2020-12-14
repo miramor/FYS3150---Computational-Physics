@@ -33,14 +33,15 @@ def equilibrium(a,b,c):
     s = b/a
     i = (1-b/a)/(1+b/c)
     r = b/c * (1-b/a) / (1+b/c)
-    print(f"a = {a}, b = {b}, c = {c}")
-    print(f"s* = {s}\n i* = {i}\n r* = {r}")
+    #print(f"a = {a}, b = {b}, c = {c}")
+    # print(f"s* = {s}\n i* = {i}\n r* = {r}")
+    return s, i, r
 
 def expectation(b,method):
     B = str(b)
     filename = "./Results/" + f"pop_{B}_{method}.csv"
     df, N, t, dt, a, b, c, dp, sol_met, prob_type = read_file(filename)
-    dp_15 = int(0.15*dp)
+    dp_15 = int(0.40*dp)
 
     S_exp = np.mean(df["S"][dp_15:])
     I_exp = np.mean(df["I"][dp_15:])
@@ -50,7 +51,9 @@ def expectation(b,method):
     I_std = np.std(df["I"][dp_15:])
     R_std = np.std(df["R"][dp_15:])
 
-    equilibrium(a,b,c)
+    s_eq, i_eq, r_eq = equilibrium(a,b,c)
+    print(f"a = {a}, b = {b}, c = {c}")
+    print(f"s* = {s_eq}\ni* = {i_eq}\nr* = {r_eq}")
     return np.array([S_exp, I_exp, R_exp, S_std, I_std, R_std])/N
 
 def Plot_HealthStatus(b, method):
@@ -120,16 +123,16 @@ def plot_hist(b_val, method):
     df, N, t, dt, a, b, c, dp, sol_met, prob_type = read_file(filename)
     popGrouped = df.groupby(df["S"],as_index=False).size()
     dp_15 = int(dp*0.15)
-    fig, axs = plt.subplots(3)
-    axs[0].plot(df["S"][dp_15:])
-    axs[1].plot(df["I"][dp_15:])
-    axs[3].plot(df["R"][dp_15:])
+    # fig, axs = plt.subplots(3)
+    # axs[0].plot(df["S"][dp_15:])
+    # axs[1].plot(df["I"][dp_15:])
+    # axs[2].plot(df["R"][dp_15:])
 
-    sb.distplot(df["S"][dp_15:], norm_hist=True, kde = False, bins = 109)
+    sb.distplot(df["S"][dp_15:]/N, norm_hist=True, kde = False, bins = 109)
     #print(f"NORM: {norm.fit(df["E"])})
     plt.title(f"Probability distribution, B={b_val}", size = titlesize)
     plt.ylabel("P(E)", size = labelsize)
-    plt.xlabel("Population", size = labelsize)
+    plt.xlabel("Population [%]", size = labelsize)
     plt.savefig("./Plots/hist.pdf")
     print(popGrouped)
 
@@ -150,26 +153,48 @@ def Plot_PhasePortrait(b, method):
     plt.grid()
     plt.savefig(f"./Plots/phasepor_{B}_{method}_{prob_type}.pdf")
 
-for i in range(1,5):
-    Plot_PhasePortrait(i, "RK4")
+# for i in range(1,5):
+#     Plot_PhasePortrait(i, "RK4")
 #plot_hist(1,"MC")
 #for i in [1, 2, 3, 4]:
 for i in range(1,5):
     Plot_HealthStatus(i, "RK4")
-
     Plot_HealthStatus(i, "MC")
-    print(f"______________________________")
-    exp_values = expectation(i, "MC")
-    print(f"<S> = {exp_values[0]:.4f} | STD(S) = {exp_values[3]:.4f}")
-    print(f"<I> = {exp_values[1]:.4f} | STD(I) = {exp_values[4]:.4f}")
-    print(f"<R> = {exp_values[2]:.4f} | STD(R) = {exp_values[5]:.4f}")
+    # print(f"______________________________")
+    # exp_valuesMC = expectation(i, "MC")
+    # print(f"<S> = {exp_valuesMC[0]:.4f} | STD(S) = {exp_valuesMC[3]:.4f}")
+    # print(f"<I> = {exp_valuesMC[1]:.4f} | STD(I) = {exp_valuesMC[4]:.4f}")
+    # print(f"<R> = {exp_valuesMC[2]:.4f} | STD(R) = {exp_valuesMC[5]:.4f}")
 
 
-#Plot_HealthStatus(2, "MC")
+def eps_rel():
+    print("\n(Relative) Error and Standard deviation: ")
+    for i in range(1,5):
+        dfRK4, N, t, dt, a, b, c, dp, sol_met, prob_type = read_file("./Results/" + f"pop_{i}_RK4.csv")
+        s_eq, i_eq, r_eq = equilibrium(a,b,c)
+        S_RK4 = dfRK4["S"][dp-1]/N
+        I_RK4 = dfRK4["I"][dp-1]/N
+        R_RK4 = dfRK4["R"][dp-1]/N
+        print(f"______________________________")
+        exp_valuesMC = expectation(i, "MC")
+        #print(f"a = {a}, b = {b}, c = {c}")
+        #print(f"s* = {s_eq:.4f}\ni* = {i_eq:.4f}\nr* = {r_eq:.4f}")
+        if i == 4: #prevent to divide by zero, thus calculating absolute error
+            print("RK4:")
+            print(f"S_eq = {S_RK4:.4f}  | eps = {abs((S_RK4-s_eq)):.4E} ")
+            print(f"I_eq = {I_RK4:.4f}  | eps = {abs((I_RK4-i_eq)):.4E} ")
+            print(f"R_eq = {R_RK4:.4f}  | eps = {abs((R_RK4-r_eq)):.4E} ")
 
+        else: #calculating relative error
+            print("RK4:")
+            print(f"S_eq = {S_RK4:.4f}  | eps_rel = {abs((S_RK4-s_eq)/s_eq):.4E} ")
+            print(f"I_eq = {I_RK4:.4f}  | eps_rel = {abs((I_RK4-i_eq)/i_eq):.4E} ")
+            print(f"R_eq = {R_RK4:.4f}  | eps_rel = {abs((R_RK4-r_eq)/r_eq):.4E} ")
 
-
-
-# RK4(2)
-# RK4(3)
-# RK4(4)
+        print("MC: ")
+        print(f"<S> = {exp_valuesMC[0]:.4f} | STD(S) = {exp_valuesMC[3]:.4f} | eps_RK4 = {abs((S_RK4-exp_valuesMC[0])/S_RK4):.4E}")
+        print(f"<I> = {exp_valuesMC[1]:.4f} | STD(I) = {exp_valuesMC[4]:.4f} | eps_RK4 = {abs((R_RK4-exp_valuesMC[1])/I_RK4):.4E}")
+        print(f"<R> = {exp_valuesMC[2]:.4f} | STD(R) = {exp_valuesMC[5]:.4f} | eps_RK4 = {abs((I_RK4-exp_valuesMC[2])/R_RK4):.4E}")
+        #HUSK dp = 30%!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+eps_rel()
+#plot_hist(1, "MC")
