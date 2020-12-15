@@ -39,7 +39,6 @@ void SIRS::specRK4(double dt_, double f_){
   num_pts = int(t/dt);
   useV = true;
   f = f_;
-  cout << "f=" << f << endl;
 
 }
 

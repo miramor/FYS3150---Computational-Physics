@@ -24,7 +24,7 @@ int main(int argc, char const *argv[]) {
 
   double e = 0.009;
   double d = 0.0075;
-  double dI = 0.2;
+  double dI = 5;
 
   //list<double> b_val = {1, 2, 3, 4};
   map<double, double> b_totimeRK4;
@@ -63,7 +63,7 @@ int main(int argc, char const *argv[]) {
 
     SIRS popRK4(S, I, a, b, c, b_totimeRK4[b]);
     //popRK4.specRK4(dt,75);
-    popRK4.specRK4(dt);
+    //popRK4.specRK4(dt);
     popRK4.specRK4_VD(dt, e, d, dI);
     popRK4.solveRK4("./Results/pop_" + to_string((int)b));
   }
