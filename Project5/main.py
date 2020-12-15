@@ -5,8 +5,12 @@ import matplotlib.pyplot as plt
 if not os.path.exists("Results"):
     os.makedirs("Results")
 
-if not os.path.exists("Plots"):
-    os.makedirs("Plots")
+if not os.path.exists("Plotsstd"):
+    os.makedirs("Plotsstd")
+if not os.path.exists("PlotsVD"):
+    os.makedirs("PlotsVD")
+if not os.path.exists("PlotsVac"):
+    os.makedirs("PlotsVac")
 
 cla = " ".join(sys.argv[1:])
 print(cla)

@@ -18,16 +18,16 @@ def read_file(filename):
         a = float(line[2])
         b = float(line[3])
         c = float(line[4])
-        sol_met = line[5]
+        sol_met = line[5].strip()
         prob_type = line[6].strip()
 
     if prob_type == "VD":
-        df = pd.read_csv(filename, index_col=False, names=["S", "I", "R", "dD", "dP", "B"], skiprows = 1)
+        df = pd.read_csv(filename, index_col=False, names=["S", "I", "R", "dD", "n", "B"], skiprows = 1)
     else:
         df = pd.read_csv(filename, index_col=False, names=["S", "I", "R"], skiprows = 1)
     N = df["S"][0] + df["I"][0] + df["R"][0]
-    dp = len(df["S"])
-    return df, N, t, dt, a, b, c, dp, sol_met, prob_type
+    n = len(df["S"])
+    return df, N, t, dt, a, b, c, n, sol_met, prob_type
 
 def equilibrium(a,b,c):
     s = b/a
@@ -37,19 +37,21 @@ def equilibrium(a,b,c):
     # print(f"s* = {s}\n i* = {i}\n r* = {r}")
     return s, i, r
 
-def expectation(b,method):
+def expectation(b,method, cutoff):
+
     B = str(b)
     filename = "./Results/" + f"pop_{B}_{method}.csv"
-    df, N, t, dt, a, b, c, dp, sol_met, prob_type = read_file(filename)
-    dp_15 = int(0.40*dp)
+    df, N, t, dt, a, b, c, n, sol_met, prob_type = read_file(filename)
+    n_cutoff = int(cutoff*n)
 
-    S_exp = np.mean(df["S"][dp_15:])
-    I_exp = np.mean(df["I"][dp_15:])
-    R_exp = np.mean(df["R"][dp_15:])
 
-    S_std = np.std(df["S"][dp_15:])
-    I_std = np.std(df["I"][dp_15:])
-    R_std = np.std(df["R"][dp_15:])
+    S_exp = np.mean(df["S"][n_cutoff:])
+    I_exp = np.mean(df["I"][n_cutoff:])
+    R_exp = np.mean(df["R"][n_cutoff:])
+
+    S_std = np.std(df["S"][n_cutoff:])
+    I_std = np.std(df["I"][n_cutoff:])
+    R_std = np.std(df["R"][n_cutoff:])
 
     s_eq, i_eq, r_eq = equilibrium(a,b,c)
     print(f"a = {a}, b = {b}, c = {c}")
@@ -61,8 +63,8 @@ def Plot_HealthStatus(b, method):
     B = str(b)
     filename = "./Results/" + f"pop_{B}_{method}.csv"
     #Reading parameters
-    df, N, t, dt, a, b, c, dp, sol_met, prob_type = read_file(filename)
-    x = np.linspace(0, t, dp)
+    df, N, t, dt, a, b, c, n, sol_met, prob_type = read_file(filename)
+    x = np.linspace(0, t, n)
     plt.clf()
 
     lw = 1
@@ -72,10 +74,16 @@ def Plot_HealthStatus(b, method):
     plt.plot(x, df["I"]/N, 'r', alpha = alpha ,lw= lw, label = "I")
     plt.plot(x, df["R"]/N, 'k', alpha = alpha ,lw= lw, label = "R")
 
-    if prob_type == "VD":
-        plt.plot(x, df["dP"]/N, alpha = alpha, lw= lw,  label = "Natural deaths")
+
+    if prob_type == "VD" and sol_met == "MC":
+        plt.plot(x, df["n"]/N, alpha = alpha, lw= lw,  label = "Natural deaths")
         plt.plot(x, df["dD"]/N,  alpha = alpha ,lw= lw, label = "Deaths by disease")
         plt.plot(x, df["B"]/N,  alpha = alpha ,lw= lw, label = "Births")
+
+        deathsDis  = df["dD"].to_numpy()
+        print(f"Death Disease[%], for b={b}: {100*deathsDis[-1]/N:.4f}")
+        print("****************************************")
+
 
     #if method == "MC":
     #    plot_avg(x, df, N)
@@ -86,27 +94,27 @@ def Plot_HealthStatus(b, method):
     plt.legend()
     plt.grid()
     #plt.savefig("./Plots/pop_" + B + "_" + method +  ".pdf")
-    plt.savefig(f"./Plots/pop_{B}_{method}_{prob_type}.pdf")
+    plt.savefig(f"./Plots{prob_type}/pop_{B}_{method}_{prob_type}.pdf")
 
 
 def plot_avg(x, df, N):
-    S, I, R, dp = find_avg(df)
+    S, I, R, n = find_avg(df)
     lw = 1.5
     plt.plot(x, S/N, "b", lw=lw, label= "<S>", ls = "dashed")
     plt.plot(x, I/N, "r", lw = lw,label= "<I>", ls = "dashed")
     plt.plot(x, R/N, "k" , lw = lw, label= "<R>", ls = "dashed")
 
 def find_avg(df):
-    dp = len(df["S"])
-    S = np.zeros(dp)
-    I = np.zeros(dp)
-    R = np.zeros(dp)
+    n = len(df["S"])
+    S = np.zeros(n)
+    I = np.zeros(n)
+    R = np.zeros(n)
 
     Stot = 0
     Itot = 0
     Rtot = 0
 
-    for i in range(dp):
+    for i in range(n):
         Stot += df["S"][i]
         Itot += df["I"][i]
         Rtot += df["R"][i]
@@ -115,20 +123,20 @@ def find_avg(df):
         I[i] = Itot/(i+1)
         R[i] = Rtot/(i+1)
 
-    return S, I, R, dp
+    return S, I, R, n
 
 def plot_hist(b_val, method):
     plt.clf()
     filename = "./Results/" + f"pop_{b_val}_{method}.csv"
-    df, N, t, dt, a, b, c, dp, sol_met, prob_type = read_file(filename)
+    df, N, t, dt, a, b, c, n, sol_met, prob_type = read_file(filename)
     popGrouped = df.groupby(df["S"],as_index=False).size()
-    dp_15 = int(dp*0.15)
+    n_cutoff = int(n*0.15)
     # fig, axs = plt.subplots(3)
-    # axs[0].plot(df["S"][dp_15:])
-    # axs[1].plot(df["I"][dp_15:])
-    # axs[2].plot(df["R"][dp_15:])
+    # axs[0].plot(df["S"][n_cutoff:])
+    # axs[1].plot(df["I"][n_cutoff:])
+    # axs[2].plot(df["R"][n_cutoff:])
 
-    sb.distplot(df["S"][dp_15:]/N, norm_hist=True, kde = False, bins = 109)
+    sb.distplot(df["S"][n_cutoff:]/N, norm_hist=True, kde = False, bins = 109)
     #print(f"NORM: {norm.fit(df["E"])})
     plt.title(f"Probability distribution, B={b_val}", size = titlesize)
     plt.ylabel("P(E)", size = labelsize)
@@ -140,7 +148,7 @@ def Plot_PhasePortrait(b, method):
     plt.clf()
     B = str(b)
     filename = "./Results/" + f"pop_{B}_{method}.csv"
-    df, N, t, dt, a, b, c, dp, sol_met, prob_type = read_file(filename)
+    df, N, t, dt, a, b, c, n, sol_met, prob_type = read_file(filename)
     plt.clf()
     lw = 1
     alpha = 1
@@ -169,14 +177,17 @@ for i in range(1,5):
 
 def eps_rel():
     print("\n(Relative) Error and Standard deviation: ")
+    cutoffs = [0.50,0.50,0.80,0.50]
+    #for i,cut in zip(range(1,5), cutoffs):
+
     for i in range(1,5):
-        dfRK4, N, t, dt, a, b, c, dp, sol_met, prob_type = read_file("./Results/" + f"pop_{i}_RK4.csv")
+        dfRK4, N, t, dt, a, b, c, n, sol_met, prob_type = read_file("./Results/" + f"pop_{i}_RK4.csv")
         s_eq, i_eq, r_eq = equilibrium(a,b,c)
-        S_RK4 = dfRK4["S"][dp-1]/N
-        I_RK4 = dfRK4["I"][dp-1]/N
-        R_RK4 = dfRK4["R"][dp-1]/N
+        S_RK4 = dfRK4["S"][n-1]/N
+        I_RK4 = dfRK4["I"][n-1]/N
+        R_RK4 = dfRK4["R"][n-1]/N
         print(f"______________________________")
-        exp_valuesMC = expectation(i, "MC")
+        exp_valuesMC = expectation(i, "MC", cutoffs[i-1])
         #print(f"a = {a}, b = {b}, c = {c}")
         #print(f"s* = {s_eq:.4f}\ni* = {i_eq:.4f}\nr* = {r_eq:.4f}")
         if i == 4: #prevent to divide by zero, thus calculating absolute error
@@ -195,6 +206,10 @@ def eps_rel():
         print(f"<S> = {exp_valuesMC[0]:.4f} | STD(S) = {exp_valuesMC[3]:.4f} | eps_RK4 = {abs((S_RK4-exp_valuesMC[0])/S_RK4):.4E}")
         print(f"<I> = {exp_valuesMC[1]:.4f} | STD(I) = {exp_valuesMC[4]:.4f} | eps_RK4 = {abs((R_RK4-exp_valuesMC[1])/I_RK4):.4E}")
         print(f"<R> = {exp_valuesMC[2]:.4f} | STD(R) = {exp_valuesMC[5]:.4f} | eps_RK4 = {abs((I_RK4-exp_valuesMC[2])/R_RK4):.4E}")
-        #HUSK dp = 30%!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        #HUSK n = 30%!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        print(f"eps_rel = {abs((exp_valuesMC[0]-s_eq)/s_eq):.4E} ")
+        print(f"eps_rel = {abs((exp_valuesMC[1]-i_eq)/i_eq):.4E} ")
+        print(f"eps_rel = {abs((exp_valuesMC[2]-r_eq)/r_eq):.4E} ")
+
 eps_rel()
 #plot_hist(1, "MC")

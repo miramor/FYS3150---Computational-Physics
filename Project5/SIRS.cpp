@@ -302,7 +302,7 @@ void SIRS::MonteCarlo(){
 
 
     r = rand() % 100001;
-    if (r/100000 < d*y(1)*dt) //Is birth rate given for dt = 1??
+    if (r/100000 < d_I*y(1)*dt) //Is birth rate given for dt = 1??
         diedI_disease ++;
 
     r = rand() % 100001;
