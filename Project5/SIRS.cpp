@@ -29,15 +29,16 @@ void SIRS::specRK4(double dt_){
   dy = vec(3);
   useVD = false;
   num_pts = int(t/dt);
+  //cout << "Not use Vac........." << endl;
 }
 
 void SIRS::specRK4(double dt_, double f_){
   dt = dt_;
-  cout << useV << endl;
   dy = vec(3);
   useVD = false;
   num_pts = int(t/dt);
   useV = true;
+  cout << "Use Vac........." << endl;
   f = f_;
 
 }
@@ -114,10 +115,12 @@ void SIRS::solveRK4(string filename){
   ofile << t << ", " << dt << ", " << a << ", " << b << ", " << c << ", RK4, " << prob_type << endl;
   ofile << y(0) << ", " << y(1) << ", " <<  y(2) << endl;
   //for (double i = 0; i < t; i += dt){
-  //double A = 1.5 ;double A0 = 4;double w = 0.08*(2*PI);
+  double A = 1.5 ;double A0 = 4;double wa = 0.08*(2*PI);
+  double F = f/100*30; double F0 = f; double wf = 0.08*(2*PI); double phi = 0;
   for(int i = 0; i < num_pts; i++){
     //cout << i << endl;
-    //a = A*cos(w*dt*i) + A0; //OPG D - SEASONAL VARIATION
+    a = A*cos(wa*dt*i) + A0; //OPG D - SEASONAL VARIATION
+    f = F*cos(wf*dt*i+phi) + F0; //
     rk4(useVD);
     ofile << y(0) << ", " << y(1) << ", " <<  y(2) << endl;
     //N = y(0) + y(1) + y(2);
@@ -167,7 +170,9 @@ void SIRS::solveMC(string filename){
   ofile << endl;
   cout << "dt: " << dt << endl;
 
-  //double A = 1.5 ;double A0 = 4;double w = 0.08*(2*PI);
+  double A = 1.5 ;double A0 = 4;double wa = 0.08*(2*PI);
+  double F = f/100*30; double F0 = f; double wf = 0.08*(2*PI); double phi = 0;
+
   double progress = 0;
   cout << num_pts << endl;
   for (int j = 0; j < MC_cycles; j ++){
@@ -179,8 +184,9 @@ void SIRS::solveMC(string filename){
     int deadDiscount = 0;
     int borncount = 0;
     for (int i = 1; i < num_pts; i++){
-      //a = A*cos(w*dt*i) + A0; //OPG D - SEASONAL VARIATION
-      //if(useSV) a = A*cos(w*dt*i) + A0; //OPG D - SEASONAL VARIATION
+      a = A*cos(wa*dt*i) + A0; //OPG D - SEASONAL VARIATION
+      //f = F*cos(wf*dt*i+phi) + F0; //
+      //if(useSV) a = A*cos(wa*dt*i) + A0; //OPG D - SEASONAL VARIATION
       MonteCarlo();
       deadPopcount += diedS + diedI + diedR;
       deadDiscount += diedI_disease;
@@ -260,6 +266,7 @@ void SIRS::rk4(bool useVD){
     K3 = dt*derivatives3(y+0.5*K2);
     K4 = dt*derivatives3(y+K3);
     y = y + (K1 + 2.0*K2 + 2.0*K3 + K4)/6.0;
+    //y(2) = N - y(1) - y(0);
   }
 }
 
@@ -312,7 +319,7 @@ void SIRS::MonteCarlo(){
 
   if(useV){
     r = rand() % 100001;
-    if (r/100000 < f*y(0)*dt){
+    if (r/100000 < f*dt){
         y(2) ++;
         y(0) --;
     }
@@ -320,7 +327,7 @@ void SIRS::MonteCarlo(){
   y(0) += RS_count - SI_count + bornS - diedS;
   y(1) += SI_count - IR_count - diedI - diedI_disease;
   y(2) += IR_count - RS_count - diedR;
-  N = y(0) + y(1) + y(2); // Update tot pop after deaths and births
+  N = y(0) + y(1) + y(2); // Update tot pop after deaths and birthss
   //cout << "MC" << endl;
   //cout <<"S: " << y(0) << ", I: "<< y(1) << endl;
 }

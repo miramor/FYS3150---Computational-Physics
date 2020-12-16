@@ -30,7 +30,7 @@ int main(int argc, char const *argv[]) {
   map<double, double> b_totimeRK4;
   map<double, double> b_totimeMC;
 
-  double time = 30.;
+  double time = 100.;
   b_totimeRK4[1.] = time;
   b_totimeRK4[2.] = time;
   b_totimeRK4[3.] = time;
@@ -51,20 +51,20 @@ int main(int argc, char const *argv[]) {
   b_totimeMC[3.] = 50;
   b_totimeMC[4.] = 30;
   */
-  list<double> b_val = {1,2,3,4};
+  list<double> b_val = {1};
 
   for(double b : b_val){
     //SIRS popMC(S, I, a, b, c, t_MC , MC_cycles);
     SIRS popMC(S, I, a, b, c, b_totimeMC[b]);
-    //popMC.specMC(MC_cycles, 0.50);
+    popMC.specMC(MC_cycles, 100);
     //popMC.specMC(MC_cycles);
-    popMC.specMC_VD(MC_cycles, e, d, dI);
+    //popMC.specMC_VD(MC_cycles, e, d, dI);
     popMC.solveMC("./Results/pop_" + to_string((int)b));
 
     SIRS popRK4(S, I, a, b, c, b_totimeRK4[b]);
-    //popRK4.specRK4(dt,75);
-    //popRK4.specRK4(dt);
-    popRK4.specRK4_VD(dt, e, d, dI);
+    //popRK4.specRK4(dt,100);
+    popRK4.specRK4(dt);
+    //popRK4.specRK4_VD(dt, e, d, dI);
     popRK4.solveRK4("./Results/pop_" + to_string((int)b));
   }
 

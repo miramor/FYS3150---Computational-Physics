@@ -11,6 +11,8 @@ if not os.path.exists("PlotsVD"):
     os.makedirs("PlotsVD")
 if not os.path.exists("PlotsVac"):
     os.makedirs("PlotsVac")
+if not os.path.exists("PlotsSV"):
+    os.makedirs("PlotsSV")
 
 cla = " ".join(sys.argv[1:])
 print(cla)
