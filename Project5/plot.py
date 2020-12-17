@@ -240,9 +240,9 @@ def eps_rel():
             print(f"I_eq = {I_RK4:.4f}  | eps = {abs((I_RK4-i_eq)):.4E} ")
             print(f"R_eq = {R_RK4:.4f}  | eps = {abs((R_RK4-r_eq)):.4E} ")
             print("MC: ")
-            print(f"<S> = {exp_valuesMC[0]:.4f} | STD(S) = {exp_valuesMC[3]:.4f} | eps = {abs((s_eq-exp_valuesMC[0])):.4E}")
-            print(f"<I> = {exp_valuesMC[1]:.4f} | STD(I) = {exp_valuesMC[4]:.4f} | eps = {abs((i_eq-exp_valuesMC[1])):.4E}")
-            print(f"<R> = {exp_valuesMC[2]:.4f} | STD(R) = {exp_valuesMC[5]:.4f} | eps = {abs((r_eq-exp_valuesMC[2])):.4E}")
+            print(f"<S> = {exp_valuesMC[0]:.4f} | STD(S) = {exp_valuesMC[3]:.4E} | eps = {abs((s_eq-exp_valuesMC[0])):.4E}")
+            print(f"<I> = {exp_valuesMC[1]:.4f} | STD(I) = {exp_valuesMC[4]:.4E} | eps = {abs((i_eq-exp_valuesMC[1])):.4E}")
+            print(f"<R> = {exp_valuesMC[2]:.4f} | STD(R) = {exp_valuesMC[5]:.4E} | eps = {abs((r_eq-exp_valuesMC[2])):.4E}")
 
         else: #calculating relative error
             print("RK4:")
@@ -251,9 +251,9 @@ def eps_rel():
             print(f"R_eq = {R_RK4:.4f}  | eps_rel = {abs((R_RK4-r_eq)/r_eq):.4E} ")
 
             print("MC: ")
-            print(f"<S> = {exp_valuesMC[0]:.4f} | STD(S) = {exp_valuesMC[3]:.4f} | eps_rel = {abs((s_eq-exp_valuesMC[0])/s_eq):.4E}")
-            print(f"<I> = {exp_valuesMC[1]:.4f} | STD(I) = {exp_valuesMC[4]:.4f} | eps_rel = {abs((i_eq-exp_valuesMC[1])/i_eq):.4E}")
-            print(f"<R> = {exp_valuesMC[2]:.4f} | STD(R) = {exp_valuesMC[5]:.4f} | eps_rel = {abs((r_eq-exp_valuesMC[2])/r_eq):.4E}")
+            print(f"<S> = {exp_valuesMC[0]:.4f} | STD(S) = {exp_valuesMC[3]:.4E} | eps_rel = {abs((s_eq-exp_valuesMC[0])/s_eq):.4E}")
+            print(f"<I> = {exp_valuesMC[1]:.4f} | STD(I) = {exp_valuesMC[4]:.4E} | eps_rel = {abs((i_eq-exp_valuesMC[1])/i_eq):.4E}")
+            print(f"<R> = {exp_valuesMC[2]:.4f} | STD(R) = {exp_valuesMC[5]:.4E} | eps_rel = {abs((r_eq-exp_valuesMC[2])/r_eq):.4E}")
         #HUSK n = 30%!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         # print(f"eps_rel = {abs((exp_valuesMC[0]-s_eq)/s_eq):.4E} ")
         # print(f"eps_rel = {abs((exp_valuesMC[1]-i_eq)/i_eq):.4E} ")

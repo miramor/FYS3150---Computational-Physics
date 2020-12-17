@@ -119,8 +119,8 @@ void SIRS::solveRK4(string filename){
   double F = f/100*30; double F0 = f; double wf = 0.08*(2*PI); double phi = 0;
   for(int i = 0; i < num_pts; i++){
     //cout << i << endl;
-    a = A*cos(wa*dt*i) + A0; //OPG D - SEASONAL VARIATION
-    f = F*cos(wf*dt*i+phi) + F0; //
+    //a = A*cos(wa*dt*i) + A0; //OPG D - SEASONAL VARIATION
+    //f = F*cos(wf*dt*i+phi) + F0; //
     rk4(useVD);
     ofile << y(0) << ", " << y(1) << ", " <<  y(2) << endl;
     //N = y(0) + y(1) + y(2);
@@ -184,7 +184,7 @@ void SIRS::solveMC(string filename){
     int deadDiscount = 0;
     int borncount = 0;
     for (int i = 1; i < num_pts; i++){
-      a = A*cos(wa*dt*i) + A0; //OPG D - SEASONAL VARIATION
+      //a = A*cos(wa*dt*i) + A0; //OPG D - SEASONAL VARIATION
       //f = F*cos(wf*dt*i+phi) + F0; //
       //if(useSV) a = A*cos(wa*dt*i) + A0; //OPG D - SEASONAL VARIATION
       MonteCarlo();
@@ -319,7 +319,7 @@ void SIRS::MonteCarlo(){
 
   if(useV){
     r = rand() % 100001;
-    if (r/100000 < f*dt){
+    if (r/100000 < f*dt && y(0)>0){
         y(2) ++;
         y(0) --;
     }
