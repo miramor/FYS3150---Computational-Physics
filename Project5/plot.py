@@ -161,13 +161,57 @@ def Plot_PhasePortrait(b, method):
     plt.grid()
     plt.savefig(f"./Plots/phasepor_{B}_{method}_{prob_type}.pdf")
 
+def Plot_HealthStatus2(b, method):
+    plt.clf()
+    B = str(b)
+    methods = ["MC", "RK4"]
+    filenameMC = "./Results/" + f"pop_{B}_{methods[0]}.csv"
+    filenameRK4 = "./Results/" + f"pop_{B}_{methods[1]}.csv"
+    #Reading parameters
+    dfMC, N, t, dtmc, a, b, c, nmc, sol_metmc, prob_type = read_file(filenameMC)
+    dfRK4, N, t, dtrk, a, b, c, nrk4, sol_metrk, prob_type = read_file(filenameRK4)
+
+    xmc = np.linspace(0, t, nmc)
+    xrk4 = np.linspace(0, t, nrk4)
+
+    plt.clf()
+
+    lw = 1
+    alpha = 1
+    #print(f"{method}: {lw}")
+
+    plt.plot(xmc, dfMC["S"]/N, "b", alpha = alpha, lw= lw,  label = "Vac: S")
+    plt.plot(xmc, dfMC["I"]/N, "c", alpha = alpha ,lw= lw, label = "Vac: I")
+    plt.plot(xmc, dfMC["R"]/N, "r", alpha = alpha ,lw= lw, label = "Vac: R")
+    plt.plot(xrk4, dfRK4["S"]/N, "m", alpha = alpha, lw= lw,  label = "Standard: S", ls = "dashed")
+    plt.plot(xrk4, dfRK4["I"]/N, "k", alpha = alpha ,lw= lw, label = "Standard: I", ls = "dashed")
+    plt.plot(xrk4, dfRK4["R"]/N, "g", alpha = alpha ,lw= lw, label = "Standard: R", ls = "dashed")
+
+
+    if prob_type == "VD" and sol_met == "MC":
+        plt.plot(x, df["n"]/N, alpha = alpha, lw= lw,  label = "Natural deaths")
+        plt.plot(x, df["dD"]/N,  alpha = alpha ,lw= lw, label = "Deaths by disease")
+        plt.plot(x, df["B"]/N,  alpha = alpha ,lw= lw, label = "Births")
+
+
+    #if method == "MC":
+    #    plot_avg(x, df, N)
+
+    plt.title(f"Health status, b={b}", size = titlesize)
+    plt.ylabel(f"Population [%]", size = labelsize)
+    plt.xlabel("Time", size = labelsize)
+    plt.legend()
+    plt.grid()
+    #plt.savefig("./Plots/pop_" + B + "_" + method +  ".pdf")
+    plt.savefig(f"./PlotsVac/pop_{B}_Vac.pdf")
 # for i in range(1,5):
 #     Plot_PhasePortrait(i, "RK4")
 #plot_hist(1,"MC")
 #for i in [1, 2, 3, 4]:
 for i in range(1,5):
-    Plot_HealthStatus(i, "RK4")
-    Plot_HealthStatus(i, "MC")
+    # Plot_HealthStatus(i, "RK4")
+    # Plot_HealthStatus(i, "MC")
+    Plot_HealthStatus2(i,"both")
     # print(f"______________________________")
     # exp_valuesMC = expectation(i, "MC")
     # print(f"<S> = {exp_valuesMC[0]:.4f} | STD(S) = {exp_valuesMC[3]:.4f}")
@@ -195,6 +239,10 @@ def eps_rel():
             print(f"S_eq = {S_RK4:.4f}  | eps = {abs((S_RK4-s_eq)):.4E} ")
             print(f"I_eq = {I_RK4:.4f}  | eps = {abs((I_RK4-i_eq)):.4E} ")
             print(f"R_eq = {R_RK4:.4f}  | eps = {abs((R_RK4-r_eq)):.4E} ")
+            print("MC: ")
+            print(f"<S> = {exp_valuesMC[0]:.4f} | STD(S) = {exp_valuesMC[3]:.4E} | eps = {abs((s_eq-exp_valuesMC[0])):.4E}")
+            print(f"<I> = {exp_valuesMC[1]:.4f} | STD(I) = {exp_valuesMC[4]:.4E} | eps = {abs((i_eq-exp_valuesMC[1])):.4E}")
+            print(f"<R> = {exp_valuesMC[2]:.4f} | STD(R) = {exp_valuesMC[5]:.4E} | eps = {abs((r_eq-exp_valuesMC[2])):.4E}")
 
         else: #calculating relative error
             print("RK4:")
@@ -202,14 +250,19 @@ def eps_rel():
             print(f"I_eq = {I_RK4:.4f}  | eps_rel = {abs((I_RK4-i_eq)/i_eq):.4E} ")
             print(f"R_eq = {R_RK4:.4f}  | eps_rel = {abs((R_RK4-r_eq)/r_eq):.4E} ")
 
-        print("MC: ")
-        print(f"<S> = {exp_valuesMC[0]:.4f} | STD(S) = {exp_valuesMC[3]:.4f} | eps_RK4 = {abs((S_RK4-exp_valuesMC[0])/S_RK4):.4E}")
-        print(f"<I> = {exp_valuesMC[1]:.4f} | STD(I) = {exp_valuesMC[4]:.4f} | eps_RK4 = {abs((R_RK4-exp_valuesMC[1])/I_RK4):.4E}")
-        print(f"<R> = {exp_valuesMC[2]:.4f} | STD(R) = {exp_valuesMC[5]:.4f} | eps_RK4 = {abs((I_RK4-exp_valuesMC[2])/R_RK4):.4E}")
+            print("MC: ")
+            print(f"<S> = {exp_valuesMC[0]:.4f} | STD(S) = {exp_valuesMC[3]:.4E} | eps_rel = {abs((s_eq-exp_valuesMC[0])/s_eq):.4E}")
+            print(f"<I> = {exp_valuesMC[1]:.4f} | STD(I) = {exp_valuesMC[4]:.4E} | eps_rel = {abs((i_eq-exp_valuesMC[1])/i_eq):.4E}")
+            print(f"<R> = {exp_valuesMC[2]:.4f} | STD(R) = {exp_valuesMC[5]:.4E} | eps_rel = {abs((r_eq-exp_valuesMC[2])/r_eq):.4E}")
         #HUSK n = 30%!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        print(f"eps_rel = {abs((exp_valuesMC[0]-s_eq)/s_eq):.4E} ")
-        print(f"eps_rel = {abs((exp_valuesMC[1]-i_eq)/i_eq):.4E} ")
-        print(f"eps_rel = {abs((exp_valuesMC[2]-r_eq)/r_eq):.4E} ")
+        # print(f"eps_rel = {abs((exp_valuesMC[0]-s_eq)/s_eq):.4E} ")
+        # print(f"eps_rel = {abs((exp_valuesMC[1]-i_eq)/i_eq):.4E} ")
+        # print(f"eps_rel = {abs((exp_valuesMC[2]-r_eq)/r_eq):.4E} ")
+
+
+
+
+
 
 eps_rel()
 #plot_hist(1, "MC")
