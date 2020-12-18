@@ -7,7 +7,7 @@ labelsize = 16
 titlesize = 18
 legendsize = 14
 
-prob_type = "prob_type"
+
 
 def read_file(filename):
     #Reading parameters
@@ -77,9 +77,9 @@ def Plot_HealthStatus(b, method):
         plt.plot(x, df["dD"]/N,  alpha = alpha ,lw= lw, label = "Deaths by disease")
         plt.plot(x, df["B"]/N,  alpha = alpha ,lw= lw, label = "Births")
 
-        deathsDis  = df["dD"].to_numpy()
-        print(f"Death Disease[%], for b={b}: {100*deathsDis[-1]/N:.4f}")
-        print("****************************************")
+        #deathsDis  = df["dD"].to_numpy()
+        #print(f"Death Disease[%], for b={b}: {100*deathsDis[-1]/N:.4f}")
+        #print("****************************************")
 
 
     #if method == "MC":
@@ -129,22 +129,7 @@ def plot_hist(b_val, method):
     plt.savefig("./Plots/hist.pdf")
     print(popGrouped)
 
-def Plot_PhasePortrait(b, method):
-    plt.clf()
-    B = str(b)
-    filename = "./Results/" + f"pop_{B}_{method}.csv"
-    df, N, t, dt, a, b, c, n, sol_met, prob_type = read_file(filename)
-    plt.clf()
-    lw = 1
-    alpha = 1
-    #print(f"{method}: {lw}")
-    plt.plot(df["S"]/N,  df["I"]/N, 'b', alpha = alpha, lw= lw,  label = "S")
-    plt.title(f"Phase portrait, b={b}", size = titlesize)
-    plt.ylabel("I/N", size = labelsize)
-    plt.xlabel("S/N", size = labelsize)
-    #plt.legend()
-    plt.grid()
-    plt.savefig(f"./Plots/phasepor_{B}_{method}_{prob_type}.pdf")
+
 
 def Plot_HealthStatus2(b, method):
     plt.clf()
@@ -188,16 +173,7 @@ def Plot_HealthStatus2(b, method):
     plt.legend()
     plt.grid()
     #plt.savefig("./Plots/pop_" + B + "_" + method +  ".pdf")
-    plt.savefig(f"./PlotsVac/pop_{B}_Vac.pdf")
-
-# for i in range(1,5):
-#     Plot_PhasePortrait(i, "RK4")
-#plot_hist(1,"MC")
-
-for i in range(1,5):
-    # Plot_HealthStatus(i, "RK4")
-    # Plot_HealthStatus(i, "MC")
-    Plot_HealthStatus2(i,"both")
+    plt.savefig(f"./Plots{prob_type}/pop_{B}_{prob_type}.pdf")
 
 
 def eps_rel():
@@ -243,18 +219,44 @@ def eps_rel():
 
 
 if __name__ == "__main__":
-    #Phase portrait
-    # for i in range(1,5):
-    #     Plot_PhasePortrait(i, "RK4")
+    prob_type = "prob_type"
 
-    #Histogram
-    #plot_hist(1,"MC")
+    input_correct = False
+    while input_correct == False:
+        try:
+            plot_input = int(input("Would like to plot with RK4 and MC seperate or together?\n 1. Seperate \n 2. Together \n"))
+            if plot_input == 1 or plot_input == 2:
+                input_correct = True
+            else:
+                print("Please enter 1 or 2")
+        except:
+            print("Please enter 1 or 2")
+
 
     # States of S,I,R etc. (most in use)
     for i in range(1,5):
-        # Plot_HealthStatus(i, "RK4")
-        # Plot_HealthStatus(i, "MC")
-        Plot_HealthStatus2(i,"both")
+        if plot_input == 1:
+            Plot_HealthStatus(i, "RK4")
+            Plot_HealthStatus(i, "MC")
+
+        elif plot_input == 2:
+            Plot_HealthStatus2(i,"both")
+
+
+    input_correct = False
+    while input_correct == False:
+        try:
+            print_data = int(input("Would you like to see the error and expectation values? \n 1. Yes \n 2. No \n"))
+            if print_data == 1 or print_data == 2:
+                input_correct = True
+            else:
+                print("Please enter 1 or 2")
+        except:
+            print("Please enter 1 or 2")
+
+    if print_data == 1:
+        eps_rel()
+
         # print(f"______________________________")
         # exp_valuesMC = expectation(i, "MC")
         # print(f"<S> = {exp_valuesMC[0]:.4f} | STD(S) = {exp_valuesMC[3]:.4f}")
@@ -262,4 +264,3 @@ if __name__ == "__main__":
         # print(f"<R> = {exp_valuesMC[2]:.4f} | STD(R) = {exp_valuesMC[5]:.4f}")
 
     #Prints out relative error.
-    eps_rel()

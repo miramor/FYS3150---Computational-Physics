@@ -15,7 +15,6 @@ int main(int argc, char const *argv[]) {
   double S = 300;
   double I = 100;
   double a = 4;
-  //double b = 1;
   double c = .5;
   double t_MC = 2.;
   double t_RK4 = 2.;
@@ -24,13 +23,48 @@ int main(int argc, char const *argv[]) {
 
   double e = 0.009;
   double d = 0.0075;
-  double dI = 5;
+  double dI = 1;
 
-  double A = 1.5; double A0 = 4; double frequency = 0.08*(2*PI);
+  double A = 1.5;
+  double A0 = 4;
+  double PI = 4*atan(1);
+  double frequency = 0.08*(2*PI);
+
+  bool useSV;
+  bool useVD;
+  bool useV;
+  bool useSTD;
+
+
+  cout << "Would you like enable seasonal variation for the rate of transmission(a)?\n 1. Yes \n 0. No " << endl;
+  cin >> useSV;
+  //cin >> useV >> useSeasVar >> useSV;
+
+
+  cout << "Would you like enable vital dynamics (deaths & births)?\n 1. Yes \n 0. No " << endl;
+  cin >> useVD;
+
+  if(useVD == false){
+    cout << "Would you like enable vaccines (susceptible -> recovered)?\n 1. Yes \n 0. No " << endl;
+    cin >> useV;
+  }
+
+  if(useV == false && useVD == false){
+    useSTD = true;
+  }
+  cout << "VitalDyn = " << useVD << ", vaccin = "  << useV << ", std = " << useSTD <<  endl;
+
+
+// 0, 0, 0 -> using standard
+// 1, 0, 1 -> using vaccines with seasonal variation
+// 1, 1, * -> using vital dynamics, with seasonal
+// 0, 0, 1 -> using vaccines without seasonal variation
+// 0, 1, * -> vital dynamics, no seasonal
+// 1, 0, 0 -> using standard, with seasonal
 
   map<double, double> b_totimeRK4;
   map<double, double> b_totimeMC;
-
+  //t_end for each group
   b_totimeRK4[1.] = 20;
   b_totimeRK4[2.] = 20;
   b_totimeRK4[3.] = 50;
@@ -44,19 +78,35 @@ int main(int argc, char const *argv[]) {
   list<double> b_val = {1,2,3,4};
 
   for(double b : b_val){
-    //SIRS popMC(S, I, a, b, c, t_MC , MC_cycles);
-    SIRS popMC(S, I, a, b, c, b_totimeMC[b]);
-    //popMC.specMC(MC_cycles, 100);
-    popMC.specMC(MC_cycles);
-    //popMC.enableSeasVar();
-    //popMC.specMC_VD(MC_cycles, e, d, dI);
-    popMC.solveMC("./Results/pop_" + to_string((int)b));
 
     SIRS popRK4(S, I, a, b, c, b_totimeRK4[b]);
-    //popRK4.specRK4(dt,100);
-    popRK4.specRK4(dt);
-    //popRK4.enableSeasVar();
-    //popRK4.specRK4_VD(dt, e, d, dI);
+    SIRS popMC(S, I, a, b, c, b_totimeMC[b]);
+
+    if(useSTD){
+      cout << "Spec standard" << endl;
+      popRK4.specRK4(dt);
+      popMC.specMC(MC_cycles);
+    }
+
+    if(useSV){
+      cout << "Enable seasonal variation" << endl;
+      popRK4.enableSeasVar();
+      popMC.enableSeasVar();
+    }
+
+    if(useVD){
+      cout << "Spec Vital Dyna" << endl;
+      popRK4.specRK4_VD(dt, e, d, dI);
+      popMC.specMC_VD(MC_cycles, e, d, dI);
+    }
+
+    else if(useV){
+      cout << "Spec Vaccines" << endl;
+      popRK4.specRK4(dt,100);
+      popMC.specMC(MC_cycles, 100);
+    }
+
+    popMC.solveMC("./Results/pop_" + to_string((int)b));
     popRK4.solveRK4("./Results/pop_" + to_string((int)b));
   }
 
