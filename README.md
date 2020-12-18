@@ -97,7 +97,7 @@ python3 main.py 40 5000000
 8
 ```
 
-###Project 5:
+### Project 5:
 This project looks to use both the runge-kutta 4 method and monte-carlo sampling to simulate how a disease would spread among a population consisting of three groups(states): susceptible(S), infected(I) and recovered(R). Focusing mainly on what happens by changing the paramater that decides how the ill population recovers (I->R). Apart from the basic one, vital dynamics which includes deaths and births and vaccines which in MC allows a direct transition from the susceptible state to the recovered one, reducing diesease in total. Additionally an option exist to add seasonal variation to the a-variable, which affects the transition from susceptible to sick.
 
 **Structure:**
