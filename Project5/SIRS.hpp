@@ -18,8 +18,9 @@ class SIRS{
     double N;
     double PI = 4*atan(1);
 
-    bool useVD;
-    bool useV = false;
+    bool useVD; // Use useVitalDynamics
+    bool useV = false; // Use vaccines
+    bool useSeasVar = false; // Use seasonal variation.
     vec born;
     vec dead;
     vec deadDisease;
@@ -49,13 +50,14 @@ class SIRS{
     //RK4 variables
     vec dy;
 
-
     //VD variables
     double d;
     double e;
     double d_I;
 
     double f; //vaccination
+
+    double A, A0, wa; //Seasonal variation
 
     void rk4(bool useDer1);
     vec derivatives(vec yt);
@@ -78,6 +80,8 @@ class SIRS{
 
     void solveMC(string filename);
     void solveRK4(string filename);
+
+    void enableSeasVar();
 };
 
 

@@ -33,8 +33,6 @@ def equilibrium(a,b,c):
     s = b/a
     i = (1-b/a)/(1+b/c)
     r = b/c * (1-b/a) / (1+b/c)
-    #print(f"a = {a}, b = {b}, c = {c}")
-    # print(f"s* = {s}\n i* = {i}\n r* = {r}")
     return s, i, r
 
 def expectation(b,method, cutoff):
@@ -43,7 +41,6 @@ def expectation(b,method, cutoff):
     filename = "./Results/" + f"pop_{B}_{method}.csv"
     df, N, t, dt, a, b, c, n, sol_met, prob_type = read_file(filename)
     n_cutoff = int(cutoff*n)
-
 
     S_exp = np.mean(df["S"][n_cutoff:])
     I_exp = np.mean(df["I"][n_cutoff:])
@@ -131,13 +128,8 @@ def plot_hist(b_val, method):
     df, N, t, dt, a, b, c, n, sol_met, prob_type = read_file(filename)
     popGrouped = df.groupby(df["S"],as_index=False).size()
     n_cutoff = int(n*0.15)
-    # fig, axs = plt.subplots(3)
-    # axs[0].plot(df["S"][n_cutoff:])
-    # axs[1].plot(df["I"][n_cutoff:])
-    # axs[2].plot(df["R"][n_cutoff:])
 
     sb.distplot(df["S"][n_cutoff:]/N, norm_hist=True, kde = False, bins = 109)
-    #print(f"NORM: {norm.fit(df["E"])})
     plt.title(f"Probability distribution, B={b_val}", size = titlesize)
     plt.ylabel("P(E)", size = labelsize)
     plt.xlabel("Population [%]", size = labelsize)
@@ -204,10 +196,11 @@ def Plot_HealthStatus2(b, method):
     plt.grid()
     #plt.savefig("./Plots/pop_" + B + "_" + method +  ".pdf")
     plt.savefig(f"./PlotsVac/pop_{B}_Vac.pdf")
+
 # for i in range(1,5):
 #     Plot_PhasePortrait(i, "RK4")
 #plot_hist(1,"MC")
-#for i in [1, 2, 3, 4]:
+
 for i in range(1,5):
     # Plot_HealthStatus(i, "RK4")
     # Plot_HealthStatus(i, "MC")
@@ -261,8 +254,24 @@ def eps_rel():
 
 
 
+if __name__ == "__main__":
+    #Phase portrait
+    # for i in range(1,5):
+    #     Plot_PhasePortrait(i, "RK4")
 
+    #Histogram
+    #plot_hist(1,"MC")
 
+    # States of S,I,R etc. (most in use)
+    for i in range(1,5):
+        # Plot_HealthStatus(i, "RK4")
+        # Plot_HealthStatus(i, "MC")
+        Plot_HealthStatus2(i,"both")
+        # print(f"______________________________")
+        # exp_valuesMC = expectation(i, "MC")
+        # print(f"<S> = {exp_valuesMC[0]:.4f} | STD(S) = {exp_valuesMC[3]:.4f}")
+        # print(f"<I> = {exp_valuesMC[1]:.4f} | STD(I) = {exp_valuesMC[4]:.4f}")
+        # print(f"<R> = {exp_valuesMC[2]:.4f} | STD(R) = {exp_valuesMC[5]:.4f}")
 
-eps_rel()
-#plot_hist(1, "MC")
+    #Prints out relative error.
+    eps_rel()

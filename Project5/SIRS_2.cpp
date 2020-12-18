@@ -62,7 +62,6 @@ vec SIRS::derivatives(vec yt){
 }
 
 vec SIRS::derivatives2(vec yt){
-  //Update N since people die and get born
   dy(0) = c*yt(2) - yt(0)*(a*yt(1)/N+d)+e*N;
   dy(1) = yt(1)*(a*yt(0)/N - b-d-d_I);
   dy(2) = b*yt(1) - (c+d)*yt(2);
@@ -76,13 +75,10 @@ void SIRS::solveRK4(string filename){
 
   ofile << t << ", " << dt << ", " << a << ", " << b << ", " << c << ", RK4" << ", std" <<  endl;
   ofile << y(0) << ", " << y(1) << ", " <<  y(2) << endl;
-  //for (double i = 0; i < t; i += dt){
   cout << "Num pts in RK4 solve: " <<  num_pts << endl;
   for(int i = 0; i < num_pts; i++){
-    //cout << i << endl;
     rk4(useDer1);
     ofile << y(0) << ", " << y(1) << ", " <<  y(2) << endl;
-    //writeResults(ofile);
   }
 }
 
@@ -103,33 +99,20 @@ void SIRS::solveMC(string filename){
   I_mc = vec(num_pts, fill::zeros);
   R_mc = vec(num_pts, fill::zeros);
 
+  //Write relevant  and initial values
   ofile << t << ", " << dt << ", " << a << ", " << b << ", " << c << ", MC"  << ", std" << endl;
   ofile << y(0) << ", " << y(1) << ", " <<  y(2) << endl;
-  cout << "dt: " << dt << endl;
-  //Kjøre MC, ca 1000 ganger. Ha 3 t/dt lang array med verdier for S,I,R.
-  //Ta gjennomsnitt av alle kjøringene og skriv dette til fil.
-  //Må vel resetee S0 etc hver gang vel, starte fra t0 for hver eksperiment,
-  //reset initial conditions with func
+  //cout << "dt: " << dt << endl;
   bool useVD = false;
+
   double progress = 0;
   for (int j = 0; j < MC_cycles; j ++){
     if(j+1 >= progress){
-      cout << progress*100/MC_cycles << "% done." << endl; //Interval time: " << endl;
+      cout << progress*100/MC_cycles << "% done." << endl;
       progress += 0.1*MC_cycles;
     }
-      //stop = clock();
-      //double timeInterval = ( (stop - start)/(double)CLOCKS_PER_SEC );
-      //totTime += timeInterval;
-      //start = clock();
+
     for (int i = 0; i < num_pts; i++){
-      /*
-      if(i == 2){
-        cout << "MC = " << j << endl;
-        cout << S0 << ", " << ", " << I0 << ", " << R0 << endl;
-        cout << y(0) << endl;
-        cout << S_mc(0) << endl;
-        cout << S_mc(1) << "\n" <<  endl;
-      }*/
       MonteCarlo();
       S_mc(i) += y(0);
       I_mc(i) += y(1);
