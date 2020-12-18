@@ -97,3 +97,15 @@ python3 main.py 40 5000000
 8
 ```
 
+###Project 5:
+This project looks to use both the runge-kutta 4 method and monte-carlo sampling to simulate how a disease would spread among a population consisting of three groups(states): susceptible(S), infected(I) and recovered(R). Focusing mainly on what happens by changing the paramater that decides how the ill population recovers (I->R). Apart from the basic one, vital dynamics which includes deaths and births and vaccines which in MC allows a direct transition from the susceptible state to the recovered one, reducing diesease in total. Additionally an option exist to add seasonal variation to the a-variable, which affects the transition from susceptible to sick.
+
+**Structure:**
+The program is divided into one big class named SIRS.cpp (+SIRS.hpp) which contains all the solver methods for the RK4 and Monte-carlo method and writing to file. Each instance of the class can solve for the given timesteps for either MC or RK4 once. The choices solver type and problem type is done with dinstict specialization methods which is called upon after the constructor (such as specRK4_VD). *main.cpp* includes all the paramaters needed for all the different runs. It creates an object for both RK4 and MC, and depending on choices made in the terminal by the user it will make solve the given problem for the four different b-values and write them to their designated folder (such as ____, ____).  (bit more incoming)
+
+**How to use:**
+Simply run the python program main.py
+(more coming)
+```python
+python3 main.py
+```
