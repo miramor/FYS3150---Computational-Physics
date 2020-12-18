@@ -337,25 +337,25 @@ void SIRS::MonteCarlo(){
   //If using vital dynamics check deaths and births.
   if(useVD){
     r = rand() % 100001;
-    if (r/100000 < e*N*dt) //Is birth rate given for dt = 1??
+    if (r/100000 < e*N*dt)
         bornS ++;
 
     r = rand() % 100001;
-    if (r/100000 < d*y(0)*dt) //Is birth rate given for dt = 1??
+    if (r/100000 < d*y(0)*dt)
         diedS ++;
 
 
     r = rand() % 100001;
-    if (r/100000 < d*y(1)*dt) //Is birth rate given for dt = 1??
+    if (r/100000 < d*y(1)*dt)
         diedI ++;
 
 
     r = rand() % 100001;
-    if (r/100000 < d_I*y(1)*dt) //Is birth rate given for dt = 1??
+    if (r/100000 < d_I*y(1)*dt)
         diedI_disease ++;
 
     r = rand() % 100001;
-    if (r/100000 < d*y(2)*dt) //Is birth rate given for dt = 1??
+    if (r/100000 < d*y(2)*dt)
         diedR ++;
   }
 
