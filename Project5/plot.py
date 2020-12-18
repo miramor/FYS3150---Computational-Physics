@@ -115,22 +115,6 @@ def find_avg(df):
 
     return S, I, R, n
 
-def plot_hist(b_val, method):
-    plt.clf()
-    filename = "./Results/" + f"pop_{b_val}_{method}.csv"
-    df, N, t, dt, a, b, c, n, sol_met, prob_type = read_file(filename)
-    popGrouped = df.groupby(df["S"],as_index=False).size()
-    n_cutoff = int(n*0.15)
-
-    sb.distplot(df["S"][n_cutoff:]/N, norm_hist=True, kde = False, bins = 109)
-    plt.title(f"Probability distribution, B={b_val}", size = titlesize)
-    plt.ylabel("P(E)", size = labelsize)
-    plt.xlabel("Population [%]", size = labelsize)
-    plt.savefig("./Plots/hist.pdf")
-    print(popGrouped)
-
-
-
 def Plot_HealthStatus2(b, method):
     plt.clf()
     B = str(b)
