@@ -94,13 +94,6 @@ def Plot_HealthStatus(b, method):
     plt.savefig(f"./Plots{prob_type}/pop_{B}_{method}_{prob_type}.pdf")
 
 
-def plot_avg(x, df, N):
-    S, I, R, n = find_avg(df)
-    lw = 1.5
-    plt.plot(x, S/N, "b", lw=lw, label= "<S>", ls = "dashed")
-    plt.plot(x, I/N, "r", lw = lw,label= "<I>", ls = "dashed")
-    plt.plot(x, R/N, "k" , lw = lw, label= "<R>", ls = "dashed")
-
 def find_avg(df):
     n = len(df["S"])
     S = np.zeros(n)
@@ -205,11 +198,6 @@ for i in range(1,5):
     # Plot_HealthStatus(i, "RK4")
     # Plot_HealthStatus(i, "MC")
     Plot_HealthStatus2(i,"both")
-    # print(f"______________________________")
-    # exp_valuesMC = expectation(i, "MC")
-    # print(f"<S> = {exp_valuesMC[0]:.4f} | STD(S) = {exp_valuesMC[3]:.4f}")
-    # print(f"<I> = {exp_valuesMC[1]:.4f} | STD(I) = {exp_valuesMC[4]:.4f}")
-    # print(f"<R> = {exp_valuesMC[2]:.4f} | STD(R) = {exp_valuesMC[5]:.4f}")
 
 
 def eps_rel():
