@@ -98,11 +98,12 @@ python3 main.py 40 5000000
 ```
 
 ### Project 5:
-**Numerical Studies of the SIRS model (disease)**
+**Numerical Studies of SIRS model**
 This project takes use of both the fourth-order runge-kutta method (RK4) and monte-carlo sampling (MC) to simulate how a disease would spread among an isolated population consisting of three groups (states): susceptible (S), infected (I) and recovered (R). We study differnt rates of recovery that decide how (fast) the sick population recovers (I->R). In addition, the basic SIRS model (std) is extended by adding vital dynamics (VD), which includes deaths and births. Moreover, vaccines (Vac) allow a direct a direct transition from the susceptible state to the recovered one, reducing the impact of the diesease. Furthermore, an option exist to add seasonal variation (SV) to the rate of transmission (a), which affects the transition from susceptible to sick. The rate of immunity loss (c) is set constant.
 
 **Structure:**
-The program is divided into one big class named SIRS.cpp (+SIRS.hpp) which contains all the solver methods for the RK4 and Monte-carlo method and writing to file. Each instance of the class can solve for the given timesteps for either MC or RK4 at once. The choice of solver type and problem type is done with distinct specialization methods which are called upon after the constructor (such as specRK4_VD). *main.cpp* includes all the paramaters needed for all the different runs. It creates an object for both RK4 and MC, and, depending on choices made in the terminal by the user, it will make solve the given problem for the four different recovery-values (b) and writes them to their designated folder (such as ____, ____).  (bit more incoming)
+The program is divided into one big class named SIRS.cpp (+SIRS.hpp) which contains all the solver methods for the RK4 and Monte-carlo method and writing to file. Each instance of the class can solve for the given timesteps for either MC or RK4 at once. The choice of solver type and problem type is done with distinct specialization methods which are called upon after the constructor (such as specRK4_VD). *main.cpp* includes all the paramaters needed for all the different runs. It creates an object for both RK4 and MC, and, depending on choices made in the terminal by the user, it will make solve the given problem for the four different recovery-values (b) and writes them to their designated folder (such as ____, ____).  (bit more incoming) 
+Plot.py can visualize the health status, thus showing the number of susceptibles, infected and recovered. The user is asked what should be plotted. For example, the results of the RK4 and MC methods can be plotted in the same plot. For the Monte Carlo method, the number of births and deaths are also displayed when examining the SIRS model with vital dynamics. In addition, the relative error between the numerical and analytic expected equilibrium values (denoted with an asterisk) can be printed to the terminal. As for now, four poulation groups (A with b=1, B with b=2, C with b=3, D with b=4) are looked at. For group D only the absolute error is shown, as the relative error is not defined.The different rates have the unit inverse time and are not specified further.
 
 **How to use:**
 Simply run the python program main.py
@@ -120,7 +121,7 @@ python3 main.py
 (main.cpp runs, plot.py gets run)
 0 (do not print out extra data like error and expecation values)
 ```
-There's a maximum of 4 in total, but just 3 inputs when running needed when running the main.cpp file. Each combination resulting in a different type of problem. Some example combinations is noted below (* = meaning no input here):
+There's a maximum of 3 inputs needed when running the main.cpp file. Each combination results in a different type of problem. Some example combinations are noted below (* = meaning no input here):
 // 0, 0, 0 -> using standard
 
 // 1, 0, 1 -> using vaccines with seasonal variation
