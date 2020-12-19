@@ -112,16 +112,15 @@ python3 main.py
 ```
 
 **Example use:**
-Using seasonal variation combined with vital dynamics and plots them seperate in :
+Using seasonal variation combined with vital dynamics, plotted but no relative difference printed out. Use () to explain what each choice is:
 ```python
 python3 main.py
-1
-1
-*Program runs, plot.py gets run*
-1
-0
+1 (use seasonal variation)
+1 (use vital dynamics)
+(main.cpp runs, plot.py gets run)
+0 (do not print out extra data like error and expecation values)
 ```
-There's a maximum of 3 inputs when running needed when running the main.cpp file. Each combination resulting in a different type of problem. Some example combinations is noted below:
+There's a maximum of 3 inputs when running needed when running the main.cpp file. Each combination resulting in a different type of problem. Some example combinations is noted below (* = meaning no input here):
 // 0, 0, 0 -> using standard
 // 1, 0, 1 -> using vaccines with seasonal variation
 // 1, 1, * -> using vital dynamics, with seasonal
