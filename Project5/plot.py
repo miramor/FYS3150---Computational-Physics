@@ -64,7 +64,6 @@ def Plot_HealthStatus(b, method): #Plot number of susceptibles, infected and imm
 
     lw = 1
     alpha = 1
-    #print(f"{method}: {lw}")
     plt.plot(x, df["S"]/N, 'b', alpha = alpha, lw= lw,  label = "S")
     plt.plot(x, df["I"]/N, 'r', alpha = alpha ,lw= lw, label = "I")
     plt.plot(x, df["R"]/N, 'k', alpha = alpha ,lw= lw, label = "R")
@@ -113,7 +112,7 @@ def find_avg(df):
 
     return S, I, R, n
 
-def Plot_HealthStatus2(b, method): #Plot number of susceptibles, infected and immune resulting for two different runs
+def Plot_HealthStatus2(b, method): #Plot number of susceptibles, infected and immune resulting from two different runs
     plt.clf()
     B = str(b)
     methods = ["MC", "RK4"]
@@ -130,7 +129,6 @@ def Plot_HealthStatus2(b, method): #Plot number of susceptibles, infected and im
 
     lw = 1
     alpha = 1
-    #print(f"{method}: {lw}")
 
     plt.plot(xmc, dfMC["S"]/N, "b", alpha = alpha, lw= lw,  label = "Vac: S")
     plt.plot(xmc, dfMC["I"]/N, "c", alpha = alpha ,lw= lw, label = "Vac: I")

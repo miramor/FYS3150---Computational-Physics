@@ -19,7 +19,7 @@ int main(int argc, char const *argv[]) {
   double dt = 0.0025; //time-step for RK4
   int MC_cycles = 1000; //number of Monte Carlo cycles
 
-  double e = 0.009; //birht rate
+  double e = 0.009; //birth rate
   double d = 0.0075; //death reate
   double dI = 1; //death rate due to illness
 
@@ -35,7 +35,7 @@ int main(int argc, char const *argv[]) {
   bool useSTD;
 
 
-  cout << "Would you like to enable seasonal variation for the rate of transmission(a)?\n 1. Yes \n 0. No " << endl;
+  cout << "Would you like to enable seasonal variation for the rate of transmission (a)?\n 1. Yes \n 0. No " << endl;
   cin >> useSV;
   //cin >> useV >> useSeasVar >> useSV;
 
