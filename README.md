@@ -107,7 +107,7 @@ The program is divided into one big class named SIRS.cpp (+SIRS.hpp) which conta
 The .csv files contains one header line including information of the problem solved which is used exctract data about the specific run when plotting. The columns after are as follows: S, I, R. Once its all finished writing to file we use the function *Plot_HealthsStatus* in *plot.py* to visualize the values. is plotted and placed in the correct folders(being PlotsVac, Plotsstd and PlotsVD). 
 The *main.py* files initially runs the makefile which compiles all the files. Then executes the code and then runs *plot.py* finalizing the program.
 
-Extra:
+**Extra:**
 Code not used when running includes a plot2.py, which looked to increase options but currently gives some errors. When it comes to the deadthInfected.pdf plot it was a modified version of this, but to avoid major bugs or changes to a functioning program a 2nd folder was made; named Project5_copy. This program loops over mulitple dI(deaths disease) or f(vaccine) and writes the final death toll to a file which then was plotted using the *plot_deathInfected* method. 
 
 **How to use:**
