@@ -54,6 +54,7 @@ int main(int argc, char const *argv[]) {
   cout << "VitalDyn = " << useVD << ", vaccin = "  << useV << ", std = " << useSTD <<  endl;
 
 
+// Example combinations:
 // 0, 0, 0 -> using standard
 // 1, 0, 1 -> using vaccines with seasonal variation
 // 1, 1, * -> using vital dynamics, with seasonal
@@ -82,25 +83,25 @@ int main(int argc, char const *argv[]) {
     SIRS popMC(S, I, a, b, c, b_totimeMC[b]);
 
     if(useSTD){
-      cout << "Spec standard" << endl;
+      //cout << "Spec standard" << endl;
       popRK4.specRK4(dt);
       popMC.specMC(MC_cycles);
     }
 
     if(useSV){
-      cout << "Enable seasonal variation" << endl;
+      //cout << "Enable seasonal variation" << endl;
       popRK4.enableSeasVar();
       popMC.enableSeasVar();
     }
 
     if(useVD){
-      cout << "Spec Vital Dyna" << endl;
+      //cout << "Spec Vital Dyna" << endl;
       popRK4.specRK4_VD(dt, e, d, dI);
       popMC.specMC_VD(MC_cycles, e, d, dI);
     }
 
     else if(useV){
-      cout << "Spec Vaccines" << endl;
+      //cout << "Spec Vaccines" << endl;
       popRK4.specRK4(dt,100);
       popMC.specMC(MC_cycles, 100);
     }

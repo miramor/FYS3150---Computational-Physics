@@ -14,7 +14,7 @@ if not os.path.exists("PlotsVac"):
 
 
 cla = " ".join(sys.argv[1:])
-print(cla)
+#print(cla)
 os.system("echo Compiling...")
 #os.system("make") #compile codes
 os.system("make") #compile codes

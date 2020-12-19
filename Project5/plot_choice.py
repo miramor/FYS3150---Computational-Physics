@@ -198,12 +198,28 @@ def eps_rel(): #prints out (relative) errror between the numerical values and th
 if __name__ == "__main__":
     prob_type = "prob_type"
 
+
+    input_correct = False
+    while input_correct == False:
+        try:
+            plot_input = int(input("Would you like to plot with RK4 and MC seperate or together?\n 1. Seperate \n 2. Together \n"))
+            if plot_input == 1 or plot_input == 2:
+                input_correct = True
+            else:
+                print("Please enter 1 or 2")
+        except:
+            print("Please enter 1 or 2")
+
+
     # States of S,I,R etc. (most in use)
     for i in range(1,5):
-        Plot_HealthStatus(i, "RK4")
-        Plot_HealthStatus(i, "MC")
+        if plot_input == 1:
+            Plot_HealthStatus(i, "RK4")
+            Plot_HealthStatus(i, "MC")
 
-        #Plot_HealthStatus(i, "both") //useable for some of the combinations
+        elif plot_input == 2:
+            Plot_HealthStatus2(i,"both")
+
 
     input_correct = False
     while input_correct == False:
