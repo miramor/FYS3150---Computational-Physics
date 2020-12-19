@@ -8,7 +8,6 @@ titlesize = 18
 legendsize = 14
 
 
-
 def read_file(filename):
     #Reading parameters
     with open(filename, 'r') as f:
@@ -29,14 +28,13 @@ def read_file(filename):
     n = len(df["S"])
     return df, N, t, dt, a, b, c, n, sol_met, prob_type
 
-def equilibrium(a,b,c):
+def equilibrium(a,b,c): #Expected (analytic) equilibrium values
     s = b/a
     i = (1-b/a)/(1+b/c)
     r = b/c * (1-b/a) / (1+b/c)
     return s, i, r
 
-def expectation(b,method, cutoff):
-
+def expectation(b,method, cutoff): #Computes expectation values resulting from Monte Carlo simulation
     B = str(b)
     filename = "./Results/" + f"pop_{B}_{method}.csv"
     df, N, t, dt, a, b, c, n, sol_met, prob_type = read_file(filename)
@@ -55,7 +53,7 @@ def expectation(b,method, cutoff):
     print(f"s* = {s_eq}\ni* = {i_eq}\nr* = {r_eq}")
     return np.array([S_exp, I_exp, R_exp, S_std, I_std, R_std])/N
 
-def Plot_HealthStatus(b, method):
+def Plot_HealthStatus(b, method): #Plot number of susceptibles, infected and immune resulting from MC or RK4
     plt.clf()
     B = str(b)
     filename = "./Results/" + f"pop_{B}_{method}.csv"
@@ -115,7 +113,7 @@ def find_avg(df):
 
     return S, I, R, n
 
-def Plot_HealthStatus2(b, method):
+def Plot_HealthStatus2(b, method): #Plot number of susceptibles, infected and immune resulting for two different runs
     plt.clf()
     B = str(b)
     methods = ["MC", "RK4"]
@@ -141,12 +139,10 @@ def Plot_HealthStatus2(b, method):
     plt.plot(xrk4, dfRK4["I"]/N, "k", alpha = alpha ,lw= lw, label = "Standard: I", ls = "dashed")
     plt.plot(xrk4, dfRK4["R"]/N, "g", alpha = alpha ,lw= lw, label = "Standard: R", ls = "dashed")
 
-
     if prob_type == "VD" and sol_met == "MC":
         plt.plot(x, df["n"]/N, alpha = alpha, lw= lw,  label = "Natural deaths")
         plt.plot(x, df["dD"]/N,  alpha = alpha ,lw= lw, label = "Deaths by disease")
         plt.plot(x, df["B"]/N,  alpha = alpha ,lw= lw, label = "Births")
-
 
     #if method == "MC":
     #    plot_avg(x, df, N)
@@ -160,10 +156,9 @@ def Plot_HealthStatus2(b, method):
     plt.savefig(f"./Plots{prob_type}/pop_{B}_{prob_type}.pdf")
 
 
-def eps_rel():
+def eps_rel(): #prints out (relative) errror between the numerical values and the (analytic) expected ones
     print("\n(Relative) Error and Standard deviation: ")
-    cutoffs = [0.50,0.50,0.80,0.50]
-    #for i,cut in zip(range(1,5), cutoffs):
+    cutoffs = [0.50,0.50,0.80,0.50] #needed for equilibtration time for group A, B, C, D respectively
 
     for i in range(1,5):
         dfRK4, N, t, dt, a, b, c, n, sol_met, prob_type = read_file("./Results/" + f"pop_{i}_RK4.csv")
@@ -195,7 +190,7 @@ def eps_rel():
             print(f"<S> = {exp_valuesMC[0]:.4f} | STD(S) = {exp_valuesMC[3]:.4E} | eps_rel = {abs((s_eq-exp_valuesMC[0])/s_eq):.4E}")
             print(f"<I> = {exp_valuesMC[1]:.4f} | STD(I) = {exp_valuesMC[4]:.4E} | eps_rel = {abs((i_eq-exp_valuesMC[1])/i_eq):.4E}")
             print(f"<R> = {exp_valuesMC[2]:.4f} | STD(R) = {exp_valuesMC[5]:.4E} | eps_rel = {abs((r_eq-exp_valuesMC[2])/r_eq):.4E}")
-        #HUSK n = 30%!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
         # print(f"eps_rel = {abs((exp_valuesMC[0]-s_eq)/s_eq):.4E} ")
         # print(f"eps_rel = {abs((exp_valuesMC[1]-i_eq)/i_eq):.4E} ")
         # print(f"eps_rel = {abs((exp_valuesMC[2]-r_eq)/r_eq):.4E} ")
@@ -208,7 +203,7 @@ if __name__ == "__main__":
     input_correct = False
     while input_correct == False:
         try:
-            plot_input = int(input("Would like to plot with RK4 and MC seperate or together?\n 1. Seperate \n 2. Together \n"))
+            plot_input = int(input("Would you like to plot with RK4 and MC seperate or together?\n 1. Seperate \n 2. Together \n"))
             if plot_input == 1 or plot_input == 2:
                 input_correct = True
             else:

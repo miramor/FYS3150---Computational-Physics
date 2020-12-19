@@ -12,19 +12,18 @@ using namespace arma;
 
 int main(int argc, char const *argv[]) {
 
-  double S = 300;
-  double I = 100;
-  double a = 4;
-  double c = .5;
-  double t_MC = 2.;
-  double t_RK4 = 2.;
-  double dt = 0.0025;
-  int MC_cycles = 1000;
+  double S = 300; //inital number of susceptibles
+  double I = 100; //inital number of infected
+  double a = 4; //rate of transmission 
+  double c = .5; //rate of immunity loss
+  double dt = 0.0025; //time-step for RK4
+  int MC_cycles = 1000; //number of Monte Carlo cycles
 
-  double e = 0.009;
-  double d = 0.0075;
-  double dI = 1;
+  double e = 0.009; //birht rate
+  double d = 0.0075; //death reate
+  double dI = 1; //death rate due to illness
 
+//parameters for oscillating rate of transmission
   double A = 1.5;
   double A0 = 4;
   double PI = 4*atan(1);

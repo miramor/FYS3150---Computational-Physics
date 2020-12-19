@@ -8,10 +8,10 @@ using namespace std;
 using namespace arma;
 
 /**
-  Saves the initial states for S,I and R and the basic params for way we choose
+  Saves the initial states for S, I and R and the basic params for way we choose
   to run the program.
-  S_, I_ where t==0. a,b & c is constants which decides the likeliness for one state
-  to transition to another one. t is the total time to simulate the run.
+  S_, I_ where t==0. a, b & c are constants which decide the likeliness for one person in one state
+  will transition to another. to another one. t is the total time to simulate the run.
 */
 
 SIRS::SIRS(double S_, double I_, double a_, double b_, double c_, double t_){
@@ -237,7 +237,7 @@ void SIRS::solveMC(string filename){
       if(useSeasVar){
         a = A*cos(wa*dt*i+phi) + A0; //Seasonal variation in use if enabled.
       }
-      //f = F*cos(wf*dt*i) + F0; //Comment this in if you wanna use a oscillating value for f.
+      //f = F*cos(wf*dt*i) + F0; //Comment this in if you want to use a oscillating value for f.
       MonteCarlo();
 
       deadPopcount += diedS + diedI + diedR;
