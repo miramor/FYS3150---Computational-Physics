@@ -122,10 +122,15 @@ python3 main.py
 ```
 There's a maximum of 3 inputs when running needed when running the main.cpp file. Each combination resulting in a different type of problem. Some example combinations is noted below (* = meaning no input here):
 // 0, 0, 0 -> using standard
+
 // 1, 0, 1 -> using vaccines with seasonal variation
+
 // 1, 1, * -> using vital dynamics, with seasonal
+
 // 0, 0, 1 -> using vaccines without seasonal variation
+
 // 0, 1, * -> vital dynamics, no seasonal
+
 // 1, 0, 0 -> using standard, with seasonal
 
 
