@@ -98,7 +98,7 @@ python3 main.py 40 5000000
 ```
 
 ### Project 5:
-**Numerical Studies of SIRS model**
+**Numerical Studies of the SIRS model (disease)**
 This project takes use of both the fourth-order runge-kutta method (RK4) and monte-carlo sampling (MC) to simulate how a disease would spread among an isolated population consisting of three groups (states): susceptible (S), infected (I) and recovered (R). We study differnt rates of recovery that decide how (fast) the sick population recovers (I->R). In addition, the basic SIRS model (std) is extended by adding vital dynamics (VD), which includes deaths and births. Moreover, vaccines (Vac) allow a direct a direct transition from the susceptible state to the recovered one, reducing the impact of the diesease. Furthermore, an option exist to add seasonal variation (SV) to the rate of transmission (a), which affects the transition from susceptible to sick. The rate of immunity loss (c) is set constant.
 
 **Structure:**
@@ -120,7 +120,7 @@ python3 main.py
 (main.cpp runs, plot.py gets run)
 0 (do not print out extra data like error and expecation values)
 ```
-There's a maximum of 3 inputs when running needed when running the main.cpp file. Each combination resulting in a different type of problem. Some example combinations is noted below (* = meaning no input here):
+There's a maximum of 4 in total, but just 3 inputs when running needed when running the main.cpp file. Each combination resulting in a different type of problem. Some example combinations is noted below (* = meaning no input here):
 // 0, 0, 0 -> using standard
 
 // 1, 0, 1 -> using vaccines with seasonal variation
