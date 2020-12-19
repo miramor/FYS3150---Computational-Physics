@@ -283,9 +283,7 @@ void SIRS::rk4(bool useVD){
   vec K1(3), K2(3), K3(3), K4(3);
 
   if(useVD == false && useV == false){ //Simple SIRS
-    //cout << "Using derivate1 function." << endl;
     K1 = dt*derivatives(y);
-    //cout << "K1: " << K1 << endl;
     K2 = dt*derivatives(y+0.5*K1);
     K3 = dt*derivatives(y+0.5*K2);
     K4 = dt*derivatives(y+K3);
@@ -294,9 +292,7 @@ void SIRS::rk4(bool useVD){
   }
 
   else if(useVD == true){ //Vital Dynamics
-    //cout << "Using der2" << endl;
     K1 = dt*derivatives2(y);
-    //cout << "K1: " << K1 << endl;
     K2 = dt*derivatives2(y+0.5*K1);
     K3 = dt*derivatives2(y+0.5*K2);
     K4 = dt*derivatives2(y+K3);
@@ -320,8 +316,7 @@ void SIRS::rk4(bool useVD){
   and vaccines +1. Update all states and total population N.
 */
 void SIRS::MonteCarlo(){
-  // S, I, R = y(0), y(1), y(2)atom://teletype/portal/db276bfd-41b3-422c-bf85-e19906e7780d
-  //Tansition probabilities and dt
+  // S, I, R = y(0), y(1), y(2)
   pR_S = (c*y(2))*dt;
   pS_I = (a*y(0)*y(1)/N)*dt;
   pI_R = (b*y(1))*dt;
