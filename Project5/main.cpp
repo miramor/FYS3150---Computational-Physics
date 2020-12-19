@@ -14,7 +14,7 @@ int main(int argc, char const *argv[]) {
 
   double S = 300; //inital number of susceptibles
   double I = 100; //inital number of infected
-  double a = 4; //rate of transmission 
+  double a = 4; //rate of transmission
   double c = .5; //rate of immunity loss
   double dt = 0.0025; //time-step for RK4
   int MC_cycles = 1000; //number of Monte Carlo cycles
@@ -35,16 +35,16 @@ int main(int argc, char const *argv[]) {
   bool useSTD;
 
 
-  cout << "Would you like enable seasonal variation for the rate of transmission(a)?\n 1. Yes \n 0. No " << endl;
+  cout << "Would you like to enable seasonal variation for the rate of transmission(a)?\n 1. Yes \n 0. No " << endl;
   cin >> useSV;
   //cin >> useV >> useSeasVar >> useSV;
 
 
-  cout << "Would you like enable vital dynamics (deaths & births)?\n 1. Yes \n 0. No " << endl;
+  cout << "Would you like to enable vital dynamics (deaths & births)?\n 1. Yes \n 0. No " << endl;
   cin >> useVD;
 
   if(useVD == false){
-    cout << "Would you like enable vaccines (susceptible -> recovered)?\n 1. Yes \n 0. No " << endl;
+    cout << "Would you like to enable vaccines (susceptible -> recovered)?\n 1. Yes \n 0. No " << endl;
     cin >> useV;
   }
 
