@@ -132,7 +132,7 @@ There's a maximum of 4 in total, but just 3 inputs needed when for the the main.
 // 1, 0, 1 -> using vaccines with seasonal variation
 // 1, 1, * -> using vital dynamics, with seasonal
 // 0, 0, 1 -> using vaccines without seasonal variation
-// 0, 1, * -> vital dynamics, no seasonal
+// 0, 1, * -> using vital dynamics, no seasonal
 // 1, 0, 0 -> using standard, with seasonal
 ```
 
