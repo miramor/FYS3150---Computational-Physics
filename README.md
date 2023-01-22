@@ -1,8 +1,9 @@
 # FYS3150
-FYS3150 – Computational Physics .  Filer til undervisning og oppgaver. Prosjekter.
+Repository of collaborative coursework for FYS3150-Computational Physics at the University of Oslo. The course covers methods for numerically solving a wide range of mathematical problems in physics.
+There are a total of five projects, which are outlined below. Each project folder contains the source code and a report.
 
 ## Projects
-### Project 1:
+### [Project 1](https://github.com/miramor/FYS3150---Computational-Physics/tree/master/Project1:
 Thomas algorithm and LU decomposition to solve second order differential equation. Writing the results to files for different n values and visualizing results.
 
 **How to use:**
