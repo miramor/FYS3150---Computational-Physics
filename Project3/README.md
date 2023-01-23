@@ -10,7 +10,7 @@ We use `main.py` to compile all the `.hpp` and `.cpp` files into an executable, 
 **How to use:**
 Run by writing 
 ``` python
- main.py <system method> <end_time time_step>
+ python3 main.py <system method> <end_time time_step>
 ```
 into the terminal.
 The possible *systems* are systemA (Sun-Earth), systemB (Sun-Earth-Jupiter), systemC (Sun plus planets of solar system), and systemE (Sun-Mercury). Possible *methods* are E (Euler), EC (Euler-Cromer), VV (Velocity Verlet), VV2 (Velocity Verlet only used for perihelion preseccion of Mercury). *end_time* is an integer choosing numbers of years to simulate. *time_step* is also given in the unit years. We used *time_step*=0.0001 for most of the simulations, while for the perihelion for 1 year 1e-7 or 1e-8 seemed sufficient. 
@@ -26,20 +26,23 @@ PS: We recommend plotting in 3D :) (axis != equal, which makes it look cooler)
 
 1. Plots all planets excluding Pluto in 3D. Calculations takes about two minutes.
 ``` python
- main.py systemC VV 100 0.00001
+ python3 main.py systemC VV 100 0.00001
 ```
 then use NASA data, adjust origin and plot 3D.
 
 2. For perihelion:
 Setting *h* = 1e-8 the code runs for about 50s.
 ``` python
-main.py systemE VV2 1 0.00000001
+python3 main.py systemE VV2 1 0.00000001
 ```
 The correct method will automatically be chosen.
 For the last input, do not enter 0 when asked: If used NASA data press 0, otherwise the calculated theta is printed out*
 
 3. Basic example
 ``` python
-main.py systemA VV 2 0.00001
+python3 main.py systemA VV 2 0.00001
 ```
 
+**Dependencies** \
+gcc: armadillo \
+python3: numpy, matplotlib, sys, pandas, math

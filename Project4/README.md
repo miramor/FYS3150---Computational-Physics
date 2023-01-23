@@ -37,3 +37,6 @@ python3 main.py 40 5000000
 1 2.4 8
 8
 ```
+**Dependencies** \
+gcc: - \
+python3: seaborn, matplotlib, pandas, numpy, scipy, sklearn

@@ -38,5 +38,7 @@ There's a maximum of 4 in total, but just 3 inputs needed when for the the main.
 // 0, 1, * -> using vital dynamics, no seasonal
 // 1, 0, 0 -> using standard, with seasonal
 ```
-
+**Dependencies** \
+gcc: armadillo, lapack, blas \
+python3: seaborn, matplotlib, pandas, numpy
 
